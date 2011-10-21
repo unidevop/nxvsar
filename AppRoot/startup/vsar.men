@@ -1,0 +1,99 @@
+VERSION 120
+
+EDIT UG_GATEWAY_MAIN_MENUBAR
+
+BEFORE UG_WINDOW
+  CASCADE_BUTTON VSAR_MENU_BAR
+  LABEL &Vsar Sim
+END_OF_BEFORE
+
+MENU VSAR_MENU_BAR
+
+  BUTTON VSAR_NEW_PROJECT
+  LABEL &New Project...
+  !BITMAP filenew
+  MESSAGE Create a Vsar Project
+  ACTIONS libvsar.dll
+
+  SEPARATOR
+
+  BUTTON VSAR_SET_TRAIN
+  LABEL &Train Settings...
+  !BITMAP filenew
+  MESSAGE Set train parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+  BUTTON VSAR_SET_RAIL
+  LABEL &Rail Settings...
+  !BITMAP filenew
+  MESSAGE Set Rail parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+  BUTTON VSAR_SET_SLAB
+  LABEL &Slab Settings...
+  !BITMAP filenew
+  MESSAGE Set Slab parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+  
+  CASCADE_BUTTON VSAR_SET_BRACE
+  LABEL &Brace Settings
+  
+  SEPARATOR
+
+  CASCADE_BUTTON VSAR_EXECUTE_SOLVE
+  LABEL Sol&ve
+  !BITMAP calculator.bmp
+  
+  !SEPARATOR
+  
+  !BUTTON VSAR_VIEW_RESULT
+  !LABEL Create Res&ult...
+  !MESSAGE Create afu result
+  !SENSITIVITY OFF
+  !ACTIONS libvsar.dll
+
+END_OF_MENU
+
+MENU VSAR_SET_BRACE
+
+  BUTTON VSAR_SET_BRIDGE
+  LABEL &Bridge Settings...
+  !BITMAP filenew
+  MESSAGE Set Bridge parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+  BUTTON VSAR_SET_BASE
+  LABEL Ba&se Settings...
+  MESSAGE Set Base parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+  BUTTON VSAR_SET_TUNNEL
+  LABEL Tun&nel Settings...
+  MESSAGE Set Tunnel parameters
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+END_OF_MENU
+
+MENU VSAR_EXECUTE_SOLVE
+
+  BUTTON VSAR_SOLVE_RESPONSE
+  LABEL Solve R&esponse...
+  !BITMAP calculator.bmp
+  MESSAGE Solve response
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+  BUTTON VSAR_SOLVE_NOISE
+  LABEL Solve &Noise...
+  !BITMAP calculator_and_monitor.bmp
+  MESSAGE Solve noise
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
+
+END_OF_MENU

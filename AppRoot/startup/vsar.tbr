@@ -1,0 +1,60 @@
+TITLE Vsar
+VERSION 170
+DOCK TOP
+
+
+BUTTON VSAR_NEW_PROJECT
+LABEL &New Project...
+!MESSAGE Create a Vsar Project
+!BITMAP filenew
+
+SEPARATOR
+
+BUTTON VSAR_SET_TRAIN
+LABEL &Train Settings...
+
+BUTTON VSAR_SET_RAIL
+LABEL &Rail Settings...
+
+BUTTON VSAR_SET_SLAB
+LABEL &Slab Settings...
+
+BEGIN_DROPDOWN VSAR_SET_BRACE
+LABEL &Brace Settings
+AS_POPUP_MENU
+  
+  BUTTON VSAR_SET_BRIDGE
+  LABEL &Bridge Settings...
+
+  BUTTON VSAR_SET_BASE
+  LABEL Ba&se Settings...
+
+  BUTTON VSAR_SET_TUNNEL
+  LABEL Tun&nel Settings...
+
+END_DROPDOWN
+
+SEPARATOR
+
+BEGIN_DROPDOWN VSAR_EXECUTE_SOLVE
+LABEL &Solve
+!BITMAP calculator
+AS_POPUP_MENU
+
+  BUTTON VSAR_SOLVE_RESPONSE
+  LABEL Solve R&esponse...
+  !MESSAGE Solve response
+  !BITMAP calculator
+
+  BUTTON VSAR_SOLVE_NOISE
+  LABEL Solve &Noise...
+  !MESSAGE Solve noise
+  !BITMAP calculator_and_monitor
+
+END_DROPDOWN
+
+!SEPARATOR
+
+!BUTTON VSAR_VIEW_RESULT
+!LABEL Create &Result...
+!MESSAGE Create afu result
