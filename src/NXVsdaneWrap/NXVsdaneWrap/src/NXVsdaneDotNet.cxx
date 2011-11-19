@@ -2,6 +2,7 @@
 
 #include "NXVsdaneDotNet.hxx"
 
+using namespace System;
 using namespace NXOpen;
 using namespace NXOpen::CAE;
 

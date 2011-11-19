@@ -24,6 +24,7 @@
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Names.hxx>
 #include <Vsar_Utils.hxx>
+#include <NXVsdane.hxx>
 
 using namespace boost;
 using namespace NXOpen;
@@ -225,13 +226,15 @@ namespace Vsar
 
         Session *pSession = Session::GetSession();
 
-        pSession->Parts()->SetDisplay(pFem, false, true, &pPrtLoadStatus);
+        pSession->Parts()->SetDisplay(pFem, false, false, &pPrtLoadStatus);
 
         Session::UndoMarkId  undoMark;
 
         try
         {
             undoMark = pSession->SetUndoMark(Session::MarkVisibilityVisible, "Setting Vsar Component");
+
+            pFem->BaseFEModel()->UpdateFemodel();
 
             updateCb();
 
@@ -274,7 +277,9 @@ namespace Vsar
 
             CAEFace *pBottomFace = vCaeFaces.empty() ? NULL : vCaeFaces[0];
 
-            CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
+            //CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
+            //Vsdane::CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
+            Vsdane::CreateSweptMesh(pFeModel->Tag(), meshColName, meshName, pTopFace->Tag(), pBottomFace->Tag(), pEleSize->Tag());
         }
     }
 

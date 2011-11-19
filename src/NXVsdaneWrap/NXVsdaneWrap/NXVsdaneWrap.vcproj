@@ -69,6 +69,8 @@
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib&quot;;&quot;$(UGII_BASE_DIR)\ugopen&quot;;"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
+				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
+				ImportLibrary="$(OutDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -142,6 +144,8 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib&quot;;&quot;$(UGII_BASE_DIR)\ugopen&quot;;"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
+				ImportLibrary="$(OutDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -333,8 +337,8 @@
 			MinFrameworkVersion="131072"
 		/>
 		<AssemblyReference
-			RelativePath="e:\workdir\IP\qrm075404mp5\UGII\managed\NXOpen.dll"
-			AssemblyName="NXOpen, Version=7.5.4.4, processorArchitecture=MSIL"
+			RelativePath="$(UGII_BASE_DIR)\UGII\managed\NXOpen.dll"
+			AssemblyName="NXOpen, Version=7.5.2.5, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
 		/>
 	</References>
@@ -349,11 +353,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NXVsdane.cxx"
+				RelativePath=".\src\NXVsdane.cxx"
 				>
 			</File>
 			<File
-				RelativePath=".\NXVsdaneDotNet.cxx"
+				RelativePath=".\src\NXVsdaneBridge.cxx"
+				>
+			</File>
+			<File
+				RelativePath=".\src\NXVsdaneDotNet.cxx"
 				>
 			</File>
 		</Filter>
@@ -363,11 +371,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\NXVsdane.hxx"
+				RelativePath=".\include\NXVsdane.hxx"
 				>
 			</File>
 			<File
-				RelativePath=".\NXVsdaneDotNet.hxx"
+				RelativePath=".\include\NXVsdaneBridge.hxx"
+				>
+			</File>
+			<File
+				RelativePath=".\include\NXVsdaneDotNet.hxx"
 				>
 			</File>
 			<File
