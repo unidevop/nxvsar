@@ -318,8 +318,8 @@ namespace Vsar
 #endif
 
         std::vector<CAE::Mesh*> createdMeshes = pMesh3dHexBuilder->CommitMesh();
-        std::for_each(createdMeshes.begin(), createdMeshes.end(),
-            boost::bind(&NXObject::SetName, _1, meshName.c_str()));
+        //std::for_each(createdMeshes.begin(), createdMeshes.end(),
+        //    boost::bind(&NXObject::SetName, _1, meshName.c_str()));
 
         pSession->DeleteUndoMark(undoMark, NULL);
     }
@@ -350,14 +350,14 @@ namespace Vsar
             ElementTypeBuilder          *pEleTypeBuilder = pMesh3dHexBuilder->ElementType();
             DestinationCollectorBuilder *pSrcColBulder   = pEleTypeBuilder->DestinationCollector();
 
-            pMeshMgr->DragNDropMesh(pMesh, pSrcColBulder->ElementContainer(), pDstMeshCol);
+            //pMeshMgr->DragNDropMesh(pMesh, pSrcColBulder->ElementContainer(), pDstMeshCol);
             PropertyTable *pPropTable = pMesh3dHexBuilder->PropertyTable();
 
             //  set element size
             Expression *pEleSizeExp = pPropTable->GetScalarPropertyValue("source element size");
 
             pEleSizeExp->SetRightHandSide(pEleSize->RightHandSide());
-            //pMesh3dHexBuilder->CommitMesh();
+            pMesh3dHexBuilder->CommitMesh();
         }
     }
 

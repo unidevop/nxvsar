@@ -7,15 +7,14 @@
 #pragma managed
 
 //#using <NXOpen.dll>
-using namespace System;
 
 namespace Vsdane
 {
     public ref class NXVsdane
     {
     public:
-        static void CreateSweptMeshDotNet(NXOpen::CAE::IFEModel ^pFeModel,
-            String^ meshColName, String ^meshName,
+        void CreateSweptMeshDotNet(NXOpen::CAE::IFEModel ^pFeModel,
+            System::String^ meshColName, System::String ^meshName,
             NXOpen::CAE::CAEFace ^pSrcFace, NXOpen::CAE::CAEFace ^pTargetFace, NXOpen::Expression ^pEleSize);
     };
 }

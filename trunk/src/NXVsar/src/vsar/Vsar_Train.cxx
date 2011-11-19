@@ -118,7 +118,7 @@ namespace Vsar
 
                 SetFeGeometryData(pBridgeFem, bodyOccs);
 
-                UpdateSwepMesh_sf(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
+                UpdateSwepMesh(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
                                BRIDGE_MESH_COLLECTOR_NAME, BRIDGE_MESH_NAME,
                                pBridgeFem->Expressions()->FindObject("Bridge_Element_Size"));
             }
