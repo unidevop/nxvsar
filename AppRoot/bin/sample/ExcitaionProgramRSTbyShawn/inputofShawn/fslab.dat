@@ -1,0 +1,8 @@
+3,12.0,2.4,80.0,2.237e8,8.433e5,1.0,1.0,1.43e9,1.0,2
+
+Nu_F,Length_F,LengthF_E,uDensity_F,K_R,C_R,aK_BF,bC_BF,
+     $	E_F,J_F,N_BS
+
+input(receptance program used)
+6.726D6,1.0,60.64,2.237e8,8.433e5,1.43e9,1.0,80.0,0.04,0.01
+Er,Ir,mr,Kr,Cr,Es,Is,u,a,b
