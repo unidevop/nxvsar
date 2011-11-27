@@ -17,6 +17,8 @@
 #include <NXOpen/CAE_FemPart.hxx>
 #include <NXOpen/CAE_AssyFemPart.hxx>
 #include <NXOpen/CAE_BaseFEModel.hxx>
+#include <NXOpen/CAE_MeshManager.hxx>
+#include <NXOpen/CAE_MeshCollector.hxx>
 #include <NXOpen/CAE_CAEBody.hxx>
 #include <NXOpen/CAE_CAEFace.hxx>
 
@@ -24,7 +26,6 @@
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Names.hxx>
 #include <Vsar_Utils.hxx>
-#include <NXVsdane.hxx>
 
 using namespace boost;
 using namespace NXOpen;
@@ -226,15 +227,13 @@ namespace Vsar
 
         Session *pSession = Session::GetSession();
 
-        pSession->Parts()->SetDisplay(pFem, false, false, &pPrtLoadStatus);
+        pSession->Parts()->SetDisplay(pFem, false, true, &pPrtLoadStatus);
 
         Session::UndoMarkId  undoMark;
 
         try
         {
             undoMark = pSession->SetUndoMark(Session::MarkVisibilityVisible, "Setting Vsar Component");
-
-            pFem->BaseFEModel()->UpdateFemodel();
 
             updateCb();
 
@@ -261,11 +260,17 @@ namespace Vsar
     {
     }
 
-    void BaseComponent::UpdateSwepMesh(IFEModel *pFeModel, const std::vector<CAEBody*> &pPolygonBodies,
+    void BaseComponent::UpdateSweptMesh(IFEModel *pFeModel, const std::vector<CAEBody*> &pPolygonBodies,
                                        const std::string &meshColName, const std::string &meshName,
-                                       Expression *pEleSize)
+                                       const std::string &eleSizeExpName)
     {
         std::vector<CAEFace*>  vCaeFaces;
+
+        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
+
+        std::string meshColFullName = std::string("MeshCollector[").append(meshColName).append("]");
+
+        MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
         for (unsigned int idx = 0; idx < pPolygonBodies.size(); idx++)
         {
@@ -277,13 +282,13 @@ namespace Vsar
 
             CAEFace *pBottomFace = vCaeFaces.empty() ? NULL : vCaeFaces[0];
 
-            //CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
+            CreateSweptMesh(pMeshMgr, pMeshCol, meshName, pTopFace, pBottomFace, eleSizeExpName);
             //Vsdane::CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
-            Vsdane::CreateSweptMesh(pFeModel->Tag(), meshColName, meshName, pTopFace->Tag(), pBottomFace->Tag(), pEleSize->Tag());
+            //Vsdane::CreateSweptMesh(pFeModel->Tag(), meshColName, meshName, pTopFace->Tag(), pBottomFace->Tag(), pEleSize->Tag());
         }
     }
 
-    void BaseComponent::UpdateSwepMesh_sf(IFEModel *pFeModel, const std::vector<CAEBody*> &pPolygonBodies,
+    void BaseComponent::UpdateSweptMesh_sf(IFEModel *pFeModel, const std::vector<CAEBody*> &pPolygonBodies,
                                        const std::string &meshColName, const std::string &meshName,
                                        Expression *pEleSize)
     {

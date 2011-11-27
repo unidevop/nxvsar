@@ -10,7 +10,7 @@
 //#using <NXOpen.dll>
 //using namespace System;
 #include <string>
-#include <uf_defs.h>
+//#include <uf_defs.h>
 
 //namespace NXOpen
 //{
@@ -26,6 +26,8 @@
 #pragma managed
 #include <vcclr.h>
 #include "NXVsdaneDotNet.hxx"
+
+typedef unsigned int tag_t;
 
 namespace Vsdane
 {

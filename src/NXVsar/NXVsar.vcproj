@@ -29,7 +29,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;DEL /F /Q $(TargetDir)\NXOpen*.dll&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
 			<Tool
@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include;..\NXVsdaneWrap\NXVsdaneWrap\include"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_SECURE_SCL=0;DEBUG"
+				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include"
+				PreprocessorDefinitions="WIN32;_WINDOWS;DEBUG;_USRDLL;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="false"
-				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib libNXVsdaneWrap.lib"
+				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib"
 				OutputFile="$(UGII_USER_DIR)\application\libvsar.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib&quot;;&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(OutDir)&quot;"
@@ -129,8 +129,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include;..\NXVsdaneWrap\NXVsdaneWrap\include"
-				PreprocessorDefinitions="_SECURE_SCL=0"
+				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include"
+				PreprocessorDefinitions="_SECURE_SCL=0;_USRDLL"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib libNXVsdaneWrap.lib"
+				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib"
 				OutputFile="$(UGII_USER_DIR)\application\libvsar.dll"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(ProjectDir)\lib&quot;;&quot;$(OutDir)&quot;"

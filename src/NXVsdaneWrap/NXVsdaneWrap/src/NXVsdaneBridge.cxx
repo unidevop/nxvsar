@@ -14,7 +14,7 @@ namespace Vsdane
 {
     NXVsdaneBridge::NXVsdaneBridge()
     {
-        m_impl = gcnew NXVsdane;
+        m_impl = gcnew NXVsdane();
     }
 
     //void NXVsdaneBridge::CreateSweptMesh(void *pFeModel,

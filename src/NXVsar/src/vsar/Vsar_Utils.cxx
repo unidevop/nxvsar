@@ -10,6 +10,8 @@
 #include <boost/shared_array.hpp>
 #endif
 
+#include <sstream>
+
 #include <boost/filesystem.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/shared_ptr.hpp>
@@ -101,7 +103,7 @@ namespace Vsar
                 //UF_UI_write_listing_window(str);
             }
 #else
-            UF_UI_set_status(errMsgStream.str().c_str());
+            UF_UI_set_status(const_cast<char*>(errMsgStream.str().c_str()));
 #endif
             throw NXException::Create(irc);
         }
@@ -245,20 +247,13 @@ namespace Vsar
         //std::vector<Mesh *> pvMesh = pMesh3dBuilder->CommitMesh();
     }
 
-    void CreateSweptMesh(IFEModel *pFeModel,
-                         const std::string &meshColName, const std::string &meshName,
-                         CAEFace* pSrcFace, CAEFace *pTargetFace, Expression *pEleSize)
+    void CreateSweptMesh( MeshManager *pMeshMgr, MeshCollector *pMeshCol, const std::string &meshName,
+                          CAEFace* pSrcFace, CAEFace *pTargetFace, const std::string &eleSizeExpName)
     {
         Session *pSession = Session::GetSession();
 
-        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
-
         boost::shared_ptr<Mesh3dHexBuilder> pMesh3dHexBuilder(pMeshMgr->CreateMesh3dHexBuilder(NULL),
                                                               boost::bind(&Builder::Destroy, _1));
-
-        std::string meshColFullName = std::string("MeshCollector[").append(meshColName).append("]");
-
-        MeshCollector *meshCol(polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str())));
 
         ElementTypeBuilder          *pEleTypeBuilder = pMesh3dHexBuilder->ElementType();
 
@@ -267,14 +262,12 @@ namespace Vsar
 
         DestinationCollectorBuilder *pDstColBulder   = pEleTypeBuilder->DestinationCollector();
 
-        pDstColBulder->SetElementContainer(meshCol);
+        pDstColBulder->SetElementContainer(pMeshCol);
         pDstColBulder->SetAutomaticMode(false);
 
         pMesh3dHexBuilder->SetCreationType(Mesh3dHexBuilder::TypeManual);
 
-        std::vector<DisplayableObject*> srcFaces(1, pSrcFace);
-
-        bool bSrcFaceAdded = pMesh3dHexBuilder->SourceFaceList()->Add(srcFaces);
+        bool bSrcFaceAdded = pMesh3dHexBuilder->SourceFaceList()->Add(pSrcFace);
 
         pMesh3dHexBuilder->TargetFace()->SetValue(pTargetFace);
 
@@ -288,7 +281,7 @@ namespace Vsar
         //  set element size
         Expression *pEleSizeExp = pPropTable->GetScalarPropertyValue("source element size");
 
-        pEleSizeExp->SetRightHandSide(pEleSize->RightHandSide());
+        pEleSizeExp->SetRightHandSide(eleSizeExpName);
 //        pPropTable->SetScalarPropertyValue("source element size", pEleSizeExp);
 
         Session::UndoMarkId undoMark = pSession->SetUndoMark(Session::MarkVisibilityInvisible, "Create Swept Mesh");
@@ -317,7 +310,7 @@ namespace Vsar
         }
 #endif
 
-        std::vector<CAE::Mesh*> createdMeshes = pMesh3dHexBuilder->CommitMesh();
+        std::vector<CAE::Mesh*> createdMeshes(pMesh3dHexBuilder->CommitMesh());
         //std::for_each(createdMeshes.begin(), createdMeshes.end(),
         //    boost::bind(&NXObject::SetName, _1, meshName.c_str()));
 
@@ -332,7 +325,7 @@ namespace Vsar
 
         int err = UF_CALL(UF_SF_create_swept_hex_mesh(pSolidBody->Tag(), pSrcFace->Tag(), true,
                     pEleSize->Value(), &tSweptMesh));
-
+#if 0
         if (err == 0)
         {
             MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
@@ -359,6 +352,7 @@ namespace Vsar
             pEleSizeExp->SetRightHandSide(pEleSize->RightHandSide());
             pMesh3dHexBuilder->CommitMesh();
         }
+#endif
     }
 
     std::vector<CAEBody*> GetCaeBodies(const std::vector<Body*> &srcBodies)

@@ -69,10 +69,10 @@ namespace Vsar
 
         virtual void UpdateBraseModel();
 
-        void UpdateSwepMesh(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
-                            const std::string &meshColName, const std::string &meshName, NXOpen::Expression *pEleSize);
+        void UpdateSweptMesh(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
+                            const std::string &meshColName, const std::string &meshName, const std::string &eleSizeExpName);
 
-        void UpdateSwepMesh_sf(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
+        void UpdateSweptMesh_sf(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
                             const std::string &meshColName, const std::string &meshName, NXOpen::Expression *pEleSize);
 
     protected:
