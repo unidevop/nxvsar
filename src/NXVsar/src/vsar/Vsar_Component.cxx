@@ -6,6 +6,7 @@
 #include <boost/scope_exit.hpp>
 #include <boost/bind.hpp>
 #include <boost/cast.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <NXOpen/Session.hxx>
 //#include <NXOpen/NXException.hxx>
@@ -272,7 +273,7 @@ namespace Vsar
 
         MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
-        for (unsigned int idx = 0; idx < pPolygonBodies.size(); idx++)
+        for (int idx = pPolygonBodies.size() - 1; idx >= 0; idx--)
         {
             vCaeFaces = GetCaeFaceByName(pPolygonBodies[idx], FACE_NAME_TOP);
 
@@ -282,7 +283,9 @@ namespace Vsar
 
             CAEFace *pBottomFace = vCaeFaces.empty() ? NULL : vCaeFaces[0];
 
-            CreateSweptMesh(pMeshMgr, pMeshCol, meshName, pTopFace, pBottomFace, eleSizeExpName);
+            std::string  curMeshName(meshName + "(" + boost::lexical_cast<std::string>(pPolygonBodies.size() - idx) + ")");
+
+            CreateSweptMesh(pMeshMgr, pMeshCol, curMeshName, pTopFace, pBottomFace, eleSizeExpName);
             //Vsdane::CreateSweptMesh(pFeModel, meshColName, meshName, pTopFace, pBottomFace, pEleSize);
             //Vsdane::CreateSweptMesh(pFeModel->Tag(), meshColName, meshName, pTopFace->Tag(), pBottomFace->Tag(), pEleSize->Tag());
         }
