@@ -13,7 +13,7 @@
 
 
 #include <string>
-#include <uf_defs.h>
+//#include <uf_defs.h>
 
 //namespace NXOpen
 //{
@@ -25,6 +25,8 @@
 //        class CAEFace;
 //    }
 //}
+
+typedef unsigned int tag_t;
 
 namespace Vsdane
 {

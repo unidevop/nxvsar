@@ -13,6 +13,7 @@ namespace Vsar
     const char * const SLAB_ASSEM_NAME                          = "slabs.prt";
     const char * const SLAB_MESH_NAME                           = "Slab_Mesh";
     const char * const SLAB_MESH_COLLECTOR_NAME                 = "Slab_Mesh_Collector";
+    const char * const SLAB_ELEMENT_SIZE_NAME                   = "Slab_Element_Size";
 
     const char * const FACE_NAME_TOP                            = "TOP_FACE";
     const char * const FACE_NAME_BOTTOM                         = "BOTTOM_FACE";
@@ -21,6 +22,7 @@ namespace Vsar
     const char * const BRIDGE_BEAM_BODY_NAME                    = "BRIDGE_BEAM_BODY";
     const char * const BRIDGE_MESH_NAME                         = "Bridge_Mesh";
     const char * const BRIDGE_MESH_COLLECTOR_NAME               = "Bridge_Mesh_Collector";
+    const char * const BRIDGE_ELEMENT_SIZE_NAME                 = "Bridge_Element_Size";
 
     const char * const CARRIAGE_PART_NAME                       = "carriage.prt";
     const char * const CARRIAGE_BODY_NAME                       = "CARRIAGE_BODY";

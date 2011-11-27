@@ -25,6 +25,8 @@ namespace NXOpen
     namespace CAE
     {
         class IFEModel;
+        class MeshManager;
+        class MeshCollector;
         class CAEBody;
         class CAEFace;
     }
@@ -59,9 +61,9 @@ namespace Vsar
     void EditSweptMeshData(NXOpen::CAE::IFEModel *pFeModel, const std::string &meshName,
                         const std::vector<NXOpen::Body*> &srcBodies);
 
-    void CreateSweptMesh(NXOpen::CAE::IFEModel *pFeModel,
-                         const std::string &meshColName, const std::string &meshName,
-                         NXOpen::CAE::CAEFace* pSrcFace, NXOpen::CAE::CAEFace *pTargetFace, NXOpen::Expression *pEleSize);
+    void CreateSweptMesh(NXOpen::CAE::MeshManager *pMeshMgr, NXOpen::CAE::MeshCollector *pMeshCol,
+                         const std::string &meshName, NXOpen::CAE::CAEFace* pSrcFace, NXOpen::CAE::CAEFace *pTargetFace,
+                         const std::string &eleSizeExpName);
 
     void CreateSweptMesh_sf(NXOpen::CAE::IFEModel *pFeModel, NXOpen::CAE::CAEBody *pSolidBody,
                          const std::string &meshColName, const std::string &meshName,

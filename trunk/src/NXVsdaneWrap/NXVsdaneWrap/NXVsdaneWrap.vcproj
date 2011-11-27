@@ -6,6 +6,7 @@
 	ProjectGUID="{8914BF95-C37B-406D-896C-9BC85C17701E}"
 	RootNamespace="NXVsdaneWrap"
 	Keyword="ManagedCProj"
+	AssemblyReferenceSearchPaths="&quot;..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1&quot;"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -45,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;"
+				AdditionalIncludeDirectories=".\include;"
 				PreprocessorDefinitions="WIN32;_USRDLL;_SECURE_SCL=0;DEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -63,10 +64,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libnxopencpp.lib"
 				OutputFile="$(UGII_USER_DIR)\application\libNXVsdaneWrap.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib&quot;;&quot;$(UGII_BASE_DIR)\ugopen&quot;;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;"
+				AdditionalIncludeDirectories=".\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_SECURE_SCL=0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -337,8 +337,28 @@
 			MinFrameworkVersion="131072"
 		/>
 		<AssemblyReference
-			RelativePath="$(UGII_BASE_DIR)\UGII\managed\NXOpen.dll"
-			AssemblyName="NXOpen, Version=7.5.2.5, processorArchitecture=MSIL"
+			RelativePath="..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1\UGII\managed\NXOpen.dll"
+			AssemblyName="NXOpen, Version=7.5.3.3, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1\UGII\managed\ManagedLoader.dll"
+			AssemblyName="ManagedLoader, Version=4.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1\UGII\managed\NXOpen.Utilities.dll"
+			AssemblyName="NXOpen.Utilities, Version=4.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1\UGII\managed\NXOpen.UF.dll"
+			AssemblyName="NXOpen.UF, Version=7.5.3.2, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+		<AssemblyReference
+			RelativePath="..\..\..\..\..\..\..\..\develop_tool\NX\qrm075303mp1\UGII\managed\NXOpenUI.dll"
+			AssemblyName="NXOpenUI, Version=7.5.3.3, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
 		/>
 	</References>

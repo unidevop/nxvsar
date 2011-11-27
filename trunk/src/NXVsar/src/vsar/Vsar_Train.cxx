@@ -95,9 +95,9 @@ namespace Vsar
 
             //EditSweptMeshData(pRailSlabFem->BaseFEModel(), meshName, tmpBodyOccs);
 
-            UpdateSwepMesh(pRailSlabFem->BaseFEModel(), GetCaeBodies(tmpBodyOccs),
+            UpdateSweptMesh(pRailSlabFem->BaseFEModel(), GetCaeBodies(tmpBodyOccs),
                            SLAB_MESH_COLLECTOR_NAME, SLAB_MESH_NAME,
-                           pRailSlabFem->Expressions()->FindObject("Slab_Element_Size"));
+                           SLAB_ELEMENT_SIZE_NAME);
 
             UpdateRailSlabConnection(pRailSlabFem);
         }
@@ -118,9 +118,12 @@ namespace Vsar
 
                 SetFeGeometryData(pBridgeFem, bodyOccs);
 
-                UpdateSwepMesh(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
+                UpdateSweptMesh(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
                                BRIDGE_MESH_COLLECTOR_NAME, BRIDGE_MESH_NAME,
-                               pBridgeFem->Expressions()->FindObject("Bridge_Element_Size"));
+                               BRIDGE_ELEMENT_SIZE_NAME);
+                //UpdateSwepMesh_tmp(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
+                //               BRIDGE_MESH_COLLECTOR_NAME, BRIDGE_MESH_NAME,
+                //               pBridgeFem->Expressions()->FindObject("Bridge_Element_Size"));
             }
         }
     }
