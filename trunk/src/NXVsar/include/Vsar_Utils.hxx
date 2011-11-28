@@ -13,7 +13,7 @@ namespace NXOpen
     class BasePart;
     class Part;
     class Body;
-    class Point;
+    class TaggedObject;
     class DisplayableObject;
     class Expression;
 
@@ -48,9 +48,9 @@ namespace Vsar
 
     std::vector<NXOpen::Body*> GetBodyByName(NXOpen::Part *pBodyPrt, const std::string &bodyName);
 
-    std::vector<NXOpen::Point*> GetPointByAttrName( NXOpen::BasePart * pPtPrt, const std::string &ptName );
+    std::vector<NXOpen::TaggedObject*> GetPointByAttrName( NXOpen::BasePart * pPtPrt, const std::string &ptName );
 
-    std::vector<NXOpen::Point*> GetPointByLayer( NXOpen::BasePart * pPtPrt, int layer );
+    std::vector<NXOpen::TaggedObject*> GetPointByLayer( NXOpen::BasePart * pPtPrt, int layer );
 
     std::vector<NXOpen::Assemblies::Component*> GetOccInCompTree(NXOpen::Assemblies::Component *pAssemTree, NXOpen::Part *pPrt);
 

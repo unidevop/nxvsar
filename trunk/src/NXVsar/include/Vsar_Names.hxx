@@ -28,6 +28,9 @@ namespace Vsar
     const char * const CARRIAGE_BODY_NAME                       = "CARRIAGE_BODY";
 
     const char * const RAIL_CONNECTION_NAME                     = "RAIL_CONNECT_POINT";
+    const char * const RAIL_SLAB_CONNECTION_MESH_NAME           = "Rail_Slab_Connection_Mesh";
+    const char * const RAIL_SLAB_CONNECTION_COLLECTOR_NAME      = "Rail_Slab_Connection_Collector";
+    const char * const RAIL_SLAB_CONNECTION_NAME                = "Rail_Slab_Connection";
 
     const char * const SLAB_CONNECT_TO_RAIL_NAME                = "SLAB_CONNECT_TO_RAIL_POINT";
 

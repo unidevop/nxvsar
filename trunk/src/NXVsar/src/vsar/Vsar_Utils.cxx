@@ -156,10 +156,10 @@ namespace Vsar
     }
 
     //  Select points by Attribute Name
-    std::vector<Point*> GetPointByAttrName( BasePart * pPtPrt, const std::string &attrName )
+    std::vector<TaggedObject*> GetPointByAttrName( BasePart * pPtPrt, const std::string &attrName )
     {
         PointCollection    *pPtOccCol = pPtPrt->Points();
-        std::vector<Point*> ptSel;
+        std::vector<TaggedObject*> ptSel;
 
         typedef std::vector<NXObject::AttributeInformation> StlAttrInfoVector;
 
@@ -188,10 +188,10 @@ namespace Vsar
     }
 
     //  Select points by layer
-    std::vector<Point*> GetPointByLayer( BasePart * pPtPrt, int layer )
+    std::vector<TaggedObject*> GetPointByLayer( BasePart * pPtPrt, int layer )
     {
         PointCollection    *pPtCol = pPtPrt->Points();
-        std::vector<Point*> ptSel;
+        std::vector<TaggedObject*> ptSel;
 
         //  Get body prototypes
         for (PointCollection::iterator iter = pPtCol->begin(); iter != pPtCol->end(); ++iter)
