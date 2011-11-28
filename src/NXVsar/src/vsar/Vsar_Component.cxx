@@ -9,7 +9,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <NXOpen/Session.hxx>
-//#include <NXOpen/NXException.hxx>
+#include <NXOpen/NXException.hxx>
 #include <NXOpen/PartCollection.hxx>
 #include <NXOpen/BasePart.hxx>
 #include <NXOpen/ExpressionCollection.hxx>
@@ -22,6 +22,8 @@
 #include <NXOpen/CAE_MeshCollector.hxx>
 #include <NXOpen/CAE_CAEBody.hxx>
 #include <NXOpen/CAE_CAEFace.hxx>
+
+#include <uf_sf.h>
 
 #include <Vsar_Project.hxx>
 #include <Vsar_Init_Utils.hxx>
@@ -309,5 +311,16 @@ namespace Vsar
 
             CreateSweptMesh_sf(pFeModel, pPolygonBodies[idx], meshColName, meshName, pTopFace, pEleSize);
         }
+    }
+
+    void BaseComponent::MergeDuplicateNodes()
+    {
+        int    numDuplicates = 0;
+        double tolerance     = 0.001;
+
+        int iErr = UF_SF_check_model_duplicate_nodes(0, NULL_TAG, true, tolerance, &numDuplicates);
+
+        if (iErr != 0)
+            throw NXException::Create(iErr);
     }
 }

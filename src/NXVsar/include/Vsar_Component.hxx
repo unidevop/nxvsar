@@ -75,6 +75,8 @@ namespace Vsar
         void UpdateSweptMesh_sf(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
                             const std::string &meshColName, const std::string &meshName, NXOpen::Expression *pEleSize);
 
+        void MergeDuplicateNodes();
+
     protected:
         StlCompAttrInfoVector   m_compAttrs;
     };
