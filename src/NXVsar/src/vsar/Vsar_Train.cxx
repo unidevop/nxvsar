@@ -182,9 +182,10 @@ namespace Vsar
         std::vector<TaggedObject*>  slabConnectPts;
 
         //railConnectPts = GetPointByAttrName(pFemPart, RAIL_CONNECTION_NAME);
-        slabConnectPts = GetPointByAttrName(pFemPart, SLAB_CONNECT_TO_RAIL_NAME);
+        //slabConnectPts = GetPointByAttrName(pFemPart, SLAB_CONNECT_TO_RAIL_NAME);
 
         railConnectPts = GetPointByLayer(pFemPart, RAIL_CONNECTION_POINT_LAYER);
+        slabConnectPts = GetPointByLayer(pFemPart, SLAB_CONNECT_TO_RAIL_POINT_LAYER);
 
         BaseFEModel              *pFeModel        = pFemPart->BaseFEModel();
         CAEConnectionCollection  *pCaeConnCol     = pFeModel->CaeConnections();
