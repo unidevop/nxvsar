@@ -8,7 +8,7 @@
 #include <boost/cast.hpp>
 
 #include <NXOpen/Session.hxx>
-//#include <NXOpen/NXException.hxx>
+#include <NXOpen/NXException.hxx>
 #include <NXOpen/PartCollection.hxx>
 #include <NXOpen/Part.hxx>
 #include <NXOpen/Assemblies_ComponentAssembly.hxx>
@@ -20,13 +20,6 @@
 //#include <NXOpen/BodyCollection.hxx>
 #include <NXOpen/CAE_FemPart.hxx>
 #include <NXOpen/CAE_FEModel.hxx>
-#include <NXOpen/CAE_CAEConnectionCollection.hxx>
-#include <NXOpen/CAE_CAEConnection.hxx>
-#include <NXOpen/CAE_CAEConnectionBuilder.hxx>
-#include <NXOpen/CAE_DestinationCollectorBuilder.hxx>
-#include <NXOpen/CAE_MeshManager.hxx>
-#include <NXOpen/CAE_MeshCollector.hxx>
-#include <NXOpen/SelectTaggedObjectList.hxx>
 
 #include <Vsar_Names.hxx>
 #include <Vsar_Project.hxx>
@@ -84,10 +77,16 @@ namespace Vsar
 
     void Train::UpdateRailSlabModel()
     {
-        if (GetCarriageCount() > m_oldCarriageCount)
+        int carriageCnt = GetCarriageCount();
+
+        if (carriageCnt == m_oldCarriageCount)
+            return;
+
+        BaseProjectProperty *pPrjProp       = Project::Instance()->GetProperty();
+        CAE::FemPart        *pRailSlabFem   = pPrjProp->GetRailSlabFemPart();
+
+        if (carriageCnt > m_oldCarriageCount)
         {
-            BaseProjectProperty *pPrjProp       = Project::Instance()->GetProperty();
-            CAE::FemPart        *pRailSlabFem   = pPrjProp->GetRailSlabFemPart();
             std::vector<Body*>   bodyOccs;
             std::vector<Body*>   tmpBodyOccs;
 
@@ -99,7 +98,7 @@ namespace Vsar
             tmpBodyOccs = GetGeoModelOccs(pRailSlabFem, SLAB_PART_NAME, SLAB_BODY_NAME);
             bodyOccs.insert(bodyOccs.end(), tmpBodyOccs.begin(), tmpBodyOccs.end());
 
-            SetFeGeometryData(pRailSlabFem, bodyOccs);
+            SetFeGeometryData(pRailSlabFem, bodyOccs, true);
 
             //std::string meshName = std::string("Mesh[").append(SLAB_MESH_NAME).append("]");
 
@@ -108,35 +107,40 @@ namespace Vsar
             UpdateSweptMesh(pRailSlabFem->BaseFEModel(), GetCaeBodies(tmpBodyOccs),
                            SLAB_MESH_COLLECTOR_NAME, SLAB_MESH_NAME,
                            SLAB_ELEMENT_SIZE_NAME);
-
-            MergeDuplicateNodes();
-
-            UpdateRailSlabConnection(pRailSlabFem);
         }
+
+        UpdateRailSlabConnection(pRailSlabFem);
+        MergeDuplicateNodes();
     }
 
     void Train::UpdateBraseModel()
     {
-        if (GetCarriageCount() > m_oldCarriageCount)
+        int carriageCnt = GetCarriageCount();
+
+        if (carriageCnt == m_oldCarriageCount)
+            return;
+
+        BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
+        CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
+
+        if (carriageCnt > m_oldCarriageCount)
         {
-            BaseProjectProperty *pPrjProp       = Project::Instance()->GetProperty();
-            
             if (pPrjProp->GetProjectType() == Project::ProjectType_Bridge)
             {
-                CAE::FemPart        *pBridgeFem     = pPrjProp->GetBraceFemPart();
                 std::vector<Body*>   bodyOccs;
 
-                bodyOccs = GetGeoModelOccs(pBridgeFem, BRIDGE_BEAM_PART_NAME, BRIDGE_BEAM_BODY_NAME);
+                bodyOccs = GetGeoModelOccs(pBaseFem, BRIDGE_BEAM_PART_NAME, BRIDGE_BEAM_BODY_NAME);
 
-                SetFeGeometryData(pBridgeFem, bodyOccs);
+                SetFeGeometryData(pBaseFem, bodyOccs, false);
 
-                UpdateSweptMesh(pBridgeFem->BaseFEModel(), GetCaeBodies(bodyOccs),
+                UpdateSweptMesh(pBaseFem->BaseFEModel(), GetCaeBodies(bodyOccs),
                                BRIDGE_MESH_COLLECTOR_NAME, BRIDGE_MESH_NAME,
                                BRIDGE_ELEMENT_SIZE_NAME);
-
-                MergeDuplicateNodes();
             }
         }
+
+        UpdateBaseSlabConnection(pBaseFem);
+        MergeDuplicateNodes();
     }
 
     std::vector<Body*> Train::GetGeoModelOccs(FemPart *pFemPart, const std::string &bodyPrtName, const std::string &bodyName)
@@ -187,25 +191,34 @@ namespace Vsar
         railConnectPts = GetPointByLayer(pFemPart, RAIL_CONNECTION_POINT_LAYER);
         slabConnectPts = GetPointByLayer(pFemPart, SLAB_CONNECT_TO_RAIL_POINT_LAYER);
 
-        BaseFEModel              *pFeModel        = pFemPart->BaseFEModel();
-        CAEConnectionCollection  *pCaeConnCol     = pFeModel->CaeConnections();
-        CAEConnection            *pCaeConn        = pCaeConnCol->FindObject(std::string("Connection[") + RAIL_SLAB_CONNECTION_NAME + "]");
-        boost::shared_ptr<CAEConnectionBuilder> pCaeConnBuilder(pCaeConnCol->CreateConnectionBuilder(pCaeConn), boost::bind(&Builder::Destroy, _1));
+        Update1DConnection(pFemPart->BaseFEModel(), railConnectPts, slabConnectPts,
+            RAIL_SLAB_CONNECTION_NAME, RAIL_SLAB_CONNECTION_COLLECTOR_NAME);
+    }
 
-        pCaeConnBuilder->SourceSelection()->Add(railConnectPts);
-        pCaeConnBuilder->TargetSelection()->Add(slabConnectPts);
+    void Train::UpdateBaseSlabConnection(FemPart *pFemPart)
+    {
+        std::vector<TaggedObject*>  slabConnectPts;
+        std::vector<TaggedObject*>  baseConnectPts;
 
-        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
+        std::vector<TaggedObject*>  slabPartConnectPts;
+        std::vector<TaggedObject*>  basePartConnectPts;
 
-        std::string meshColFullName = std::string("MeshCollector[").append(RAIL_SLAB_CONNECTION_COLLECTOR_NAME).append("]");
+        //  get left side points
+        slabPartConnectPts = GetPointByLayer(pFemPart, SLAB_CONNECT_TO_BASE_LEFT_POINT_LAYER);
+        basePartConnectPts = GetPointByLayer(pFemPart, BASE_CONNECT_TO_SLAB_LEFT_POINT_LAYER);
 
-        MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
+        slabConnectPts.insert(slabConnectPts.end(), slabPartConnectPts.begin(), slabPartConnectPts.end());
+        baseConnectPts.insert(baseConnectPts.end(), basePartConnectPts.begin(), basePartConnectPts.end());
 
-        DestinationCollectorBuilder *pDstCol = pCaeConnBuilder->ElementType()->DestinationCollector();
-        pDstCol->SetAutomaticMode(false);
-        pDstCol->SetElementContainer(pMeshCol);
+        //  get right side points
+        slabPartConnectPts = GetPointByLayer(pFemPart, SLAB_CONNECT_TO_BASE_RIGHT_POINT_LAYER);
+        basePartConnectPts = GetPointByLayer(pFemPart, BASE_CONNECT_TO_SLAB_RIGHT_POINT_LAYER);
 
-        pCaeConnBuilder->Commit();
+        slabConnectPts.insert(slabConnectPts.end(), slabPartConnectPts.begin(), slabPartConnectPts.end());
+        baseConnectPts.insert(baseConnectPts.end(), basePartConnectPts.begin(), basePartConnectPts.end());
+
+        Update1DConnection(pFemPart->BaseFEModel(), slabConnectPts, baseConnectPts,
+            SLAB_BASE_CONNECTION_NAME, SLAB_BASE_CONNECTION_COLLECTOR_NAME);
     }
 
     void Train::OnInit()
@@ -213,12 +226,12 @@ namespace Vsar
         m_oldCarriageCount = GetCarriageCount();
     }
 
-    void Train::SetFeGeometryData( FemPart * pFemPart, const std::vector<Body*> &bodyOccs )
+    void Train::SetFeGeometryData( FemPart * pFemPart, const std::vector<Body*> &bodyOccs, bool syncLines )
     {
         scoped_ptr<FemSynchronizeOptions> psyncData;
 
         psyncData.reset(pFemPart->NewFemSynchronizeOptions());
-        psyncData->SetSynchronizeLinesFlag(true);
+        psyncData->SetSynchronizeLinesFlag(syncLines);
         psyncData->SetSynchronizePointsFlag(true);
 
         pFemPart->SetGeometryData(FemPart::UseBodiesOptionSelectedBodies, bodyOccs, psyncData.get());

@@ -219,10 +219,15 @@ namespace Vsar
         CAE::FemPart        *pBraceFem      = pPrjProp->GetBraceFemPart();
 
         UpdateFECompModel(pBraceFem, boost::bind(&BaseComponent::UpdateBraseModel, this));
+
+        CAE::BaseFemPart    *pAssemFem      = pPrjProp->GetAFemPart();
+
+        UpdateFECompModel(pAssemFem, boost::bind(&BaseComponent::UpdateAssembleModel, this));
+
     }
 
     template <typename UpdateCallback>
-    void BaseComponent::UpdateFECompModel(CAE::FemPart *pFem, UpdateCallback updateCb)
+    void BaseComponent::UpdateFECompModel(CAE::BaseFemPart *pFem, UpdateCallback updateCb)
     {
         PartLoadStatus      *pPrtLoadStatus = NULL;
 
@@ -257,6 +262,12 @@ namespace Vsar
 
     void BaseComponent::UpdateBraseModel()
     {
+    }
+
+    void BaseComponent::UpdateAssembleModel()
+    {
+        // merge duplicate nodes
+        MergeDuplicateNodes();
     }
 
     void BaseComponent::OnInit()

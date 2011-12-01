@@ -33,11 +33,13 @@ namespace Vsar
                                                 const std::string &bodyPrtName, const std::string &bodyName);
 
         void UpdateRailSlabConnection(NXOpen::CAE::FemPart *pFemPart);
+
+        void UpdateBaseSlabConnection(NXOpen::CAE::FemPart *pFemPart);
     private:
 
         int GetCarriageCount() const;
 
-        void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs );
+        void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs, bool syncLines );
 
     private:
         int  m_oldCarriageCount;
