@@ -37,7 +37,7 @@
 #include <NXOpen/SelectDisplayableObject.hxx>
 #include <NXOpen/Assemblies_Component.hxx>
 
-#include <NXOpen/CAE_IFEModel.hxx>
+#include <NXOpen/CAE_BaseFEModel.hxx>
 #include <NXOpen/CAE_CAEBody.hxx>
 #include <NXOpen/CAE_CAEFace.hxx>
 #include <NXOpen/CAE_MeshManager.hxx>
@@ -47,6 +47,12 @@
 #include <NXOpen/CAE_ElementTypeBuilder.hxx>
 #include <NXOpen/CAE_DestinationCollectorBuilder.hxx>
 #include <NXOpen/CAE_PropertyTable.hxx>
+
+#include <NXOpen/CAE_CAEConnectionCollection.hxx>
+#include <NXOpen/CAE_CAEConnection.hxx>
+#include <NXOpen/CAE_CAEConnectionBuilder.hxx>
+#include <NXOpen/SelectTaggedObjectList.hxx>
+
 
 #include <uf_sf.h>
 //#include <uf_so.h>
@@ -353,6 +359,53 @@ namespace Vsar
             pMesh3dHexBuilder->CommitMesh();
         }
 #endif
+    }
+
+    void Update1DConnection(BaseFEModel *pFeModel,
+                            const std::vector<TaggedObject*> &railConnectPts,
+                            const std::vector<TaggedObject*> &slabConnectPts,
+                            const std::string &connName,
+                            const std::string &connColName)
+    {
+        CAEConnectionCollection  *pCaeConnCol     = pFeModel->CaeConnections();
+        CAEConnection            *pCaeConn        = NULL;
+        bool                      createMode      = false;
+
+        try
+        {
+            pCaeConn = pCaeConnCol->FindObject(std::string("Connection[") + connName + "]");
+        }
+        catch (NXException&)
+        {
+            pCaeConn    = NULL;
+            createMode  = true;
+        }
+
+        boost::shared_ptr<CAEConnectionBuilder> pCaeConnBuilder(pCaeConnCol->CreateConnectionBuilder(pCaeConn), boost::bind(&Builder::Destroy, _1));
+
+        pCaeConnBuilder->SourceSelection()->Add(railConnectPts);
+        pCaeConnBuilder->TargetSelection()->Add(slabConnectPts);
+
+        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
+
+        std::string meshColFullName = std::string("MeshCollector[").append(connColName).append("]");
+
+        MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
+
+        DestinationCollectorBuilder *pDstCol = pCaeConnBuilder->ElementType()->DestinationCollector();
+        pDstCol->SetAutomaticMode(false);
+        pDstCol->SetElementContainer(pMeshCol);
+
+        pCaeConnBuilder->ElementType()->SetElementTypeName("CBUSH");
+        pCaeConnBuilder->SetType(CAEConnectionBuilder::ConnectionTypeEnumPointToPoint);
+        pCaeConnBuilder->SetMethodType(CAEConnectionBuilder::MethodTypeEnumProximity);
+
+        pCaeConn = dynamic_cast<CAEConnection*>(pCaeConnBuilder->Commit());
+
+        if (createMode)
+        {
+            pCaeConn->SetName(connName);
+        }
     }
 
     std::vector<CAEBody*> GetCaeBodies(const std::vector<Body*> &srcBodies)

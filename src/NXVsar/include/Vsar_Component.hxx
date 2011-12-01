@@ -15,7 +15,7 @@ namespace NXOpen
 
     namespace CAE
     {
-        class FemPart;
+        class BaseFemPart;
         class IFEModel;
         class CAEBody;
     }
@@ -63,11 +63,13 @@ namespace Vsar
         void UpdateFEModel();
 
         template <typename UpdateCallback>
-        void UpdateFECompModel(NXOpen::CAE::FemPart *pFem, UpdateCallback updateCb);
+        void UpdateFECompModel(NXOpen::CAE::BaseFemPart *pFem, UpdateCallback updateCb);
 
         virtual void UpdateRailSlabModel();
 
         virtual void UpdateBraseModel();
+
+        virtual void UpdateAssembleModel();
 
         void UpdateSweptMesh(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
                             const std::string &meshColName, const std::string &meshName, const std::string &eleSizeExpName);

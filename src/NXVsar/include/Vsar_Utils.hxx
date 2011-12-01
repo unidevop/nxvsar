@@ -25,6 +25,7 @@ namespace NXOpen
     namespace CAE
     {
         class IFEModel;
+        class BaseFEModel;
         class MeshManager;
         class MeshCollector;
         class CAEBody;
@@ -68,6 +69,12 @@ namespace Vsar
     void CreateSweptMesh_sf(NXOpen::CAE::IFEModel *pFeModel, NXOpen::CAE::CAEBody *pSolidBody,
                          const std::string &meshColName, const std::string &meshName,
                          NXOpen::CAE::CAEFace* pSrcFace, NXOpen::Expression *pEleSize);
+
+    void Update1DConnection(NXOpen::CAE::BaseFEModel *pFeModel,
+                            const std::vector<NXOpen::TaggedObject*> &railConnectPts,
+                            const std::vector<NXOpen::TaggedObject*> &slabConnectPts,
+                            const std::string &connName,
+                            const std::string &connColName);
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)
