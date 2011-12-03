@@ -57,7 +57,7 @@ namespace VsarUI
         //NXOpen::BlockStyler::UIBlock* m_grpMaterial;// Block type: Group
         NXOpen::BlockStyler::UIBlock* m_density;// Block type: Expression
         NXOpen::BlockStyler::UIBlock* m_elasticModulus;// Block type: Expression
-        NXOpen::BlockStyler::UIBlock* m_crossSectMomentInertia;// Block type: Expression
+        NXOpen::BlockStyler::UIBlock* m_poissonRatio;// Block type: Expression
 
     };
 }

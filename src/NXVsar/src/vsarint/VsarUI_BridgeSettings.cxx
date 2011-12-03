@@ -43,6 +43,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -52,13 +53,13 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"width",                       "beam",       "Width"},
-        {"height",                      "beam",       "Height"},
-        {"spanCnt",                     "bridge",     "Beam_Span"},
+        {WIDTH_ID_NAME,                 BEAM_PRT_PART_NAME,     WIDTH_EXP_NAME},
+        {HEIGHT_ID_NAME,                BEAM_PRT_PART_NAME,     HEIGHT_EXP_NAME},
+        {SPAN_COUNT_ID_NAME,            BRIDGE_PRT_PART_NAME,   SPAN_COUNT_EXP_NAME},
 
-        {"elasticModulus",              "Bridge_f",   "Bridge_Elastic_Modulus"},
-        {"unitWeight",                  "Bridge_f",   "Bridge_UnitWeight"},
-        {"crossSectMomentInertia",      "Bridge_f",   "Bridge_CrossSect_MomentInertia"}
+        {ELASTIC_MODULUS_ID_NAME,       BRIDGE_FEM_PART_NAME,   BRIDGE_ELASTIC_MODULUS_EXP_NAME},
+        {UNIT_WEIGHT_ID_NAME,           BRIDGE_FEM_PART_NAME,   BRIDGE_UNIT_WEIGHT_EXP_NAME},
+        {POISSON_RATIO_ID_NAME,         BRIDGE_FEM_PART_NAME,   BRIDGE_POISSON_RATIO_EXP_NAME}
     };
 
     //------------------------------------------------------------------------------
@@ -108,14 +109,14 @@ namespace VsarUI
             CompositeBlock *pTopBlock = m_theDialog->TopBlock();
 
             //grpGeometric = (pTopBlock->FindBlock("grpGeometric"));
-            m_width = pTopBlock->FindBlock("width");
-            m_height = pTopBlock->FindBlock("height");
-            m_spanCnt = pTopBlock->FindBlock("spanCnt");
+            m_width = pTopBlock->FindBlock(WIDTH_ID_NAME);
+            m_height = pTopBlock->FindBlock(HEIGHT_ID_NAME);
+            m_spanCnt = pTopBlock->FindBlock(SPAN_COUNT_ID_NAME);
 
             //grpMaterial = pTopBlock->FindBlock("grpMaterial");
-            m_elasticModulus = pTopBlock->FindBlock("elasticModulus");
-            m_unitWeight = pTopBlock->FindBlock("unitWeight");
-            m_crossSectMomentInertia = pTopBlock->FindBlock("crossSectMomentInertia");
+            m_elasticModulus = pTopBlock->FindBlock(ELASTIC_MODULUS_ID_NAME);
+            m_unitWeight = pTopBlock->FindBlock(UNIT_WEIGHT_ID_NAME);
+            m_poissonRatio = pTopBlock->FindBlock(POISSON_RATIO_ID_NAME);
         }
         catch(std::exception& ex)
         {
@@ -188,7 +189,7 @@ namespace VsarUI
             {
                 //---------Enter your code here-----------
             }
-            else if(block == m_crossSectMomentInertia)
+            else if(block == m_poissonRatio)
             {
                 //---------Enter your code here-----------
             }

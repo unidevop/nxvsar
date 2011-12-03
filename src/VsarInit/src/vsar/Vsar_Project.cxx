@@ -426,7 +426,7 @@ namespace Vsar
         }
 
         if (!isPrjPrt)
-            throw std::exception(MSGTXT("The part is not a vsar project part."));
+            throw NXException::Create(MSGTXT("The part is not a vsar project part."));
 
         return prjType;
     }
@@ -458,7 +458,7 @@ namespace Vsar
         }
 
         if (!isPrjPrt)
-            throw std::exception(MSGTXT("The part is not a vsar project part."));
+            throw NXException::Create(MSGTXT("The part is not a vsar project part."));
 
         return prjStatus;
     }

@@ -43,6 +43,8 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
+
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -52,9 +54,9 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"density",                     "RailSlab_f", "Rail_Density"},
-        {"elasticModulus",              "RailSlab_f", "Rail_Elastic_Modulus"},
-        {"crossSectMomentInertia",      "RailSlab_f", "Rail_CrossSect_MomentInertia"}
+        {MASS_DENSITY_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, RAIL_DENSITY_EXPRESSION_NAME},
+        {ELASTIC_MODULUS_ID_NAME,    RAIL_SLAB_FEM_PART_NAME, RAIL_ELASTIC_MODULUS_EXP_NAME},
+        {POISSON_RATIO_ID_NAME,      RAIL_SLAB_FEM_PART_NAME, RAIL_POISSON_RATIO_EXP_NAME}
     };
 
     //------------------------------------------------------------------------------
@@ -105,13 +107,13 @@ namespace VsarUI
 
             //grpGeometry = pTopBlock->FindBlock("grpGeometry");
             m_length = pTopBlock->FindBlock("length");
-            m_width = pTopBlock->FindBlock("width");
+            m_width = pTopBlock->FindBlock(WIDTH_ID_NAME);
             m_eleSize = pTopBlock->FindBlock("eleSize");
 
             //grpMaterial = pTopBlock->FindBlock("grpMaterial");
-            m_density = pTopBlock->FindBlock("density");
-            m_elasticModulus = pTopBlock->FindBlock("elasticModulus");
-            m_crossSectMomentInertia = pTopBlock->FindBlock("crossSectMomentInertia");
+            m_density = pTopBlock->FindBlock(MASS_DENSITY_ID_NAME);
+            m_elasticModulus = pTopBlock->FindBlock(ELASTIC_MODULUS_ID_NAME);
+            m_poissonRatio = pTopBlock->FindBlock(POISSON_RATIO_ID_NAME);
         }
         catch(std::exception& ex)
         {
@@ -184,7 +186,7 @@ namespace VsarUI
             {
                 //---------Enter your code here-----------
             }
-            else if(block == m_crossSectMomentInertia)
+            else if(block == m_poissonRatio)
             {
                 //---------Enter your code here-----------
             }
