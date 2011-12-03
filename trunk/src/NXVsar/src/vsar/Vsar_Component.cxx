@@ -286,7 +286,7 @@ namespace Vsar
 
         MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
-        for (int idx = pPolygonBodies.size() - 1; idx >= 0; idx--)
+        for (int idx = int(pPolygonBodies.size()) - 1; idx >= 0; idx--)
         {
             vCaeFaces = GetCaeFaceByName(pPolygonBodies[idx], FACE_NAME_TOP);
 

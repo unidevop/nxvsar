@@ -43,6 +43,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -52,11 +53,11 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"diameter",     "tunnel", "Diameter"},
-        {"width",        "tunnel", "Width"},
-        {"h1",           "tunnel", "Height_Top"},
-        {"h2",           "tunnel", "Height_Mid"},
-        {"h3",           "tunnel", "Height_Bottom"}
+        {DIAMETER_ID_NAME,     TUNNEL_PRT_PART_NAME, DIAMETER_EXP_NAME},
+        {WIDTH_ID_NAME,        TUNNEL_PRT_PART_NAME, WIDTH_EXP_NAME},
+        {TUNNEL_H1_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H1_EXP_NAME},
+        {TUNNEL_H2_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H2_EXP_NAME},
+        {TUNNEL_H3_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H3_EXP_NAME}
     };
 
     //------------------------------------------------------------------------------
@@ -107,11 +108,11 @@ namespace VsarUI
 
             //grpGeometry = pTopBlock->FindBlock("grpGeometry");
             m_image     = pTopBlock->FindBlock("image");
-            m_diameter  = pTopBlock->FindBlock("diameter");
-            m_width     = pTopBlock->FindBlock("width");
-            m_h1        = pTopBlock->FindBlock("h1");
-            m_h2        = pTopBlock->FindBlock("h2");
-            m_h3        = pTopBlock->FindBlock("h3");
+            m_diameter  = pTopBlock->FindBlock(DIAMETER_ID_NAME);
+            m_width     = pTopBlock->FindBlock(WIDTH_ID_NAME);
+            m_h1        = pTopBlock->FindBlock(TUNNEL_H1_ID_NAME);
+            m_h2        = pTopBlock->FindBlock(TUNNEL_H2_ID_NAME);
+            m_h3        = pTopBlock->FindBlock(TUNNEL_H3_ID_NAME);
         }
         catch(std::exception& ex)
         {

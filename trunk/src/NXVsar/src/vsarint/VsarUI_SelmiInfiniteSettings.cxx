@@ -43,6 +43,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -53,8 +54,8 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"width",               "base", "Width"},
-        {"height",              "base", "Height"}
+        {WIDTH_ID_NAME,    BASE_PRT_PART_NAME, WIDTH_EXP_NAME},
+        {HEIGHT_ID_NAME,   BASE_PRT_PART_NAME, HEIGHT_EXP_NAME}
     };
 
     //------------------------------------------------------------------------------
@@ -104,8 +105,8 @@ namespace VsarUI
             CompositeBlock *pTopBlock = m_theDialog->TopBlock();
 
             //grpGeometry = pTopBlock->FindBlock("grpGeometry");
-            m_width  = pTopBlock->FindBlock("width");
-            m_height = pTopBlock->FindBlock("height");
+            m_width  = pTopBlock->FindBlock(WIDTH_ID_NAME);
+            m_height = pTopBlock->FindBlock(HEIGHT_ID_NAME);
         }
         catch(std::exception& ex)
         {

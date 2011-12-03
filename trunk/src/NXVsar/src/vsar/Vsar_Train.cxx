@@ -26,6 +26,7 @@
 #include <Vsar_Utils.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
 using namespace boost;
 using namespace NXOpen;
 using namespace NXOpen::CAE;
@@ -39,20 +40,20 @@ namespace Vsar
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"carriageCount",               "train",    "Carriage_Count"},
-        //{"carriageLength",              "carriage", "Length"},
-        {"carriageDistance",            "carriage", "Distance"},
-        {"carriageWeight",              "carriage", "Weight"},
-        {"bogieLength",                 "carriage", "BogieLength"},
-        {"halfBogieDistance",           "carriage", "HalfBogieDistance"},
-        {"bogieWeight",                 "carriage", "BogieWeight"},
-        {"wheelSetInterval",            "carriage", "WheelSetInterval"},
-        {"wheelSetWeight",              "carriage", "WheelSetWeight"},
-        {"wheelSetSglStgSusp",          "carriage", "WheelSetSglStgSusp"},
-        {"wheelSetSglStgSuspDamp",      "carriage", "WheelSetSglStgSuspDamp"},
-        {"wheelSetTwoStgSuspStiff",     "carriage", "WheelSetTwoStgSuspStiff"},
-        {"wheelSetTwoStgSuspDamp",      "carriage", "WheelSetTwoStgSuspDamp"},
-        {"wheelSetContactCoefElast",    "carriage", "WheelSetContactCoefElast"}
+        {TRAIN_CARRIAGE_COUNT_ID_NAME,               TRAIN_PRT_PART_NAME,    TRAIN_CARRIAGE_COUNT_EXP_NAME},
+        //{"carriageLength",              CARRIAGE_PRT_PART_NAME, "Length"},
+        {TRAIN_CARRIAGE_DISTANCE_ID_NAME,            CARRIAGE_PRT_PART_NAME, TRAIN_CARRIAGE_DISTANCE_EXP_NAME},
+        {TRAIN_CARRIAGE_WEIGHT_ID_NAME,              CARRIAGE_PRT_PART_NAME, TRAIN_CARRIAGE_WEIGHT_EXP_NAME},
+        {TRAIN_BOGIE_LENGTH_ID_NAME,                 CARRIAGE_PRT_PART_NAME, TRAIN_BOGIE_LENGTH_EXP_NAME},
+        {TRAIN_HALF_BOGIE_DISTANCE_ID_NAME,          CARRIAGE_PRT_PART_NAME, TRAIN_HALF_BOGIE_DISTANCE_EXP_NAME},
+        {TRAIN_BOGIE_WEIGHT_ID_NAME,                 CARRIAGE_PRT_PART_NAME, TRAIN_BOGIE_WEIGHT_EXP_NAME},
+        {TRAIN_WHEELSET_INTERVAL_ID_NAME,            CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_INTERVAL_EXP_NAME},
+        {TRAIN_WHEELSET_WEIGHT_ID_NAME,              CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_WEIGHT_EXP_NAME},
+        {TRAIN_WHEELSET_SGL_STG_SUSP_ID_NAME,        CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_SGL_STG_SUSP_EXP_NAME},
+        {TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_ID_NAME,   CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_EXP_NAME},
+        {TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_ID_NAME,  CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_EXP_NAME},
+        {TRAIN_WHEELSET_TWO_STG_SUSP_DAMP_ID_NAME,   CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_TWO_STG_SUSP_DAMP_EXP_NAME},
+        {TRAIN_WHEELSET_CONTACT_COEF_ELAST_ID_NAME,  CARRIAGE_PRT_PART_NAME, TRAIN_WHEELSET_CONTACT_COEF_ELAST_EXP_NAME}
     };
 
     Train::Train() : BaseComponent(attrExpInfo, N_ELEMENTS(attrExpInfo)),

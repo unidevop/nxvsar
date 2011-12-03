@@ -56,6 +56,7 @@
 //#include <Vsar_Utils.hxx>
 #include <Vsar_Train.hxx>
 
+#include <Vsar_Names.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -113,22 +114,22 @@ namespace VsarUI
             CompositeBlock *pTopBlock = m_theDialog->TopBlock();
 
             //m_grpCarriage = pTopBlock->FindBlock("grpCarriage");
-            m_carriageCount = pTopBlock->FindBlock("carriageCount");
+            m_carriageCount = pTopBlock->FindBlock(TRAIN_CARRIAGE_COUNT_ID_NAME);
             m_carriageLength = pTopBlock->FindBlock("carriageLength");
-            m_carriageDistance = pTopBlock->FindBlock("carriageDistance");
-            m_carriageWeight = pTopBlock->FindBlock("carriageWeight");
+            m_carriageDistance = pTopBlock->FindBlock(TRAIN_CARRIAGE_DISTANCE_ID_NAME);
+            m_carriageWeight = pTopBlock->FindBlock(TRAIN_CARRIAGE_WEIGHT_ID_NAME);
             //m_grpBogie = pTopBlock->FindBlock("grpBogie");
-            m_bogieLength = pTopBlock->FindBlock("bogieLength");
-            m_halfBogieDistance = pTopBlock->FindBlock("halfBogieDistance");
-            m_bogieWeight = pTopBlock->FindBlock("bogieWeight");
+            m_bogieLength = pTopBlock->FindBlock(TRAIN_BOGIE_LENGTH_ID_NAME);
+            m_halfBogieDistance = pTopBlock->FindBlock(TRAIN_HALF_BOGIE_DISTANCE_ID_NAME);
+            m_bogieWeight = pTopBlock->FindBlock(TRAIN_BOGIE_WEIGHT_ID_NAME);
             //m_grpWheelSet = pTopBlock->FindBlock("grpWheelSet");
-            m_wheelSetInterval = pTopBlock->FindBlock("wheelSetInterval");
-            m_wheelSetWeight = pTopBlock->FindBlock("wheelSetWeight");
-            m_wheelSetSglStgSusp = pTopBlock->FindBlock("wheelSetSglStgSusp");
-            m_wheelSetSglStgSuspDamp = pTopBlock->FindBlock("wheelSetSglStgSuspDamp");
-            m_wheelSetTwoStgSuspStiff = pTopBlock->FindBlock("wheelSetTwoStgSuspStiff");
-            m_wheelSetTwoStgSuspDamp = pTopBlock->FindBlock("wheelSetTwoStgSuspDamp");
-            m_wheelSetContactCoefElast = pTopBlock->FindBlock("wheelSetContactCoefElast");
+            m_wheelSetInterval = pTopBlock->FindBlock(TRAIN_WHEELSET_INTERVAL_ID_NAME);
+            m_wheelSetWeight = pTopBlock->FindBlock(TRAIN_WHEELSET_WEIGHT_ID_NAME);
+            m_wheelSetSglStgSusp = pTopBlock->FindBlock(TRAIN_WHEELSET_SGL_STG_SUSP_ID_NAME);
+            m_wheelSetSglStgSuspDamp = pTopBlock->FindBlock(TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_ID_NAME);
+            m_wheelSetTwoStgSuspStiff = pTopBlock->FindBlock(TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_ID_NAME);
+            m_wheelSetTwoStgSuspDamp = pTopBlock->FindBlock(TRAIN_WHEELSET_TWO_STG_SUSP_DAMP_ID_NAME);
+            m_wheelSetContactCoefElast = pTopBlock->FindBlock(TRAIN_WHEELSET_CONTACT_COEF_ELAST_ID_NAME);
         }
         catch(std::exception& ex)
         {

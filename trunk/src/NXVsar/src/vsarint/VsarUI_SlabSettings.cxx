@@ -43,6 +43,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Names.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -52,15 +53,15 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {"supportCnt",                  "slab",       "Support_Count"},
+        {SLAB_SUPPORT_COUNT_ID_NAME,    SLAB_PRT_PART_NAME,       SLAB_SUPPORT_COUNT_EXP_NAME},
 
-        {"fastenerStiffness",           "RailSlab_f", "Slab_Fastener_Stiffness"},
-        {"fastenerDamping",             "RailSlab_f", "Slab_Fastener_Damping"},
-        {"massRatio",                   "RailSlab_f", "Slab_Mass_Ratio"},
-        {"stiffnessRatio",              "RailSlab_f", "Slab_Stiffness_Ratio"},
-        {"dampingRatio",                "RailSlab_f", "Slab_Damping_Ratio"},
-        {"elasticModulus",              "RailSlab_f", "Slab_Elastic_Modulus"},
-        {"crossSectMomentInertia",      "RailSlab_f", "Slab_CrossSect_MomentInertia"},
+        {FASTENER_STIFFNESS_ID_NAME,    RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_STIFFNESS_EXP_NAME},
+        {FASTENER_DAMPING_ID_NAME,      RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_DAMPING_EXP_NAME},
+        {MASS_RATIO_ID_NAME,            RAIL_SLAB_FEM_PART_NAME, SLAB_MASS_RATIO_EXP_NAME},
+        {STIFFNESS_RATIO_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_STIFFNESS_RATIO_EXP_NAME},
+        {DAMPING_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_DAMPING_RATIO_EXP_NAME},
+        {ELASTIC_MODULUS_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_ELASTIC_MODULUS_EXP_NAME},
+        {POISSON_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_POISSON_RATIO_EXP_NAME},
     };
 
     //------------------------------------------------------------------------------
@@ -113,16 +114,16 @@ namespace VsarUI
             m_length = pTopBlock->FindBlock("length");
             //m_eleSize = pTopBlock->FindBlock("eleSize");
             //counts = pTopBlock->FindBlock("counts");
-            m_supportCnt = pTopBlock->FindBlock("supportCnt");
+            m_supportCnt = pTopBlock->FindBlock(SLAB_SUPPORT_COUNT_ID_NAME);
 
             //grpMaterial = pTopBlock->FindBlock("grpMaterial");
-            m_fastenerStiffness = pTopBlock->FindBlock("fastenerStiffness");
-            m_fastenerDamping = pTopBlock->FindBlock("fastenerDamping");
-            m_massRatio = pTopBlock->FindBlock("massRatio");
-            m_stiffnessRatio = pTopBlock->FindBlock("stiffnessRatio");
-            m_dampingRatio = pTopBlock->FindBlock("dampingRatio");
-            m_elasticModulus = pTopBlock->FindBlock("elasticModulus");
-            m_crossSectMomentInertia = pTopBlock->FindBlock("crossSectMomentInertia");
+            m_fastenerStiffness = pTopBlock->FindBlock(FASTENER_STIFFNESS_ID_NAME);
+            m_fastenerDamping = pTopBlock->FindBlock(FASTENER_DAMPING_ID_NAME);
+            m_massRatio = pTopBlock->FindBlock(MASS_RATIO_ID_NAME);
+            m_stiffnessRatio = pTopBlock->FindBlock(STIFFNESS_RATIO_ID_NAME);
+            m_dampingRatio = pTopBlock->FindBlock(DAMPING_RATIO_ID_NAME);
+            m_elasticModulus = pTopBlock->FindBlock(ELASTIC_MODULUS_ID_NAME);
+            m_poissonRatio = pTopBlock->FindBlock(POISSON_RATIO_ID_NAME);
         }
         catch(std::exception& ex)
         {
@@ -215,7 +216,7 @@ namespace VsarUI
             {
                 //---------Enter your code here-----------
             }
-            else if(block == m_crossSectMomentInertia)
+            else if(block == m_poissonRatio)
             {
                 //---------Enter your code here-----------
             }
