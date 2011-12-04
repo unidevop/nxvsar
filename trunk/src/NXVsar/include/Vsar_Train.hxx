@@ -4,15 +4,15 @@
 
 #include <Vsar_Component.hxx>
 
-namespace NXOpen
-{
-    class Body;
-
-    namespace CAE
-    {
-        class FemPart;
-    }
-}
+//namespace NXOpen
+//{
+//    class Body;
+//
+//    namespace CAE
+//    {
+//        class FemPart;
+//    }
+//}
 
 namespace Vsar
 {
@@ -25,21 +25,30 @@ namespace Vsar
         virtual void OnInit();
 
     protected:
-        virtual void UpdateRailSlabModel();
 
-        virtual void UpdateBraseModel();
+        virtual bool CanUpdateRailSlabFEModel() const;
 
-        std::vector<NXOpen::Body*> GetGeoModelOccs(NXOpen::CAE::FemPart *pFemPart,
-                                                const std::string &bodyPrtName, const std::string &bodyName);
+        virtual bool CanUpdateBraseFEModel() const;
 
-        void UpdateRailSlabConnection(NXOpen::CAE::FemPart *pFemPart);
+        virtual bool CanUpdateRailSlabConnection() const;
 
-        void UpdateBaseSlabConnection(NXOpen::CAE::FemPart *pFemPart);
+        virtual bool CanUpdateBraseConnection() const;
+
+        //virtual void UpdateRailSlabModel();
+
+        //virtual void UpdateBraseModel();
+
+        //std::vector<NXOpen::Body*> GetGeoModelOccs(NXOpen::CAE::FemPart *pFemPart,
+        //                                        const std::string &bodyPrtName, const std::string &bodyName);
+
+        //void UpdateRailSlabConnection(NXOpen::CAE::FemPart *pFemPart);
+
+        //void UpdateBaseSlabConnection(NXOpen::CAE::FemPart *pFemPart);
     private:
 
         int GetCarriageCount() const;
 
-        void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs, bool syncLines );
+        //void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs, bool syncLines );
 
     private:
         int  m_oldCarriageCount;

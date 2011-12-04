@@ -43,6 +43,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Init_Utils.hxx>
 
+#include <Vsar_Slab.hxx>
 #include <Vsar_Names.hxx>
 
 using namespace NXOpen;
@@ -51,24 +52,24 @@ using namespace Vsar;
 
 namespace VsarUI
 {
-    static CompAttrInfo attrExpInfo[] =
-    {
-        {SLAB_SUPPORT_COUNT_ID_NAME,    SLAB_PRT_PART_NAME,       SLAB_SUPPORT_COUNT_EXP_NAME},
+    //static CompAttrInfo attrExpInfo[] =
+    //{
+    //    {SLAB_SUPPORT_COUNT_ID_NAME,    SLAB_PRT_PART_NAME,       SLAB_SUPPORT_COUNT_EXP_NAME},
 
-        {FASTENER_STIFFNESS_ID_NAME,    RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_STIFFNESS_EXP_NAME},
-        {FASTENER_DAMPING_ID_NAME,      RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_DAMPING_EXP_NAME},
-        {MASS_RATIO_ID_NAME,            RAIL_SLAB_FEM_PART_NAME, SLAB_MASS_RATIO_EXP_NAME},
-        {STIFFNESS_RATIO_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_STIFFNESS_RATIO_EXP_NAME},
-        {DAMPING_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_DAMPING_RATIO_EXP_NAME},
-        {ELASTIC_MODULUS_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_ELASTIC_MODULUS_EXP_NAME},
-        {POISSON_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_POISSON_RATIO_EXP_NAME},
-    };
+    //    {FASTENER_STIFFNESS_ID_NAME,    RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_STIFFNESS_EXP_NAME},
+    //    {FASTENER_DAMPING_ID_NAME,      RAIL_SLAB_FEM_PART_NAME, RAIL_FASTENER_DAMPING_EXP_NAME},
+    //    {MASS_RATIO_ID_NAME,            RAIL_SLAB_FEM_PART_NAME, SLAB_MASS_RATIO_EXP_NAME},
+    //    {STIFFNESS_RATIO_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_STIFFNESS_RATIO_EXP_NAME},
+    //    {DAMPING_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_DAMPING_RATIO_EXP_NAME},
+    //    {ELASTIC_MODULUS_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, SLAB_ELASTIC_MODULUS_EXP_NAME},
+    //    {POISSON_RATIO_ID_NAME,         RAIL_SLAB_FEM_PART_NAME, SLAB_POISSON_RATIO_EXP_NAME},
+    //};
 
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
     SlabSettings::SlabSettings() : BaseCompDialog("SlabSettings.dlx",
-                                                  new BaseComponent(attrExpInfo, N_ELEMENTS(attrExpInfo)))
+                                                  new Slab)
     {
     }
 
