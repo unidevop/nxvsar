@@ -1,16 +1,16 @@
 
-#ifndef VSAR_SLAB_H_INCLUDED
-#define VSAR_SLAB_H_INCLUDED
+#ifndef VSAR_BRIDGE_H_INCLUDED
+#define VSAR_BRIDGE_H_INCLUDED
 
 #include <Vsar_Component.hxx>
 
 namespace Vsar
 {
-    class Slab : public BaseComponent
+    class Bridge : public BaseComponent
     {
     public:
-        Slab();
-        ~Slab();
+        Bridge();
+        ~Bridge();
 
         virtual void OnInit();
 
@@ -25,11 +25,13 @@ namespace Vsar
         virtual bool CanUpdateBraseConnection() const;
     private:
 
-        int GetSupportCount() const;
+        double GetHeight() const;
+        int GetSpanCount() const;
 
     private:
-        int  m_oldSupportCount;
+        double m_oldHeight;
+        int  m_oldSpanCount;
     };
 }
 
-#endif //VSAR_SLAB_H_INCLUDED
+#endif //VSAR_BRIDGE_H_INCLUDED

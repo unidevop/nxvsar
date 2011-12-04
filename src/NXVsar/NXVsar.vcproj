@@ -197,11 +197,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\vsar\Vsar_Bridge.cxx"
+				>
+			</File>
+			<File
 				RelativePath=".\src\vsar\Vsar_Component.cxx"
 				>
 			</File>
 			<File
 				RelativePath=".\src\vsar\Vsar_Result.cxx"
+				>
+			</File>
+			<File
+				RelativePath=".\src\vsar\Vsar_Slab.cxx"
 				>
 			</File>
 			<File
@@ -267,6 +275,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\include\Vsar_Bridge.hxx"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Vsar_Component.hxx"
 				>
 			</File>
@@ -276,6 +288,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Vsar_Result.hxx"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Vsar_Slab.hxx"
 				>
 			</File>
 			<File

@@ -11,11 +11,13 @@
 //------------------------------------------------------------------------------
 namespace NXOpen
 {
+    class Body;
     class Expression;
 
     namespace CAE
     {
         class BaseFemPart;
+        class FemPart;
         class IFEModel;
         class CAEBody;
     }
@@ -65,11 +67,15 @@ namespace Vsar
         template <typename UpdateCallback>
         void UpdateFECompModel(NXOpen::CAE::BaseFemPart *pFem, UpdateCallback updateCb);
 
-        virtual void UpdateRailSlabModel();
+        void UpdateRailSlabModel();
 
-        virtual void UpdateBraseModel();
+        void UpdateBraseModel();
 
-        virtual void UpdateAssembleModel();
+        virtual bool CanUpdateRailSlabFEModel() const;
+
+        virtual bool CanUpdateBraseFEModel() const;
+
+        void UpdateAssembleModel();
 
         void UpdateSweptMesh(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
                             const std::string &meshColName, const std::string &meshName, const std::string &eleSizeExpName);
@@ -77,7 +83,20 @@ namespace Vsar
         void UpdateSweptMesh_sf(NXOpen::CAE::IFEModel *pFeModel, const std::vector<NXOpen::CAE::CAEBody*> &pPolygonBodies,
                             const std::string &meshColName, const std::string &meshName, NXOpen::Expression *pEleSize);
 
+        std::vector<NXOpen::Body*> GetGeoModelOccs(NXOpen::CAE::FemPart *pFemPart,
+            const std::string &bodyPrtName, const std::string &bodyName);
+
+        void UpdateRailSlabConnection();
+
+        void UpdateBaseSlabConnection();
+
+        virtual bool CanUpdateRailSlabConnection() const;
+
+        virtual bool CanUpdateBraseConnection() const;
+
         void MergeDuplicateNodes();
+
+        void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs, bool syncLines );
 
     protected:
         StlCompAttrInfoVector   m_compAttrs;
