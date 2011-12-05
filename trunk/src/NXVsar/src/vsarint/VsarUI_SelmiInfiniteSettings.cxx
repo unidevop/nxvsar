@@ -44,6 +44,7 @@
 #include <Vsar_Init_Utils.hxx>
 
 #include <Vsar_Names.hxx>
+#include <Vsar_SelmiInfiniteBase.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -52,17 +53,11 @@ using namespace Vsar;
 
 namespace VsarUI
 {
-    static CompAttrInfo attrExpInfo[] =
-    {
-        {WIDTH_ID_NAME,    BASE_PRT_PART_NAME, WIDTH_EXP_NAME},
-        {HEIGHT_ID_NAME,   BASE_PRT_PART_NAME, HEIGHT_EXP_NAME}
-    };
-
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
     SelmiInfiniteSettings::SelmiInfiniteSettings() : BaseCompDialog("Selmi-Infinite.dlx",
-                                                    new BaseComponent(attrExpInfo, N_ELEMENTS(attrExpInfo)))
+                                                    new SelmiInfiniteBase())
     {
     }
 
