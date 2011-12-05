@@ -44,6 +44,7 @@
 #include <Vsar_Init_Utils.hxx>
 
 #include <Vsar_Names.hxx>
+#include <Vsar_Tunnel.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -51,20 +52,11 @@ using namespace Vsar;
 
 namespace VsarUI
 {
-    static CompAttrInfo attrExpInfo[] =
-    {
-        {DIAMETER_ID_NAME,     TUNNEL_PRT_PART_NAME, DIAMETER_EXP_NAME},
-        {WIDTH_ID_NAME,        TUNNEL_PRT_PART_NAME, WIDTH_EXP_NAME},
-        {TUNNEL_H1_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H1_EXP_NAME},
-        {TUNNEL_H2_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H2_EXP_NAME},
-        {TUNNEL_H3_ID_NAME,    TUNNEL_PRT_PART_NAME, TUNNEL_H3_EXP_NAME}
-    };
-
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
     TunnelSettings::TunnelSettings() : BaseCompDialog("Tunnel.dlx",
-                                      new BaseComponent(attrExpInfo, N_ELEMENTS(attrExpInfo)))
+                                      new Tunnel())
     {
     }
 

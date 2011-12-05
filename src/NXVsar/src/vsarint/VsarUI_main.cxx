@@ -209,8 +209,11 @@ struct MenuItemCallbackInfo
     //------------------------------------------------------------------------------
     extern "C" DllExport int ufusr_ask_unload()
     {
-        //return (int)Session::LibraryUnloadOptionExplicitly;
+#ifdef DEBUG || _DEBUG
         return (int)Session::LibraryUnloadOptionImmediately;
+#else
+        return (int)Session::LibraryUnloadOptionExplicitly;
+#endif
         //return (int)Session::LibraryUnloadOptionAtTermination;
     }
     
