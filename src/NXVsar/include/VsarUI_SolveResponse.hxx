@@ -13,8 +13,8 @@
 //
 //==============================================================================
 
-#ifndef VSARUI_SOLVE_H_INCLUDED
-#define VSARUI_SOLVE_H_INCLUDED
+#ifndef VSARUI_SOLVERESPONSE_H_INCLUDED
+#define VSARUI_SOLVERESPONSE_H_INCLUDED
 
 //------------------------------------------------------------------------------
 //These includes are needed for the following template code
@@ -26,12 +26,19 @@
 //------------------------------------------------------------------------------
 namespace VsarUI
 {
-    class Solve : public BaseDialog
+    class SolveResponse : public BaseDialog
     {
+    public:
+        enum SelectionOutputType
+        {
+            Selection_Output_Elements = 0,
+            Selection_Output_Nodes
+        };
+
         // class members
     public:
-        Solve();
-        ~Solve();
+        SolveResponse();
+        ~SolveResponse();
 
         static void ShowDialog();
 
@@ -52,11 +59,16 @@ namespace VsarUI
         NXOpen::BlockStyler::UIBlock* m_timeStep;// Block type: Expression
 
         //NXOpen::BlockStyler::UIBlock* outputGrp;// Block type: Group
-        NXOpen::BlockStyler::UIBlock* m_hasTimeOutput;// Block type: Toggle
-        NXOpen::BlockStyler::UIBlock* m_outputTime;// Block type: Expression
-        NXOpen::BlockStyler::UIBlock* m_hasNodesOutput;// Block type: Toggle
+        //NXOpen::BlockStyler::UIBlock* m_hasTimeOutput;// Block type: Toggle
+        //NXOpen::BlockStyler::UIBlock* m_outputTime;// Block type: Expression
+        //NXOpen::BlockStyler::UIBlock* m_hasNodesOutput;// Block type: Toggle
+
+        NXOpen::BlockStyler::UIBlock* m_selOutputType;// Block type: Enumeration
+        NXOpen::BlockStyler::UIBlock* m_outputElements;// Block type: Select Elements
         NXOpen::BlockStyler::UIBlock* m_outputNode;// Block type: Select Nodes
+
+        NXOpen::BlockStyler::UIBlock* m_hasNoiseNodeOutput;// Block type: Toggle
 
     };
 }
-#endif //VSARUI_SOLVE_H_INCLUDED
+#endif //VSARUI_SOLVERESPONSE_H_INCLUDED

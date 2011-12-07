@@ -209,6 +209,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\vsar\Vsar_SelmiInfiniteBase.cxx"
+				>
+			</File>
+			<File
 				RelativePath=".\src\vsar\Vsar_Slab.cxx"
 				>
 			</File>
@@ -218,6 +222,10 @@
 			</File>
 			<File
 				RelativePath=".\src\vsar\Vsar_Train.cxx"
+				>
+			</File>
+			<File
+				RelativePath=".\src\vsar\Vsar_Tunnel.cxx"
 				>
 			</File>
 			<File
@@ -257,7 +265,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\vsarint\VsarUI_Solve.cxx"
+				RelativePath=".\src\vsarint\VsarUI_SolveResponse.cxx"
 				>
 			</File>
 			<File
@@ -291,6 +299,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\Vsar_SelmiInfiniteBase.hxx"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Vsar_Slab.hxx"
 				>
 			</File>
@@ -300,6 +312,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Vsar_Train.hxx"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Vsar_Tunnel.hxx"
 				>
 			</File>
 			<File
@@ -335,7 +351,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\VsarUI_Solve.hxx"
+				RelativePath=".\include\VsarUI_SolveResponse.hxx"
 				>
 			</File>
 			<File

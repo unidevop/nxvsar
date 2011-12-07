@@ -46,7 +46,8 @@ namespace Vsar
         {
             ProjectStatus_None,
             ProjectStatus_Defined,
-            ProjectStatus_Solved
+            ProjectStatus_ResponseSolved,
+            ProjectStatus_NoiseSolved
         };
 
         typedef struct

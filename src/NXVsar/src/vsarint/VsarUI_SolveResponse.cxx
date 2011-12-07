@@ -35,7 +35,7 @@
 //These includes are needed for the following template code
 //------------------------------------------------------------------------------
 #include <uf_defs.h>
-#include <VsarUI_Solve.hxx>
+#include <VsarUI_SolveResponse.hxx>
 
 #include <NXOpen/UI.hxx>
 #include <NXOpen/NXMessageBox.hxx>
@@ -53,23 +53,23 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
-    Solve::Solve() : BaseDialog("Solve.dlx")
+    SolveResponse::SolveResponse() : BaseDialog("SolveResponse.dlx")
     {
     }
 
     //------------------------------------------------------------------------------
     // Destructor for NX Styler class
     //------------------------------------------------------------------------------
-    Solve::~Solve()
+    SolveResponse::~SolveResponse()
     {
     }
 
     //------------------------------------------------------------------------------
     //Method name: Show_Solve
     //------------------------------------------------------------------------------
-    void Solve::ShowDialog()
+    void SolveResponse::ShowDialog()
     {
-        boost::scoped_ptr<Solve> pSolveDlg(new Solve());
+        boost::scoped_ptr<SolveResponse> pSolveDlg(new SolveResponse());
 
         try
         {
@@ -90,7 +90,7 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     //Callback Name: initialize_cb
     //------------------------------------------------------------------------------
-    void Solve::InitializeCb()
+    void SolveResponse::InitializeCb()
     {
         CompositeBlock *pTopBlock = m_theDialog->TopBlock();
 
@@ -100,10 +100,15 @@ namespace VsarUI
             m_trainSpeed        = pTopBlock->FindBlock("trainSpeed");
             m_timeStep          = pTopBlock->FindBlock("timeStep");
             //outputGrp         = pTopBlock->FindBlock("outputGrp");
-            m_hasTimeOutput     = pTopBlock->FindBlock("hasTimeOutput");
-            m_outputTime        = pTopBlock->FindBlock("outputTime");
-            m_hasNodesOutput    = pTopBlock->FindBlock("hasNodesOutput");
-            m_outputNode        = pTopBlock->FindBlock("outputNode");
+            //m_hasTimeOutput     = pTopBlock->FindBlock("hasTimeOutput");
+            //m_outputTime        = pTopBlock->FindBlock("outputTime");
+            //m_hasNodesOutput    = pTopBlock->FindBlock("hasNodesOutput");
+
+            m_selOutputType      = pTopBlock->FindBlock("selOutputType");
+            m_outputElements     = pTopBlock->FindBlock("outputElements");
+            m_outputNode         = pTopBlock->FindBlock("outputNode");
+
+            m_hasNoiseNodeOutput = pTopBlock->FindBlock("hasNoiseNodeOutput");
         }
         catch(std::exception& ex)
         {
@@ -117,18 +122,19 @@ namespace VsarUI
     //This callback is executed just before the dialog launch. Thus any value set 
     //here will take precedence and dialog will be launched showing that value. 
     //------------------------------------------------------------------------------
-    void Solve::DialogShownCb()
+    void SolveResponse::DialogShownCb()
     {
         try
         {
-            boost::scoped_ptr<PropertyList> pHasTimeOutputPropList(m_hasTimeOutput->GetProperties());
-            boost::scoped_ptr<PropertyList> pHasNodesPropList(m_hasNodesOutput->GetProperties());
+            //boost::scoped_ptr<PropertyList> pHasTimeOutputPropList(m_selOutputType->GetProperties());
+            //boost::scoped_ptr<PropertyList> pHasNodesPropList(m_outputElements->GetProperties());
+            //boost::scoped_ptr<PropertyList> pHasNodesPropList(m_outputNode->GetProperties());
 
-            pHasTimeOutputPropList->SetLogical("Value", true);
-            pHasNodesPropList->SetLogical("Value", true);
+            //pHasTimeOutputPropList->SetLogical("Value", true);
+            //pHasNodesPropList->SetLogical("Value", true);
 
-            UpdateCb(m_hasTimeOutput);
-            UpdateCb(m_hasNodesOutput);
+            //UpdateCb(pHasTimeOutputPropList);
+            UpdateCb(m_selOutputType);
         }
         catch(std::exception& ex)
         {
@@ -140,12 +146,12 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     //Callback Name: apply_cb
     //------------------------------------------------------------------------------
-    int Solve::ApplyCb()
+    int SolveResponse::ApplyCb()
     {
         int errorCode = 0;
         try
         {
-            SolveOperation   solveOper;
+            SolveResponseOperation   solveOper;
 
             solveOper.Execute();
         }
@@ -161,39 +167,25 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     //Callback Name: update_cb
     //------------------------------------------------------------------------------
-    int Solve::UpdateCb(UIBlock* block)
+    int SolveResponse::UpdateCb(UIBlock* block)
     {
         try
         {
-            if(block == m_trainSpeed)
+            if(block == m_selOutputType)
             {
-                //---------Enter your code here-----------
-            }
-            else if(block == m_timeStep)
-            {
-                //---------Enter your code here-----------
-            }
-            else if(block == m_hasTimeOutput)
-            {
-                boost::scoped_ptr<PropertyList> pHasTimeOutputPropList(m_hasTimeOutput->GetProperties());
-                boost::scoped_ptr<PropertyList> pOutputTimePropList(m_outputTime->GetProperties());
-
-                pOutputTimePropList->SetLogical("Enable", pHasTimeOutputPropList->GetLogical("Value"));
-            }
-            else if(block == m_outputTime)
-            {
-                //---------Enter your code here-----------
-            }
-            else if(block == m_hasNodesOutput)
-            {
-                boost::scoped_ptr<PropertyList> pHasNodesPropList(m_hasNodesOutput->GetProperties());
+                boost::scoped_ptr<PropertyList> pselOutputTypePropList(m_selOutputType->GetProperties());
+                boost::scoped_ptr<PropertyList> pOutputElemsPropList(m_outputElements->GetProperties());
                 boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNode->GetProperties());
 
-                pOutputNodesPropList->SetLogical("Enable", pHasNodesPropList->GetLogical("Value"));
-            }
-            else if(block == m_outputNode)
-            {
-                //---------Enter your code here-----------
+                SelectionOutputType selOutputType = static_cast<SelectionOutputType>(pselOutputTypePropList->GetEnum("Value"));
+
+                pOutputElemsPropList->SetLogical("Show", selOutputType == Selection_Output_Elements);
+                if (selOutputType == Selection_Output_Elements)
+                    m_outputElements->Focus();
+
+                pOutputNodesPropList->SetLogical("Show", selOutputType == Selection_Output_Nodes);
+                if (selOutputType == Selection_Output_Nodes)
+                    m_outputNode->Focus();
             }
         }
         catch(std::exception& ex)
