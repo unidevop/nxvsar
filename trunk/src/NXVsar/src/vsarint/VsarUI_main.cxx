@@ -54,7 +54,7 @@
 #include <VsarUI_BridgeSettings.hxx>
 #include <VsarUI_SelmiInfiniteSettings.hxx>
 #include <VsarUI_TunnelSettings.hxx>
-#include <VsarUI_Solve.hxx>
+#include <VsarUI_SolveResponse.hxx>
 
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Init_Names.hxx>
@@ -172,7 +172,7 @@ struct MenuItemCallbackInfo
             {MENU_ITEM_NAME_SET_BRIDGE,         BridgeSettings::ShowDialog},
             {MENU_ITEM_NAME_SET_BASE,           SelmiInfiniteSettings::ShowDialog},
             {MENU_ITEM_NAME_SET_TUNNEL,         TunnelSettings::ShowDialog},
-            {MENU_ITEM_NAME_SOLVE_RESPONSE,     Solve::ShowDialog},
+            {MENU_ITEM_NAME_SOLVE_RESPONSE,     SolveResponse::ShowDialog},
             //{MENU_ITEM_NAME_SOLVE_NOISE,        TrainSettings::ShowDialog},
             //{MENU_ITEM_NAME_VIEW_RESULT,        TrainSettings::ShowDialog}
         };
@@ -209,7 +209,7 @@ struct MenuItemCallbackInfo
     //------------------------------------------------------------------------------
     extern "C" DllExport int ufusr_ask_unload()
     {
-#ifdef DEBUG || _DEBUG
+#if defined (DEBUG) || (_DEBUG)
         return (int)Session::LibraryUnloadOptionImmediately;
 #else
         return (int)Session::LibraryUnloadOptionExplicitly;

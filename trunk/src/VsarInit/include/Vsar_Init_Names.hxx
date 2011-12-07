@@ -31,7 +31,8 @@ namespace Vsar
     const char * const ATTRIBUTE_PROJECT_STATUS          = "VSAR_PROJECT_STATUS";
 
     const char * const ATTRIBUTE_PROJECT_STATUS_DEFINED  = "PROJECT_DEFINED";
-    const char * const ATTRIBUTE_PROJECT_STATUS_SOLVED   = "PROJECT_SOLVED";
+    const char * const ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED   = "PROJECT_RESPONSE_SOLVED";
+    const char * const ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED      = "PROJECT_NOISE_SOLVED";
 
     const char * const MENU_ITEM_NAME_NEW_PROJECT        = "VSAR_NEW_PROJECT";
     const char * const MENU_ITEM_NAME_SET_TRAIN          = "VSAR_SET_TRAIN";

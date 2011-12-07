@@ -24,17 +24,18 @@ using namespace Vsar;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
-    SolveOperation::SolveOperation()
+    BaseSolveOperation::BaseSolveOperation()
     {
     }
 
-    SolveOperation::~SolveOperation()
+    BaseSolveOperation::~BaseSolveOperation()
     {
     }
 
-    void SolveOperation::Execute()
+    void BaseSolveOperation::Execute()
     {
-        CleanResult();
+        CreateWorkDir();
+        //CleanResult();
 
         //  Solve 103 solution
 
@@ -43,7 +44,7 @@ namespace Vsar
         LoadResult();
     }
 
-    void SolveOperation::CleanResult()
+    void BaseSolveOperation::CleanResult()
     {
         ResponseResult   respResult;
         std::string      resultPathName(respResult.GetResultPathName());
@@ -60,10 +61,23 @@ namespace Vsar
             boost::filesystem::remove_all(resultPathName);
     }
 
-    void SolveOperation::LoadResult()
+    void BaseSolveOperation::LoadResult()
     {
         ResponseResult   respResult;
 
         respResult.Load();
+    }
+
+    void BaseSolveOperation::CreateWorkDir()
+    {
+        m_workDir = filesystem::unique_path(filesystem::path("workDir-%%%%%%")).string();
+    }
+
+    SolveResponseOperation::SolveResponseOperation() : BaseSolveOperation()
+    {
+    }
+
+    SolveResponseOperation::~SolveResponseOperation()
+    {
     }
 }

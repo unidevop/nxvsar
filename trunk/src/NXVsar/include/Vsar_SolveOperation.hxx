@@ -7,16 +7,31 @@
 
 namespace Vsar
 {
-    class SolveOperation
+    class BaseSolveOperation
     {
     public:
-        SolveOperation();
-        ~SolveOperation();
+        BaseSolveOperation();
+        virtual ~BaseSolveOperation() = 0;
 
         void Execute();
     protected:
+        void CreateWorkDir();
+
         void CleanResult();
         void LoadResult();
+
+    protected:
+        std::string m_workDir;
+        std::string m_scratchDir;
+        std::string m_solDir;
+    };
+
+    class SolveResponseOperation : public BaseSolveOperation
+    {
+    public:
+        SolveResponseOperation();
+        ~SolveResponseOperation();
+
     };
 }
 

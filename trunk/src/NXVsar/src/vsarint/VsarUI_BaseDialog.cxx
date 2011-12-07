@@ -37,6 +37,8 @@
 #include <uf_defs.h>
 #include <VsarUI_BaseDialog.hxx>
 
+#include <uf_ui_types.h>
+
 #include <NXOpen/Session.hxx>
 #include <NXOpen/UI.hxx>
 #include <NXOpen/NXMessageBox.hxx>
@@ -204,16 +206,7 @@ namespace VsarUI
 
     int BaseDialog::FilterCb(NXOpen::BlockStyler::UIBlock *pBlock, NXOpen::TaggedObject *pSel)
     {
-        try
-        {
-        }
-        catch(std::exception& ex)
-        {
-            //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
-        }
-
-        return 0;
+        return UF_UI_SEL_ACCEPT;
     }
 
     //------------------------------------------------------------------------------

@@ -107,7 +107,7 @@ namespace Vsar
                     {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
                     {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusSensitive},
                     {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusInsensitive},
                     //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusInsensitive}
                 };
 
@@ -121,7 +121,7 @@ namespace Vsar
                 Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS, ATTRIBUTE_PROJECT_STATUS_DEFINED, Update::OptionLater);
                 break;
             }
-        case ProjectStatus_Solved:
+        case ProjectStatus_ResponseSolved:
             {
                 MenuItemSensitivity menuItemsSens[] =
                 {
@@ -146,7 +146,36 @@ namespace Vsar
                                                  MenuButton::SensitivityStatusSensitive};
 
                 SetMenuItemSensitivity(braceItem);
-                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS, ATTRIBUTE_PROJECT_STATUS_SOLVED, Update::OptionLater);
+                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS, ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED, Update::OptionLater);
+                break;
+            }
+        case ProjectStatus_NoiseSolved:
+            {
+                MenuItemSensitivity menuItemsSens[] =
+                {
+                    {MENU_ITEM_NAME_NEW_PROJECT,    MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SET_TRAIN,      MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SET_RAIL,       MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SET_SLAB,       MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SET_BRACE,      MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SET_BRIDGE,     MenuButton::SensitivityStatusInsensitive},
+                    {MENU_ITEM_NAME_SET_BASE,       MenuButton::SensitivityStatusInsensitive},
+                    {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
+                    {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusSensitive},
+                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusSensitive},
+                    //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusSensitive}
+                };
+
+                std::for_each(menuItemsSens, menuItemsSens + N_ELEMENTS(menuItemsSens),
+                    boost::bind(&Status::SetMenuItemSensitivity, this, _1));
+
+                MenuItemSensitivity braceItem = {Project::Instance()->GetProperty()->GetBraceMenuItemName(),
+                                                 MenuButton::SensitivityStatusSensitive};
+
+                SetMenuItemSensitivity(braceItem);
+                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS,
+                    ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED, Update::OptionLater);
                 break;
             }
         default:
@@ -449,9 +478,9 @@ namespace Vsar
                     prjStatus = Status::ProjectStatus_Defined;
                     isPrjPrt = true;
                 }
-                else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_SOLVED) == 0)
+                else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED) == 0)
                 {
-                    prjStatus = Status::ProjectStatus_Solved;
+                    prjStatus = Status::ProjectStatus_ResponseSolved;
                     isPrjPrt = true;
                 }
             }
