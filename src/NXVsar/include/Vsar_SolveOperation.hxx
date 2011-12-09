@@ -2,8 +2,9 @@
 #ifndef VSAR_SOLVEOPERATION_H_INCLUDED
 #define VSAR_SOLVEOPERATION_H_INCLUDED
 
-#include <string>
+//#include <string>
 //#include <boost/scoped_ptr.hpp>
+#include <boost/filesystem.hpp>
 
 namespace Vsar
 {
@@ -20,10 +21,13 @@ namespace Vsar
         void CleanResult();
         void LoadResult();
 
+        virtual void PreExecute() = 0;
+
+        virtual void PrepareInputFiles() const = 0;
+
     protected:
-        std::string m_workDir;
-        std::string m_scratchDir;
-        std::string m_solDir;
+        boost::filesystem::path   m_workDir;
+        boost::filesystem::path   m_solDir;
     };
 
     class SolveResponseOperation : public BaseSolveOperation
@@ -32,6 +36,10 @@ namespace Vsar
         SolveResponseOperation();
         ~SolveResponseOperation();
 
+    protected:
+        void PreExecute();
+
+        void PrepareInputFiles() const;
     };
 }
 

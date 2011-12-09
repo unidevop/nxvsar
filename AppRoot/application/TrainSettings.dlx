@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Dialog NX="7.5.2" id="Dialog" name="Dialog" type="uicomp" Saved="Thu Mar 31 20:40:59 2011 " class="" notes="" title="E:\Project\Response\VSAR\NXProject\AppRoot\application\TrainSettings.dlx" creator="wujif" version="1.0.0" Expanded="1" languageInfo="Language and Codeset: english 17" ContainerItems="1">
+<Dialog NX="7.5.2" id="Dialog" name="Dialog" type="uicomp" Saved="Thu Mar 31 20:40:59 2011 " class="" notes="" title="I:\Project\Response\VSAR\NXProject\AppRoot\application\TrainSettings.dlx" creator="wujif" version="1.0.0" Expanded="1" languageInfo="Language and Codeset: english 17" ContainerItems="1">
     <item id="grpCarriage" name="grpCarriage" type="uicomp" class="UGS::UICOMP_group" notes="" Expanded="1" hierarchy="UGS::UICOMP_group" presentation="Group" ContainerItems="1">
         <PropertyList>
             <Property id="Members" mask="0" name="Members" type="array" class="UGS::UI::Comp::Container" group="Block Specific::" sname="Members" source="1" dynamic="1" hierarchy="UGS::UICOMP_group">
@@ -10,16 +10,16 @@
                             <PropertyList id="id" mode="0">
                                 <Property id="API Name" mask="16656" name="API Name" type="string" group="General::" sname="BlockID" value="carriageCount" source="3" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="1" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Dimensionality" mask="24576" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="-1" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
                                 <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Left" loc="2" mask="16384" name="Left" type="attachment" group="Other::Attachments::" sname="Left" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
@@ -43,7 +43,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                                <Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="100" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -496,7 +496,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="10" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="carriageLength" mask="256" name="carriageLength" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -506,25 +506,25 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaxInclusive" mask="0" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Left" loc="2" mask="16384" name="Left" type="attachment" group="Other::Attachments::" sname="Left" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Right" loc="3" mask="16384" name="Right" type="attachment" group="Other::Attachments::" sname="Right" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Bottom" loc="4" mask="16384" name="Bottom" type="attachment" group="Other::Attachments::" sname="Bottom" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
-                                <Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -532,13 +532,13 @@
                                 <Property id="Title" mask="256" name="Title" type="utfstring" group="General::" sname="Label" value="Length" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
                                 <Property/>
-                                <Property id="MinimumValue" mask="256" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="10" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
-                                <Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1000" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
-                                <Property id="Dimensionality" mask="24832" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="0" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -876,7 +876,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="MinimumValue" mask="256" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="MinInclusive" mask="256" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property id="Dimensionality" mask="24832" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="0" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="20000" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="carriageDistance" mask="256" name="carriageDistance" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -886,18 +886,18 @@
                                 <Property id="Visibility" mask="0" name="Visibility" type="logical" group="General::" sname="Show" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Left" loc="2" mask="16384" name="Left" type="attachment" group="Other::Attachments::" sname="Left" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
@@ -911,10 +911,10 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                                <Property id="Dimensionality" mask="24832" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="0" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
-                                <Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -1229,7 +1229,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                                <Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="10000" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -1242,7 +1242,7 @@
                                 <Property id="MaxInclusive" mask="256" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="MinInclusive" mask="256" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="Dimensionality" mask="24832" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="0" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="10000" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="carriageWeight" mask="256" name="carriageWeight" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -1252,19 +1252,19 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
+                                
                                 <Property/>
                                 <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
                                 <Property id="Left" loc="2" mask="16384" name="Left" type="attachment" group="Other::Attachments::" sname="Left" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
@@ -1275,7 +1275,7 @@
                                 <Property id="Dimensionality" mask="24832" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="3" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
                                 <Property/>
-                                <Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property id="API Name" mask="16656" name="API Name" type="string" group="General::" sname="BlockID" value="carriageWeight" source="3" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
@@ -1283,7 +1283,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                                <Property id="Title" mask="256" name="Title" type="utfstring" group="General::" sname="Label" value="Weight" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -1546,10 +1546,10 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                                <Property id="MinimumValue" mask="256" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
-                                <Property id="MaxInclusive" mask="256" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                
                                 <Property/>
                                 <Property/>
                                 <Property/>
@@ -1594,7 +1594,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="MinimumValue" mask="256" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="Title" mask="256" name="Title" type="utfstring" group="General::" sname="Label" value="Weight" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property id="MinInclusive" mask="256" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property id="HasUnitsMenu" mask="16640" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property id="MaxInclusive" mask="256" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property id="MaximumValue" mask="256" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="100000" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                 </PropertyList>
@@ -1602,14 +1602,14 @@
             <Property id="API Name" mask="16656" name="API Name" type="string" group="General::" sname="BlockID" value="grpCarriage" source="3" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Visibility" mask="0" name="Visibility" type="logical" group="General::" sname="Show" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Group" mask="4100" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Group" mask="69636" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Expanded" mask="0" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="UIOnly" mask="4100" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
+            <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="UIOnly" mask="69636" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Translated" mask="16384" name="Translated" type="logical" group="Other::" sname="Localize" value="True" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Column" mask="16384" name="Column" type="integer" group="Block Specific::" sname="Column" value="1" source="1" ClassID="UGS::UICOMP_group" hierarchy="UGS::UICOMP_group"/>
             <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
@@ -1631,17 +1631,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -1954,7 +1954,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="halfBogieDistance" mask="256" name="halfBogieDistance" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -1965,17 +1965,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -2284,7 +2284,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="bogieWeight" mask="256" name="bogieWeight" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -2295,17 +2295,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -2616,7 +2616,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                 </PropertyList>
@@ -2624,14 +2624,14 @@
             <Property id="API Name" mask="16656" name="API Name" type="string" group="General::" sname="BlockID" value="grpBogie" source="3" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Visibility" mask="0" name="Visibility" type="logical" group="General::" sname="Show" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Group" mask="4100" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Group" mask="69636" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Expanded" mask="0" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="UIOnly" mask="4100" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
+            <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="UIOnly" mask="69636" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Translated" mask="16384" name="Translated" type="logical" group="Other::" sname="Localize" value="True" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Column" mask="16384" name="Column" type="integer" group="Block Specific::" sname="Column" value="1" source="1" ClassID="UGS::UICOMP_group" hierarchy="UGS::UICOMP_group"/>
             <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
@@ -2653,17 +2653,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -2942,7 +2942,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetWeight" mask="256" name="wheelSetWeight" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -2952,17 +2952,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -3214,7 +3214,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetSglStgSusp" mask="256" name="wheelSetSglStgSusp" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -3225,17 +3225,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -3484,7 +3484,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetSglStgSuspDamp" mask="256" name="wheelSetSglStgSuspDamp" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -3495,18 +3495,18 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="HasUnitsMenu" mask="16384" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinInclusive" mask="0" name="MinInclusive" type="logical" group="Block Specific::" sname="MinInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
@@ -3752,7 +3752,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetTwoStgSuspStiff" mask="256" name="wheelSetTwoStgSuspStiff" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -3763,17 +3763,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaxInclusive" mask="0" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinimumValue" mask="0" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="-1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
@@ -4018,7 +4018,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetTwoStgSuspDamp" mask="256" name="wheelSetTwoStgSuspDamp" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -4029,17 +4029,17 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaxInclusive" mask="0" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinimumValue" mask="0" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="-1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
@@ -4282,7 +4282,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                     <Property id="wheelSetContactCoefElast" mask="256" name="wheelSetContactCoefElast" type="uicomp" class="UICOMP_expression" hierarchy="UGS::UICOMP_group" presentation="Expression">
@@ -4293,19 +4293,19 @@
                                 <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Group" mask="16384" name="Group" type="logical" group="General::" sname="Group" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Expanded" mask="4" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Value" mask="2" name="Value" type="double" group="Block Specific::" sname="Value" value="0" source="4" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="WithScale" mask="16384" name="WithScale" type="logical" group="Block Specific::" sname="WithScale" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Dimensionality" mask="24576" name="Dimensionality" type="enum" brief="1" group="Block Specific::" sname="Dimensionality" source="1" ClassID="UGS::UICOMP_expression" dynamic="0" selected="-1" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="HasUnitsMenu" mask="16384" name="HasUnitsMenu" type="logical" group="Block Specific::" sname="HasUnitsMenu" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="Formula" mask="0" name="Formula" type="string" group="Block Specific::" sname="Formula" value="0" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property/>
-                                <Property id="UserLockable" mask="4096" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
-                                <Property id="UserLocked" mask="4098" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLockable" mask="69632" name="UserLockable" type="logical" group="Block Specific::" sname="UserLockable" value="False" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
+                                <Property id="UserLocked" mask="69634" name="UserLocked" type="logical" group="Block Specific::" sname="UserLocked" value="False" source="2" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaximumValue" mask="0" name="MaximumValue" type="double" group="Block Specific::" sname="MaximumValue" value="1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MaxInclusive" mask="0" name="MaxInclusive" type="logical" group="Block Specific::" sname="MaxInclusive" value="True" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
                                 <Property id="MinimumValue" mask="0" name="MinimumValue" type="double" group="Block Specific::" sname="MinimumValue" value="-1" source="1" ClassID="UGS::UICOMP_expression" hierarchy="UGS::UICOMP_expression"/>
@@ -4544,7 +4544,7 @@
                                 <Property/>
                                 <Property/>
                                 <Property/>
-                            <Property/><Property/></PropertyList>
+                            <Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/><Property/></PropertyList>
                         </item>
                     </Property>
                 </PropertyList>
@@ -4552,14 +4552,14 @@
             <Property id="API Name" mask="16656" name="API Name" type="string" group="General::" sname="BlockID" value="grpWheelSet" source="3" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Visibility" mask="0" name="Visibility" type="logical" group="General::" sname="Show" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Sensitivity" mask="0" name="Sensitivity" type="logical" group="General::" sname="Enable" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Group" mask="4100" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Group" mask="69636" name="Group" type="logical" group="General::" sname="Group" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
             <Property id="Expanded" mask="0" name="Expanded" type="logical" group="General::" sname="Expanded" value="True" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="HideGroup" mask="4100" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="Focus" mask="4100" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanFocus" mask="4100" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="KeyboardFocus" mask="4100" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="CanKeyboardFocus" mask="4100" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
-            <Property id="UIOnly" mask="4100" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
+            <Property id="HideGroup" mask="69636" name="HideGroup" type="logical" group="General::" sname="HideGroup" value="False" source="2" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="Focus" mask="69636" name="Focus" type="logical" group="General::" sname="Focus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanFocus" mask="69636" name="CanFocus" type="logical" group="General::" sname="CanFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="KeyboardFocus" mask="69636" name="KeyboardFocus" type="logical" group="General::" sname="KeyboardFocus" value="False" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="CanKeyboardFocus" mask="69636" name="CanKeyboardFocus" type="logical" group="General::" sname="CanKeyboardFocus" value="True" source="1" ClassID="UGS::UICOMP" hierarchy="UGS::UICOMP_group"/>
+            <Property id="UIOnly" mask="69636" name="UIOnly" type="logical" group="Other::" sname="RetainValueInUIOnly" value="False" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Translated" mask="16384" name="Translated" type="logical" group="Other::" sname="Localize" value="True" source="1" ClassID="UGS::UICOMP_widget" hierarchy="UGS::UICOMP_group"/>
             <Property id="Column" mask="16384" name="Column" type="integer" group="Block Specific::" sname="Column" value="1" source="1" ClassID="UGS::UICOMP_group" hierarchy="UGS::UICOMP_group"/>
             <Property id="Top" loc="1" mask="16384" name="Top" type="attachment" group="Other::Attachments::" sname="Top" offset="0" source="3" target="Default" ClassID="UGS::UIFW_dialog_layout" hierarchy="UGS::UIFW_dialog_layout"/>
