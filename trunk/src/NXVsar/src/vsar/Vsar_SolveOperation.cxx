@@ -24,8 +24,12 @@ using namespace Vsar;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
-    BaseSolveOperation::BaseSolveOperation()
+    BaseSolveOperation::BaseSolveOperation() : m_workDir(), m_solDir()
     {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        m_solDir = filesystem::path(pPrjProp->GetProjectPath());
     }
 
     BaseSolveOperation::~BaseSolveOperation()
@@ -34,12 +38,23 @@ namespace Vsar
 
     void BaseSolveOperation::Execute()
     {
-        CreateWorkDir();
-        //CleanResult();
+        PreExecute();
 
-        //  Solve 103 solution
+        filesystem::path  oldWorkPath(filesystem::current_path());
 
-        //  Solve vsar sol
+        try
+        {
+            CreateWorkDir();
+            //CleanResult();
+
+            //  Solve 103 solution
+
+            //  Solve vsar sol
+        }
+        catch (std::exception &)
+        {
+            
+        }
 
         LoadResult();
     }
@@ -70,7 +85,22 @@ namespace Vsar
 
     void BaseSolveOperation::CreateWorkDir()
     {
-        m_workDir = filesystem::unique_path(filesystem::path("workDir-%%%%%%")).string();
+        filesystem::path strScratchDir(m_solDir);   //  TODO: Use custom scratch dir in future
+        filesystem::path workFolder;
+        filesystem::path workPath;
+
+        //  set work dir
+        filesystem::current_path(strScratchDir);
+
+        do
+        {
+            workFolder = filesystem::unique_path(filesystem::path("workDir-%%%%%%"));
+            workPath   = strScratchDir / workFolder;
+        } while (!filesystem::exists(workPath));
+
+        filesystem::create_directory(workPath);
+
+        m_workDir = workPath;
     }
 
     SolveResponseOperation::SolveResponseOperation() : BaseSolveOperation()
@@ -79,5 +109,15 @@ namespace Vsar
 
     SolveResponseOperation::~SolveResponseOperation()
     {
+    }
+
+    void SolveResponseOperation::PreExecute()
+    {
+
+    }
+
+    void SolveResponseOperation::PrepareInputFiles() const
+    {
+
     }
 }
