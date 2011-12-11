@@ -45,12 +45,13 @@ namespace Vsar
     // Base
     const char * const BASE_MESH_COLLECTOR_NAME                 = "Base_Mesh_Collector";
 
-    const char * const VSAR_SOLUTION_NAME                       = "Vsar103Sol";
+    const char * const VSAR_SOLUTION_NAME                       = "Vsar109Sol";
 
     //  Part Name
     const char * const RAIL_SLAB_FEM_PART_NAME                  = "RailSlab_f";
     const char * const BRIDGE_FEM_PART_NAME                     = "Bridge_f";
     const char * const SLAB_PRT_PART_NAME                       = "slab";
+    const char * const SLABS_PRT_PART_NAME                      = "slabs";
     const char * const BEAM_PRT_PART_NAME                       = "beam";
     const char * const BRIDGE_PRT_PART_NAME                     = "bridge";
     const char * const BASE_PRT_PART_NAME                       = "base";
@@ -62,7 +63,7 @@ namespace Vsar
     //  Expression Name-Value
     //  Rail
     const char * const MASS_DENSITY_ID_NAME                     = "density";      // common id name
-    const char * const RAIL_DENSITY_EXPRESSION_NAME             = "Rail_Mass_Density";
+    const char * const RAIL_MASS_DENSITY_EXP_NAME               = "Rail_Mass_Density";
 
     const char * const ELASTIC_MODULUS_ID_NAME                  = "elasticModulus";      // common id name
     const char * const RAIL_ELASTIC_MODULUS_EXP_NAME            = "Rail_Elastic_Modulus";
@@ -70,11 +71,7 @@ namespace Vsar
     const char * const POISSON_RATIO_ID_NAME                    = "poissonRatio";      // common id name
     const char * const RAIL_POISSON_RATIO_EXP_NAME              = "Rail_Poisson_Ratio";
 
-    const char * const FASTENER_STIFFNESS_ID_NAME               = "fastenerStiffness";      // common id name
-    const char * const RAIL_FASTENER_STIFFNESS_EXP_NAME         = "Rail_Fastener_Stiffness";
-
-    const char * const FASTENER_DAMPING_ID_NAME                 = "fastenerDamping";      // common id name
-    const char * const RAIL_FASTENER_DAMPING_EXP_NAME           = "Rail_Fastener_Damping";
+    const char * const RAIL_ELEMENT_SIZE_EXP_NAME               = "Rail_Element_Size";
 
     // Slab
     const char * const SLAB_SUPPORT_COUNT_ID_NAME               = "supportCnt";
@@ -89,9 +86,19 @@ namespace Vsar
     const char * const DAMPING_RATIO_ID_NAME                    = "dampingRatio";      // common id name
     const char * const SLAB_DAMPING_RATIO_EXP_NAME              = "Slab_Damping_Ratio";
 
+    const char * const FASTENER_STIFFNESS_ID_NAME               = "fastenerStiffness";      // common id name
+    const char * const SLAB_FASTENER_STIFFNESS_EXP_NAME         = "Slab_Fastener_Stiffness";
+
+    const char * const FASTENER_DAMPING_ID_NAME                 = "fastenerDamping";      // common id name
+    const char * const SLAB_FASTENER_DAMPING_EXP_NAME           = "Slab_Fastener_Damping";
+
     const char * const SLAB_ELASTIC_MODULUS_EXP_NAME            = "Slab_Elastic_Modulus";
 
     const char * const SLAB_POISSON_RATIO_EXP_NAME              = "Slab_Poisson_Ratio";
+
+    const char * const SLAB_LENGTH_EXP_NAME                     = "Slab_Length";
+    const char * const SLAB_ELEMENT_SIZE_EXP_NAME               = "Slab_Element_Size";
+    const char * const SLAB_COUNT_EXP_NAME                      = "Slab_Count";
 
     // Bridge
     const char * const BRIDGE_ELASTIC_MODULUS_EXP_NAME          = "Bridge_Elastic_Modulus";
@@ -133,6 +140,8 @@ namespace Vsar
     const char * const TRAIN_CARRIAGE_WEIGHT_ID_NAME            = "carriageWeight";
     const char * const TRAIN_CARRIAGE_WEIGHT_EXP_NAME           = "Weight";
 
+    const char * const TRAIN_CARRIAGE_LENGTH_EXP_NAME           = "Length";
+
     const char * const TRAIN_BOGIE_LENGTH_ID_NAME               = "bogieLength";
     const char * const TRAIN_BOGIE_LENGTH_EXP_NAME              = "BogieLength";
 
@@ -148,11 +157,11 @@ namespace Vsar
     const char * const TRAIN_WHEELSET_WEIGHT_ID_NAME            = "wheelSetWeight";
     const char * const TRAIN_WHEELSET_WEIGHT_EXP_NAME           = "WheelSetWeight";
 
-    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_ID_NAME      = "wheelSetSglStgSusp";
-    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_EXP_NAME     = "WheelSetSglStgSusp";
+    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_STIFF_ID_NAME  = "wheelSetSglStgSuspStiff";
+    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_STIFF_EXP_NAME = "WheelSetSglStgSuspStiff";
 
-    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_ID_NAME  = "wheelSetSglStgSuspDamp";
-    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_EXP_NAME = "WheelSetSglStgSuspDamp";
+    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_ID_NAME   = "wheelSetSglStgSuspDamp";
+    const char * const TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_EXP_NAME  = "WheelSetSglStgSuspDamp";
 
     const char * const TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_ID_NAME  = "wheelSetTwoStgSuspStiff";
     const char * const TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_EXP_NAME = "WheelSetTwoStgSuspStiff";
@@ -162,6 +171,32 @@ namespace Vsar
 
     const char * const TRAIN_WHEELSET_CONTACT_COEF_ELAST_ID_NAME  = "wheelSetContactCoefElast";
     const char * const TRAIN_WHEELSET_CONTACT_COEF_ELAST_EXP_NAME = "WheelSetContactCoefElast";
+
+    //  Solution
+
+    const char * const TRAIN_SPEED_ID_NAME                      = "trainSpeed";
+    const char * const TRAIN_SPEED_EXP_NAME                     = "Train_Speed";
+
+    const char * const COMPUTE_TIME_STEP_ID_NAME                = "timeStep";
+    const char * const COMPUTE_TIME_STEP_EXP_NAME               = "Compute_Time_Step";
+
+    //////////////////////////////////////////////////////////////////////////
+    // Binary Folder Name
+    const char * const SOLVER_FOLDER_NAME                       = "bin";
+    const char * const SOLVER_DATA_FOLDER_NAME                  = "data";
+    const char * const SOLVER_ELASTIC_EXE_NAME                  = "elastic.exe";
+    const char * const SOLVER_ELASTIC_CONVERT_EXE_NAME          = "read_exictation.exe";
+
+
+    //////////////////////////////////////////////////////////////////////////
+    // Excitation input names
+    const char * const IRR_DATA_FILE_NAME                       = "irr.dat";
+
+    const char * const VEHICLE_INPUT_FILE_NAME                  = "vehicle.dat";
+    const char * const RAIL_INPUT_FILE_NAME                     = "rail.dat";
+    const char * const SLAB_INPUT_FILE_NAME                     = "fslab.dat";
+    const char * const BEAM_INPUT_FILE_NAME                     = "beam.dat";
+    const char * const CALCULATION_INPUT_FILE_NAME              = "calculation.dat";
 
 
     enum CompLayer

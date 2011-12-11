@@ -11,6 +11,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -99,6 +102,90 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Clean and signup"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				Outputs="$(TargetDir)\$(TargetName).ilk"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include"
+				PreprocessorDefinitions="LIBVSARINIT;_WINDOWS;_USRDLL;_SECURE_SCL=0;DEBUG"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
+				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(SolutionDir)\lib&quot;"
+				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
+				SubSystem="2"
+				LargeAddressAware="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary="$(OutDir)\$(TargetName).lib"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
@@ -161,6 +248,93 @@
 				DataExecutionPrevention="0"
 				ImportLibrary="$(OutDir)\$(TargetName).lib"
 				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Clean and signup"
+				CommandLine="$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs="$(TargetDir)\$(TargetName).ilk"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="$(UGII_BASE_DIR)\ugopen;$(BOOST_ROOT);.\include"
+				PreprocessorDefinitions="LIBVSARINIT;_SECURE_SCL=0;_USRDLL"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
+				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(UGII_BASE_DIR)\ugopen;&quot;$(SolutionDir)\lib&quot;"
+				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
+				SubSystem="1"
+				LargeAddressAware="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary="$(OutDir)\$(TargetName).lib"
+				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"

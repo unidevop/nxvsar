@@ -43,6 +43,8 @@
 #include <NXOpen/BlockStyler_PropertyList.hxx>
 
 #include <Vsar_SolveOperation.hxx>
+#include <Vsar_Names.hxx>
+#include <Vsar_Solution.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -53,7 +55,7 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
-    SolveResponse::SolveResponse() : BaseDialog("SolveResponse.dlx")
+    SolveResponse::SolveResponse() : BaseCompDialog("SolveResponse.dlx", new Solution())
     {
     }
 
@@ -92,20 +94,23 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     void SolveResponse::InitializeCb()
     {
-        CompositeBlock *pTopBlock = m_theDialog->TopBlock();
+        BaseCompDialog::InitializeCb();
 
         try
         {
+            CompositeBlock *pTopBlock = m_theDialog->TopBlock();
+
             //trainSettingsGrp  = pTopBlock->FindBlock("trainSettingsGrp");
-            m_trainSpeed        = pTopBlock->FindBlock("trainSpeed");
-            m_timeStep          = pTopBlock->FindBlock("timeStep");
+            m_trainSpeed        = pTopBlock->FindBlock(TRAIN_SPEED_ID_NAME);
+            m_timeStep          = pTopBlock->FindBlock(COMPUTE_TIME_STEP_ID_NAME);
             //outputGrp         = pTopBlock->FindBlock("outputGrp");
             //m_hasTimeOutput     = pTopBlock->FindBlock("hasTimeOutput");
             //m_outputTime        = pTopBlock->FindBlock("outputTime");
-            //m_hasNodesOutput    = pTopBlock->FindBlock("hasNodesOutput");
 
             m_selOutputType      = pTopBlock->FindBlock("selOutputType");
+            m_hasElemsOutput     = pTopBlock->FindBlock("hasElemsOutput");
             m_outputElements     = pTopBlock->FindBlock("outputElements");
+            m_hasNodesOutput     = pTopBlock->FindBlock("hasNodesOutput");
             m_outputNode         = pTopBlock->FindBlock("outputNode");
 
             m_hasNoiseNodeOutput = pTopBlock->FindBlock("hasNoiseNodeOutput");
@@ -133,8 +138,8 @@ namespace VsarUI
             //pHasTimeOutputPropList->SetLogical("Value", true);
             //pHasNodesPropList->SetLogical("Value", true);
 
-            //UpdateCb(pHasTimeOutputPropList);
-            UpdateCb(m_selOutputType);
+            UpdateCb(m_hasElemsOutput);
+            UpdateCb(m_hasNodesOutput);
         }
         catch(std::exception& ex)
         {
@@ -187,6 +192,18 @@ namespace VsarUI
                 if (selOutputType == Selection_Output_Nodes)
                     m_outputNode->Focus();
             }
+            else if(block == m_hasElemsOutput)
+            {
+                boost::scoped_ptr<PropertyList> pOutputElemsPropList(m_outputElements->GetProperties());
+
+                pOutputElemsPropList->SetLogical("Enable", CanOutputElements());
+            }
+            else if(block == m_hasNodesOutput)
+            {
+                boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNode->GetProperties());
+
+                pOutputNodesPropList->SetLogical("Enable", CanOutputNodes());
+            }
         }
         catch(std::exception& ex)
         {
@@ -194,5 +211,19 @@ namespace VsarUI
             theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return 0;
+    }
+
+    bool SolveResponse::CanOutputElements() const
+    {
+        boost::scoped_ptr<PropertyList> pHasElemsPropList(m_hasElemsOutput->GetProperties());
+
+        return pHasElemsPropList->GetLogical("Value");
+    }
+
+    bool SolveResponse::CanOutputNodes() const
+    {
+        boost::scoped_ptr<PropertyList> pHasNodesPropList(m_hasNodesOutput->GetProperties());
+
+        return pHasNodesPropList->GetLogical("Value");
     }
 }

@@ -2,8 +2,8 @@
 #ifndef VSAR_SOLVEOPERATION_H_INCLUDED
 #define VSAR_SOLVEOPERATION_H_INCLUDED
 
-//#include <string>
-//#include <boost/scoped_ptr.hpp>
+#include <string>
+#include <vector>
 #include <boost/filesystem.hpp>
 
 namespace Vsar
@@ -40,6 +40,40 @@ namespace Vsar
         void PreExecute();
 
         void PrepareInputFiles() const;
+    };
+
+    class ExcitationInput
+    {
+    public:
+        struct InputItem
+        {
+            std::string  m_partName;
+            std::string  m_expName;
+            //  conversion
+            std::string  m_targetUnitName;  // to SI Unit
+        };
+
+        typedef std::vector<InputItem>  StlInputItemVector;
+
+    public:
+        ExcitationInput(const boost::filesystem::path &targetDir);
+
+        ~ExcitationInput();
+
+        void Generate() const;
+
+    protected:
+
+        void CopyIrrData() const;
+        void WriteVehicleData() const;
+        void WriteRailData() const;
+        void WriteSlabData() const;
+        void WriteBeamData() const;
+        void WriteCalculationData() const;
+
+        void WriteInputData(const StlInputItemVector &vInputItems, const std::string &fileName) const;
+    private:
+        boost::filesystem::path   m_targetDir;
     };
 }
 
