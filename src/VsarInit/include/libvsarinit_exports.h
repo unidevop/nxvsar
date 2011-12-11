@@ -18,7 +18,7 @@ File description:
 
 //#if IPLIB==10
 #if defined (LIBVSARINIT)
-#   if defined(_WIN32)
+#   if defined(_WIN32) || defined(_WIN64)
 #       define VSARINITEXPORT       __declspec(dllexport)
 #       define VSARINITGLOBAL       extern __declspec(dllexport)
 #   elif __GNUC__ >= 4
@@ -29,7 +29,7 @@ File description:
 #       define VSARINITGLOBAL       extern
 #   endif
 #else
-#   if defined(_WIN32) && !defined(WNT_STATIC_LINK)
+#   if defined(_WIN32) || defined(_WIN64) && !defined(WNT_STATIC_LINK)
 #       define VSARINITEXPORT       __declspec(dllimport)
 #       define VSARINITGLOBAL       extern __declspec(dllimport)
 #   else

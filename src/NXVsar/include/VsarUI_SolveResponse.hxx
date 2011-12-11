@@ -19,14 +19,14 @@
 //------------------------------------------------------------------------------
 //These includes are needed for the following template code
 //------------------------------------------------------------------------------
-#include <VsarUI_BaseDialog.hxx>
+#include <VsarUI_BaseCompDialog.hxx>
 
 //------------------------------------------------------------------------------
 // Forward declaration for Class
 //------------------------------------------------------------------------------
 namespace VsarUI
 {
-    class SolveResponse : public BaseDialog
+    class SolveResponse : public BaseCompDialog
     {
     public:
         enum SelectionOutputType
@@ -53,6 +53,10 @@ namespace VsarUI
         virtual int ApplyCb();
         virtual int UpdateCb(NXOpen::BlockStyler::UIBlock* block);
 
+    protected:
+        bool CanOutputElements() const;
+        bool CanOutputNodes() const;
+
     private:
         //NXOpen::BlockStyler::UIBlock* trainSettingsGrp;// Block type: Group
         NXOpen::BlockStyler::UIBlock* m_trainSpeed;// Block type: Expression
@@ -64,7 +68,9 @@ namespace VsarUI
         //NXOpen::BlockStyler::UIBlock* m_hasNodesOutput;// Block type: Toggle
 
         NXOpen::BlockStyler::UIBlock* m_selOutputType;// Block type: Enumeration
+        NXOpen::BlockStyler::UIBlock* m_hasElemsOutput;// Block type: Toggle
         NXOpen::BlockStyler::UIBlock* m_outputElements;// Block type: Select Elements
+        NXOpen::BlockStyler::UIBlock* m_hasNodesOutput;// Block type: Toggle
         NXOpen::BlockStyler::UIBlock* m_outputNode;// Block type: Select Nodes
 
         NXOpen::BlockStyler::UIBlock* m_hasNoiseNodeOutput;// Block type: Toggle

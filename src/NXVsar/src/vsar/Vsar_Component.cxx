@@ -285,8 +285,8 @@ namespace Vsar
             std::vector<Body*>   tmpBodyOccs;
 
             //  Carriage Settings
-            tmpBodyOccs = GetGeoModelOccs(pRailSlabFem, CARRIAGE_PART_NAME, CARRIAGE_BODY_NAME);
-            bodyOccs.insert(bodyOccs.end(), tmpBodyOccs.begin(), tmpBodyOccs.end());
+            //tmpBodyOccs = GetGeoModelOccs(pRailSlabFem, CARRIAGE_PART_NAME, CARRIAGE_BODY_NAME);
+            //bodyOccs.insert(bodyOccs.end(), tmpBodyOccs.begin(), tmpBodyOccs.end());
 
             //  Slab Settings
             tmpBodyOccs = GetGeoModelOccs(pRailSlabFem, SLAB_PART_NAME, SLAB_BODY_NAME);

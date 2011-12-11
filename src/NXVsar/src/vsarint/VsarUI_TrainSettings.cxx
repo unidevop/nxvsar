@@ -125,7 +125,7 @@ namespace VsarUI
             //m_grpWheelSet = pTopBlock->FindBlock("grpWheelSet");
             m_wheelSetInterval = pTopBlock->FindBlock(TRAIN_WHEELSET_INTERVAL_ID_NAME);
             m_wheelSetWeight = pTopBlock->FindBlock(TRAIN_WHEELSET_WEIGHT_ID_NAME);
-            m_wheelSetSglStgSusp = pTopBlock->FindBlock(TRAIN_WHEELSET_SGL_STG_SUSP_ID_NAME);
+            m_wheelSetSglStgSusp = pTopBlock->FindBlock(TRAIN_WHEELSET_SGL_STG_SUSP_STIFF_ID_NAME);
             m_wheelSetSglStgSuspDamp = pTopBlock->FindBlock(TRAIN_WHEELSET_SGL_STG_SUSP_DAMP_ID_NAME);
             m_wheelSetTwoStgSuspStiff = pTopBlock->FindBlock(TRAIN_WHEELSET_TWO_STG_SUSP_STIFF_ID_NAME);
             m_wheelSetTwoStgSuspDamp = pTopBlock->FindBlock(TRAIN_WHEELSET_TWO_STG_SUSP_DAMP_ID_NAME);
