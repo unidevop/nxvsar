@@ -73,6 +73,8 @@ namespace Vsar
 
     const char * const RAIL_ELEMENT_SIZE_EXP_NAME               = "Rail_Element_Size";
 
+    const char * const RAIL_SECTION_INERTIA_EXP_NAME            = "Rail_Section_Inertia";
+
     // Slab
     const char * const SLAB_SUPPORT_COUNT_ID_NAME               = "supportCnt";
     const char * const SLAB_SUPPORT_COUNT_EXP_NAME              = "Support_Count";
@@ -99,6 +101,7 @@ namespace Vsar
     const char * const SLAB_LENGTH_EXP_NAME                     = "Slab_Length";
     const char * const SLAB_ELEMENT_SIZE_EXP_NAME               = "Slab_Element_Size";
     const char * const SLAB_COUNT_EXP_NAME                      = "Slab_Count";
+    const char * const SLAB_SECTION_INERTIA_EXP_NAME            = "Slab_Section_Inertia";
 
     // Bridge
     const char * const BRIDGE_ELASTIC_MODULUS_EXP_NAME          = "Bridge_Elastic_Modulus";
@@ -116,6 +119,9 @@ namespace Vsar
 
     const char * const SPAN_COUNT_ID_NAME                       = "spanCnt";      // common id name
     const char * const SPAN_COUNT_EXP_NAME                      = "Beam_Span";
+
+    const char * const SECTION_AREA_EXP_NAME                    = "Section_Area";
+    const char * const BRIDGE_SECTION_INERTIA_EXP_NAME          = "Bridge_Section_Inertia";
 
     //  Tunnel
     const char * const DIAMETER_ID_NAME                         = "diameter";      // common id name

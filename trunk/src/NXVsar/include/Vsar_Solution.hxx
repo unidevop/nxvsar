@@ -15,6 +15,7 @@ namespace Vsar
         virtual void OnInit();
 
     protected:
+        virtual bool HasGeometryDependency() const;
 
         virtual bool CanUpdateRailSlabFEModel() const;
 

@@ -56,6 +56,7 @@ namespace VsarUI
     {
         try
         {
+            m_pComp->LoadGeometryPart();
             HandleExpressions(boost::bind(&BaseCompDialog::InitBlock, this, _1, _2));
             m_pComp->OnInit();
         }
