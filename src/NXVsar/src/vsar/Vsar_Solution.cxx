@@ -47,6 +47,11 @@ namespace Vsar
     {
     }
 
+    bool Solution::HasGeometryDependency() const
+    {
+        return true;
+    }
+
     bool Solution::CanUpdateRailSlabFEModel() const
     {
         return false;

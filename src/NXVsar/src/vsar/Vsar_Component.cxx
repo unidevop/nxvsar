@@ -60,8 +60,6 @@ namespace Vsar
 
         Session::GetSession()->Parts()->SetDisplay(pPrjProp->GetSimPart(),
             false, true, &pPrtLoadStatus);
-
-        LoadGeometryPart();
     }
 
     BaseComponent::~BaseComponent()

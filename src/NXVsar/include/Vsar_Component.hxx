@@ -39,6 +39,7 @@ namespace Vsar
     {
     public:
         BaseComponent(const CompAttrInfo *pCompAttrs, int compAttrCnt);
+
         virtual ~BaseComponent();
 
         void LoadGeometryPart(bool onDemandLoad = true);
@@ -58,7 +59,7 @@ namespace Vsar
 
     protected:
 
-        bool HasGeometryDependency() const;
+        virtual bool HasGeometryDependency() const;
 
         void UpdateGeometryModel();
 

@@ -260,8 +260,8 @@ namespace Vsar
         {
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_ELASTIC_MODULUS_EXP_NAME, UF_UNIT_PRESSURE_N__m2},
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_MASS_DENSITY_EXP_NAME,    UF_UNIT_MASSDENSITY_kg__m3},
-            {RAIL_SLAB_FEM_PART_NAME,    "0",   UF_UNIT_AREA_m2},
-            {RAIL_SLAB_FEM_PART_NAME,    "0",   UF_UNIT_MOMENT_OF_INERTIA_m4},
+            //{RAIL_SLAB_FEM_PART_NAME,    "0",   UF_UNIT_AREA_m2},
+            {RAIL_SLAB_FEM_PART_NAME,    RAIL_SECTION_INERTIA_EXP_NAME, UF_UNIT_MOMENT_OF_INERTIA_m4},
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_ELEMENT_SIZE_EXP_NAME,    UF_UNIT_LENGTH_m}
         };
 
@@ -283,7 +283,7 @@ namespace Vsar
             {RAIL_SLAB_FEM_PART_NAME,   SLAB_STIFFNESS_RATIO_EXP_NAME,      ""},
             {RAIL_SLAB_FEM_PART_NAME,   SLAB_DAMPING_RATIO_EXP_NAME,        ""},
             {RAIL_SLAB_FEM_PART_NAME,   SLAB_ELASTIC_MODULUS_EXP_NAME,      UF_UNIT_PRESSURE_N__m2},
-            {RAIL_SLAB_FEM_PART_NAME,   "1",    UF_UNIT_MOMENT_OF_INERTIA_m4},
+            {RAIL_SLAB_FEM_PART_NAME,   SLAB_SECTION_INERTIA_EXP_NAME,      UF_UNIT_MOMENT_OF_INERTIA_m4},
             {SLAB_PRT_PART_NAME,        SLAB_SUPPORT_COUNT_EXP_NAME,        ""}
         };
 
@@ -300,8 +300,8 @@ namespace Vsar
         {
             {BRIDGE_FEM_PART_NAME,       BRIDGE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
             {BRIDGE_FEM_PART_NAME,       BRIDGE_UNIT_WEIGHT_EXP_NAME,       UF_UNIT_MASS_kg},
-            {BRIDGE_FEM_PART_NAME,       "0",   UF_UNIT_AREA_m2},
-            {BRIDGE_FEM_PART_NAME,       "0",   UF_UNIT_MOMENT_OF_INERTIA_m4},
+            {BEAM_PRT_PART_NAME,         SECTION_AREA_EXP_NAME,             UF_UNIT_AREA_m2},
+            {BRIDGE_FEM_PART_NAME,       BRIDGE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4},
             {BEAM_PRT_PART_NAME,         WIDTH_EXP_NAME,                    UF_UNIT_LENGTH_m}
         };
 
@@ -320,9 +320,7 @@ namespace Vsar
         InputItem inputDataItem[] =
         {
             {strSimPrt,       TRAIN_SPEED_EXP_NAME},
-            {strSimPrt,       COMPUTE_TIME_STEP_EXP_NAME}/*,
-            {BRIDGE_FEM_PART_NAME,       ""},
-            {BRIDGE_FEM_PART_NAME,       ""}*/
+            {strSimPrt,       COMPUTE_TIME_STEP_EXP_NAME}
         };
 
         StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
