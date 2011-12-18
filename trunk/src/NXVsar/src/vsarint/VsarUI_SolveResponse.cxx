@@ -111,7 +111,7 @@ namespace VsarUI
             m_hasElemsOutput     = pTopBlock->FindBlock("hasElemsOutput");
             m_outputElements     = pTopBlock->FindBlock("outputElements");
             m_hasNodesOutput     = pTopBlock->FindBlock("hasNodesOutput");
-            m_outputNode         = pTopBlock->FindBlock("outputNode");
+            m_outputNodes         = pTopBlock->FindBlock("outputNode");
 
             m_hasNoiseNodeOutput = pTopBlock->FindBlock("hasNoiseNodeOutput");
         }
@@ -156,6 +156,11 @@ namespace VsarUI
         int errorCode = 0;
         try
         {
+            SolveSettings solveSettings(CanOutputElements(), GetOutputElements(),
+                CanOutputNodes(), GetOutputNodes(), CanOutputNodesForNoise());
+
+            solveSettings.Apply();
+
             SolveResponseOperation   solveOper;
 
             solveOper.Execute();
@@ -180,7 +185,7 @@ namespace VsarUI
             {
                 boost::scoped_ptr<PropertyList> pselOutputTypePropList(m_selOutputType->GetProperties());
                 boost::scoped_ptr<PropertyList> pOutputElemsPropList(m_outputElements->GetProperties());
-                boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNode->GetProperties());
+                boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
 
                 SelectionOutputType selOutputType = static_cast<SelectionOutputType>(pselOutputTypePropList->GetEnum("Value"));
 
@@ -190,7 +195,7 @@ namespace VsarUI
 
                 pOutputNodesPropList->SetLogical("Show", selOutputType == Selection_Output_Nodes);
                 if (selOutputType == Selection_Output_Nodes)
-                    m_outputNode->Focus();
+                    m_outputNodes->Focus();
             }
             else if(block == m_hasElemsOutput)
             {
@@ -200,7 +205,7 @@ namespace VsarUI
             }
             else if(block == m_hasNodesOutput)
             {
-                boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNode->GetProperties());
+                boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
 
                 pOutputNodesPropList->SetLogical("Enable", CanOutputNodes());
             }
@@ -220,10 +225,31 @@ namespace VsarUI
         return pHasElemsPropList->GetLogical("Value");
     }
 
+    std::vector<TaggedObject*> SolveResponse::GetOutputElements() const
+    {
+        boost::scoped_ptr<PropertyList> pOutputElemsPropList(m_outputElements->GetProperties());
+
+        return pOutputElemsPropList->GetTaggedObjectVector("SelectedObjects");
+    }
+
     bool SolveResponse::CanOutputNodes() const
     {
         boost::scoped_ptr<PropertyList> pHasNodesPropList(m_hasNodesOutput->GetProperties());
 
         return pHasNodesPropList->GetLogical("Value");
+    }
+
+    std::vector<TaggedObject*> SolveResponse::GetOutputNodes() const
+    {
+        boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
+
+        return pOutputNodesPropList->GetTaggedObjectVector("SelectedObjects");
+    }
+
+    bool SolveResponse::CanOutputNodesForNoise() const
+    {
+        boost::scoped_ptr<PropertyList> pHasNoiseNodesPropList(m_hasNoiseNodeOutput->GetProperties());
+
+        return pHasNoiseNodesPropList->GetLogical("Value");
     }
 }

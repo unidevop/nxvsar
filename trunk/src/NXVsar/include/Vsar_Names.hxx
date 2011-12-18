@@ -45,8 +45,6 @@ namespace Vsar
     // Base
     const char * const BASE_MESH_COLLECTOR_NAME                 = "Base_Mesh_Collector";
 
-    const char * const VSAR_SOLUTION_NAME                       = "Vsar109Sol";
-
     //  Part Name
     const char * const RAIL_SLAB_FEM_PART_NAME                  = "RailSlab_f";
     const char * const BRIDGE_FEM_PART_NAME                     = "Bridge_f";
@@ -180,18 +178,40 @@ namespace Vsar
 
     //  Solution
 
+    const char * const VSDANE_SOLUTION_NAME                     = "Vsdane109";
+
     const char * const TRAIN_SPEED_ID_NAME                      = "trainSpeed";
     const char * const TRAIN_SPEED_EXP_NAME                     = "Train_Speed";
 
     const char * const COMPUTE_TIME_STEP_ID_NAME                = "timeStep";
     const char * const COMPUTE_TIME_STEP_EXP_NAME               = "Compute_Time_Step";
 
+    const char * const NUM_OF_TIME_STEPS_EXP_NAME               = "Num_Of_Time_Steps";
+
+    //  Group Name
+    const char * const ELEMENT_FOR_RESPONSE_GROUP_NAME          = "ElementForResponse";
+    const char * const NODE_FOR_RESPONSE_GROUP_NAME             = "NodeForResponse";
+    const char * const NODES_FOR_NOISE_GROUP_NAME               = "NodesForNoise";
+
+    const char * const NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME      = "Noise_Structural_Output";
+    const char * const TIME_STEP_OUTPUT_OBJECT_NAME             = "Time_Step";
+
+
     //////////////////////////////////////////////////////////////////////////
     // Binary Folder Name
     const char * const SOLVER_FOLDER_NAME                       = "bin";
     const char * const SOLVER_DATA_FOLDER_NAME                  = "data";
-    const char * const SOLVER_ELASTIC_EXE_NAME                  = "elastic.exe";
-    const char * const SOLVER_ELASTIC_CONVERT_EXE_NAME          = "read_exictation.exe";
+    //const char * const SOLVER_ELASTIC_EXE_NAME                  = "elastic.exe";
+    const char * const SOLVER_ELASTIC_EXE_NAME                  = "ForceActOnRail.exe";
+    const char * const SOLVER_ELASTIC_CONVERT_EXE_NAME          = "read_excitation.exe";
+
+    // log file
+    const char * const SOLVE_ELASTIC_SUCCESS_LOG_NAME           = "elastic_finished.log";
+    const char * const SOLVE_ELASTIC_FAIL_LOG_NAME              = "elastic_error.log";
+
+    const char * const SOLVE_CONVERT_ELASTIC_FAIL_LOG_NAME      = "read_excitation_error.log";
+
+    const char * const SOLVE_NOISE_FAIL_LOG_NAME                = "noise_error.log";
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -203,6 +223,14 @@ namespace Vsar
     const char * const SLAB_INPUT_FILE_NAME                     = "fslab.dat";
     const char * const BEAM_INPUT_FILE_NAME                     = "beam.dat";
     const char * const CALCULATION_INPUT_FILE_NAME              = "calculation.dat";
+
+    //  Read_excitation input names
+    const char * const CONVERT_EXCITATION_INPUT_FILE_NAME       = "excitation_nodes.dat";
+
+    //  Noise input names
+    const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node*.dat";
+    const char * const NOISE_COORDINATE_INPUT_FILE_NAME         = "output_point.dat";
+    const char * const NOISE_OUTPUT_FILE_NAME                   = "Rail_Noise_Time**.out";
 
 
     enum CompLayer

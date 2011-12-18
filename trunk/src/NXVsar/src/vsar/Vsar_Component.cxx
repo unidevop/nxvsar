@@ -25,10 +25,14 @@
 #include <NXOpen/CAE_FemPart.hxx>
 #include <NXOpen/CAE_AssyFemPart.hxx>
 #include <NXOpen/CAE_BaseFEModel.hxx>
+#include <NXOpen/CAE_AssyFEModel.hxx>
 #include <NXOpen/CAE_MeshManager.hxx>
 #include <NXOpen/CAE_MeshCollector.hxx>
 #include <NXOpen/CAE_CAEBody.hxx>
 #include <NXOpen/CAE_CAEFace.hxx>
+#include <NXOpen/CAE_FEModelOccurrence.hxx>
+#include <NXOpen/CAE_FEElementLabelMap.hxx>
+#include <NXOpen/CAE_FENodeLabelMap.hxx>
 
 #include <uf_sf.h>
 
@@ -427,10 +431,87 @@ namespace Vsar
         //pFemPart->BaseFEModel()->UpdateFemodel();
     }
 
+    class FELabelUpdater
+    {
+    public:
+        FELabelUpdater()
+        {
+        }
+
+        ~FELabelUpdater()
+        {
+        }
+
+        void Update();
+    protected:
+
+        int GetMaxElementLabel(FEElementLabelMap *pElemLabelMap) const;
+        int GetMaxNodeLabel(FENodeLabelMap *pNodeLabelMap) const;
+
+    private:
+        FEModelOccurrence* GetFEModelOcc(const IFEModel *pFEModel) const;
+    };
+
+    void FELabelUpdater::Update()
+    {
+        BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
+        CAE::AssyFemPart    *pAssemPart  = pPrjProp->GetAFemPart();
+
+        AssyFEModel         *pAssyFEModel = dynamic_cast<AssyFEModel*>(pAssemPart->BaseFEModel());
+
+        std::vector<FEModelOccurrence*> feModelChildren(pAssyFEModel->GetChildren());
+
+        if (feModelChildren.size() == 2)
+        {
+            feModelChildren[0]->SetLabelOffsets(0, 0, 0);
+
+            feModelChildren[1]->SetLabelOffsets(GetMaxNodeLabel(feModelChildren[0]->FenodeLabelMap()),
+                GetMaxElementLabel(feModelChildren[0]->FeelementLabelMap()), 0);
+        }
+    }
+
+    int FELabelUpdater::GetMaxElementLabel(FEElementLabelMap *pElemLabelMap) const
+    {
+        int   maxLabel = 0;
+        int   curLabel = 0;
+
+        for (int idx = 0; idx < pElemLabelMap->NumElements(); idx++)
+        {
+            curLabel = pElemLabelMap->AskNextElementLabel(curLabel);
+            if (curLabel > maxLabel)
+                maxLabel = curLabel;
+        }
+
+        return maxLabel;
+    }
+
+    int FELabelUpdater::GetMaxNodeLabel(FENodeLabelMap *pNodeLabelMap) const
+    {
+        int   maxLabel = 0;
+        int   curLabel = 0;
+
+        for (int idx = 0; idx < pNodeLabelMap->NumNodes(); idx++)
+        {
+            curLabel = pNodeLabelMap->AskNextNodeLabel(curLabel);
+            if (curLabel > maxLabel)
+                maxLabel = curLabel;
+        }
+
+        return maxLabel;
+    }
+
     void BaseComponent::UpdateAssembleModel()
     {
         // merge duplicate nodes
         MergeDuplicateNodes();
+
+        // Update Node and Element offset anyway
+//        if (CanUpdateRailSlabFEModel())
+        {
+            FELabelUpdater feLabelUpdater;
+
+            feLabelUpdater.Update();
+        }
     }
 
     void BaseComponent::OnInit()
