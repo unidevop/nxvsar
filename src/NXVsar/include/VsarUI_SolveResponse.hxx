@@ -21,6 +21,11 @@
 //------------------------------------------------------------------------------
 #include <VsarUI_BaseCompDialog.hxx>
 
+namespace NXOpen
+{
+    class TaggedObject;
+}
+
 //------------------------------------------------------------------------------
 // Forward declaration for Class
 //------------------------------------------------------------------------------
@@ -55,7 +60,14 @@ namespace VsarUI
 
     protected:
         bool CanOutputElements() const;
+
+        std::vector<NXOpen::TaggedObject*> GetOutputElements() const;
+
         bool CanOutputNodes() const;
+
+        std::vector<NXOpen::TaggedObject*> GetOutputNodes() const;
+
+        bool CanOutputNodesForNoise() const;
 
     private:
         //NXOpen::BlockStyler::UIBlock* trainSettingsGrp;// Block type: Group
@@ -71,7 +83,7 @@ namespace VsarUI
         NXOpen::BlockStyler::UIBlock* m_hasElemsOutput;// Block type: Toggle
         NXOpen::BlockStyler::UIBlock* m_outputElements;// Block type: Select Elements
         NXOpen::BlockStyler::UIBlock* m_hasNodesOutput;// Block type: Toggle
-        NXOpen::BlockStyler::UIBlock* m_outputNode;// Block type: Select Nodes
+        NXOpen::BlockStyler::UIBlock* m_outputNodes;// Block type: Select Nodes
 
         NXOpen::BlockStyler::UIBlock* m_hasNoiseNodeOutput;// Block type: Toggle
 
