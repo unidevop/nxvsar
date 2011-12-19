@@ -1,0 +1,117 @@
+NX Nastran V7.1 (Intel64 Family 6 Model 42 Stepping 7 Windows 7  ) Control File:
+-------------------------------------------------------------------
+Nastran BUFFSIZE=8193 $(e:/workdir/ip/qrm075404mp5/nxnastran/conf/nast7.rcf[2])
+Nastran SYSTEM(442)=1 $(command line[5])
+Nastran REAL=2133327872 $(program default)
+JID='I:\Project\Response\testcase\solve\testprj_s-vsdane109.dat'
+OUT='./testprj_s-vsdane109'
+MEM=104857600
+MACH='Intel64 Family 6 Model 42 Stepping 7'
+OPER='Windows 7'
+OSV=' '
+MODEL='Intel(R) Xeon(R) CPU E31245 @ 3.30GHz (shi6w400)'
+CONFIG=8664
+NPROC=4
+sysfield=mapio=no,rawio=yes $(e:/workdir/ip/qrm075404mp5/nxnastran/conf/nast7.rcf[5])
+symbol=DELDIR='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/nast/del' $(program default)
+symbol=DEMODIR='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/nast/demo' $(program default)
+symbol=SSSALTERDIR='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/nast/misc/sssalter' $(program default)
+symbol=TPLDIR='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/nast/tpl' $(program default)
+SDIR='c:/temp/testprj_s-vsdane109.T7552_28'
+DBS='c:/temp/testprj_s-vsdane109.T7552_28'
+SCR=yes
+NEWDEL='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/em64tnt/SSS'
+DEL='NXNDEF'
+AUTH='28000@shlv6002;28000@shappdctclnx1;28000@shi6w149'
+AUTHQUE=0
+MSGCAT='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/em64tnt/analysis.msg'
+MSGDEST='f06'
+NEWS='e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/nast/news.txt'
+-------------------------------------------------------------------
+NXN_ISHELLPATH=E:\workdir\IP\qrm075404mp5\nxnastran\bin
+NXN_JIDPATH=
+PATH=e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/em64tnt;e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/em64tnt/mpi/bin;E:\workdir\IP\qrm075404mp5\ugii;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\apps\Hummingbird\Exceed;C:\apps\Hummingbird\Accessories\;I:\software\Text Editor\UltraEdit;%ANT_HOME%\bin;\\shv6s11\cae_nx\nxtools;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE\;C:\Program Files (x86)\Microsoft SQL Server\100\DTS\Binn\;C:\Program Files (x86)\Windows Live\Shared;I:\environment_setting;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Bitvise Tunnelier;C:\apps\MVS9\Common7\IDE;C:\apps\MVS9\VC\BIN;C:\apps\MVS9\Common7\Tools;E:\workdir\IP\qrm075404mp5\ugii\
+Command Line: testprj_s-vsdane109.dat old=no memory=400MB scratch=yes sys442=1
+Current Dir: I:\Project\Response\testcase\solve
+Executable:  e:/workdir/ip/qrm075404mp5/nxnastran/nxn7p1/em64tnt/analysis.exe
+NXN_MSG:     stderr
+FPE:         no
+-------------------------------------------------------------------
+Current resource limits:
+ Physical memory:                     8150 MB
+ Physical memory available:           3369 MB
+ Paging file size:                   10196 MB
+ Paging file size available:          4298 MB
+ Virtual memory:                   8388607 MB
+ Virtual memory available:         8388542 MB
+-------------------------------------------------------------------
+System configuration:
+ Hostname:         shi6w400.net.plm.eds.com
+ Architecture:     em64tnt
+ Platform:         Intel64 Family 6 Model 42 Stepping 7 Windows 7  
+ Model:            Intel(R) Xeon(R) CPU E31245 @ 3.30GHz
+ Clock freq.:      3292 MHz
+ Number of CPUs:   4
+ Executable:       standard
+ Raw model ID:     8664
+ Config number:    8664
+ Physical memory:  8150 MB
+ Virtual memory:   10196 MB
+ Numeric format:   32-bit little-endian IEEE.
+ Bytes per word:   4
+ Disk block size:  512 bytes (128 words)
+ Remote shell cmd: Remote capabilities not available.
+-------------------------------------------------------------------
+NX Nastran started  Mon Dec 19 20:28:31 CST 2011
+ 20:28:31  Beginning Analysis
+
+ 20:28:31  NX NASTRAN Authorization Information - System Attributes
+ 20:28:31  --------------------------------------------------------
+ 20:28:31  Model: Intel(R) Xeon(R) CPU E31245 @ 3.
+ 20:28:31  Machine: Intel64 Family 6 Model 42 Steppi
+ 20:28:31  OS: Windows 7
+ 20:28:31  Version:
+ 20:28:31  License File(s): 28000@shlv6002;28000@shappdctclnx1;28000@shi6w149
+
+
+ 20:28:33  NX NASTRAN Licensing Information
+ 20:28:33  -------------------------------
+ 20:28:33  Sold To ID:            For Internal Siemens PLM Use Only
+ 20:28:33  Webkey Access Code:    server module
+ 20:28:33  License File Issuer:   Siemens PLM, Inc,
+
+
+ 20:28:33  NX NASTRAN Authorization Information - Checkout Successful
+ 20:28:33  ----------------------------------------------------------
+ 20:28:33  License for module NX Nastran Basic checked out successfully
+
+
+ 20:28:33  NX NASTRAN Authorization Information - Checkout Successful
+ 20:28:33  ----------------------------------------------------------
+ 20:28:33  License for module NX Nastran Dynamic Response checked out successfully
+
+ 20:28:33  Reading INCLUDE file "I:\Project\Response\testcase\solve\force.dat"
+ 20:28:33  3298 records read from INCLUDE file "I:\Project\Response\testcase\solve\force.dat"
+ 20:28:33  Reading INCLUDE file "I:\Project\Response\testcase\solve\moment.dat"
+ 20:28:33  3298 records read from INCLUDE file "I:\Project\Response\testcase\solve\moment.dat"
+ 20:28:33  Reading INCLUDE file "I:\Project\Response\testcase\solve\dload.dat"
+ 20:28:33  32 records read from INCLUDE file "I:\Project\Response\testcase\solve\dload.dat"
+ 20:28:33  Analysis started.
+ 20:28:33  Geometry access/verification to CAD part initiated (if needed).
+ 20:28:33  Geometry access/verification to CAD part successfully completed (if needed).
+ 20:28:33  Finite element model generation started.
+ 20:28:34  Finite element model generated 38640 degrees of freedom.
+ 20:28:34  Finite element model generation successfully completed.
+ 20:28:34  Application of Loads and Boundary Conditions to the finite element model started.
+ 20:28:34  Application of Loads and Boundary Conditions to the finite element model successfully completed.
+ 20:28:35  Solution of the system equations for transient response started.
+ 20:30:23  Solution of the system equations for transient response successfully completed.
+ 20:30:35  Solution of the system equations for transient response started.
+ 20:32:22  Solution of the system equations for transient response successfully completed.
+ 20:32:25  Transient response analysis completed.
+ 20:32:26  NSEXIT: EXIT(0)
+ 20:32:26  Analysis complete  0
+Real:      234.533 seconds ( 0:03:54.533)
+User:      136.391 seconds ( 0:02:16.391)
+Sys:        95.082 seconds ( 0:01:35.082)
+NX Nastran finished Mon Dec 19 20:32:26 CST 2011

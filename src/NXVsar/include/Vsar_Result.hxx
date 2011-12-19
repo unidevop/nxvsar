@@ -22,21 +22,16 @@ namespace Vsar
         BaseResult();
         virtual ~BaseResult() = 0;
 
-        void Load();
+        void Create();
 
         bool IsResultExist() const;
 
-        std::string GetResultPathName() const
-        {
-            return m_resultFullName;
-        }
+        virtual std::string GetResultPathName() const = 0;
     protected:
 
         void CreateResultFile();
 
         virtual void CreateRecords() = 0;
-    private:
-        std::string     m_resultFullName;
     };
 
     struct ResponseRecordItem;
@@ -46,6 +41,8 @@ namespace Vsar
     public:
         ResponseResult();
         virtual ~ResponseResult();
+
+        virtual std::string GetResultPathName() const;
 
     protected:
         void CreateRecords();

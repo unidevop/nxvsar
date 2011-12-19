@@ -87,6 +87,8 @@ namespace VsarUI
 
         NXOpen::BlockStyler::UIBlock* m_hasNoiseNodeOutput;// Block type: Toggle
 
+        NXOpen::BlockStyler::UIBlock* m_loadBtn;    // Block type: Button
+
     };
 }
 #endif //VSARUI_SOLVERESPONSE_H_INCLUDED

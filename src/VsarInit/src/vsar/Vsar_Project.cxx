@@ -506,11 +506,33 @@ namespace Vsar
             BaseProjectProperty  *pPrjProp = m_prjInstance->GetProperty();
 
             filesystem::path  resultPathName(filesystem::path(pPrjProp->GetProjectPath()) /
-                                             pPrjProp->GetResultName());
+                                             pPrjProp->GetResponseResultName());
+
+            FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
 
             if (filesystem::exists(resultPathName))
             {
-                Session::GetSession()->DataManager()->LoadFile(resultPathName.string().c_str());
+                try
+                {
+                    pDataMgr->LoadFile(resultPathName.string().c_str());
+                }
+                catch (std::exception &)
+                {
+                }
+            }
+
+            resultPathName = filesystem::path(pPrjProp->GetProjectPath()) /
+                                              pPrjProp->GetNoiseResultName();
+
+            if (filesystem::exists(resultPathName))
+            {
+                try
+                {
+                    pDataMgr->LoadFile(resultPathName.string().c_str());
+                }
+                catch (std::exception &)
+                {
+                }
             }
         }
         catch (std::exception &)
