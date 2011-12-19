@@ -304,7 +304,7 @@ namespace Vsar
 
         if (feModelChildren.size() == 2)
         {
-            for (int idx = 0; idx < feModelChildren.size(); idx++)
+            for (unsigned int idx = 0; idx < feModelChildren.size(); idx++)
             {
                 std::string strName = feModelChildren[idx]->Name().GetText();
                 bool  isOcc = feModelChildren[idx]->IsOccurrence();
@@ -506,7 +506,7 @@ namespace Vsar
 
         std::ofstream   inputFile(filesystem::path(m_targetDir / fileName).string().c_str());
 
-        for (int idx = 0; idx < vInputItems.size(); idx++)
+        for (unsigned int idx = 0; idx < vInputItems.size(); idx++)
         {
             double expVal = 0.0;
 

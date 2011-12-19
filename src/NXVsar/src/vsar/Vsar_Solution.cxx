@@ -32,7 +32,7 @@ namespace Vsar
 
         std::string  strSimPrt(pPrjProp->GetProjectName().append("_s"));
 
-        for (int idx = 0; idx < m_compAttrs.size(); idx++)
+        for (unsigned int idx = 0; idx < m_compAttrs.size(); idx++)
         {
             m_compAttrs[idx].m_partName = strSimPrt;
         }

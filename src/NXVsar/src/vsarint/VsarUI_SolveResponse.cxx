@@ -215,7 +215,7 @@ namespace VsarUI
             {
                 SolveResponseOperation   solveOper;
 
-                //solveOper.LoadResult();
+                solveOper.LoadResult();
             }
         }
         catch(std::exception& ex)
