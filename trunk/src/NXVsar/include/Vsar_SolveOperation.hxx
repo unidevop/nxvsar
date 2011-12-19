@@ -37,6 +37,8 @@ namespace Vsar
             return m_solDir;
         }
 
+        virtual void LoadResult() = 0;
+
     protected:
         void CreateWorkDir();
 
@@ -47,8 +49,6 @@ namespace Vsar
         virtual void PreExecute() = 0;
 
         virtual void Solve() = 0;
-
-        virtual void LoadResult() = 0;
 
         //virtual void PrepareInputFiles() const = 0;
 
@@ -142,14 +142,14 @@ namespace Vsar
         SolveResponseOperation();
         virtual ~SolveResponseOperation();
 
+        virtual void LoadResult();
+
     protected:
         virtual void PreExecute();
 
         virtual void CleanResult();
 
         virtual void Solve();
-
-        virtual void LoadResult();
 
     private:
         ComputeExcitationTask  m_computeExcitation;
