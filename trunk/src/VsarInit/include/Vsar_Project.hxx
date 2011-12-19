@@ -10,6 +10,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/filesystem.hpp>
 #include <NXOpen/MenuBar_MenuButton.hxx>
+#include <Vsar_Init_Names.hxx>
 #include <libvsarinit_exports.h>
 
 //------------------------------------------------------------------------------
@@ -139,9 +140,14 @@ namespace Vsar
 
         std::string GetProjectPath() const;
 
-        std::string GetResultName() const
+        std::string GetResponseResultName() const
         {
-            return GetProjectName().append(".afu");
+            return GetProjectName().append(RESPONSE_RESULT_FILE_SUFFIX_NAME).append(".afu");
+        }
+
+        std::string GetNoiseResultName() const
+        {
+            return GetProjectName().append(NOISE_RESULT_FILE_SUFFIX_NAME).append(".afu");
         }
 
         NXOpen::CAE::SimPart* GetSimPart() const

@@ -114,6 +114,8 @@ namespace VsarUI
             m_outputNodes         = pTopBlock->FindBlock("outputNode");
 
             m_hasNoiseNodeOutput = pTopBlock->FindBlock("hasNoiseNodeOutput");
+
+            m_loadBtn            = pTopBlock->FindBlock("loadBtn");
         }
         catch(std::exception& ex)
         {
@@ -208,6 +210,12 @@ namespace VsarUI
                 boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
 
                 pOutputNodesPropList->SetLogical("Enable", CanOutputNodes());
+            }
+            else if(block == m_loadBtn)
+            {
+                SolveResponseOperation   solveOper;
+
+                //solveOper.LoadResult();
             }
         }
         catch(std::exception& ex)

@@ -18,6 +18,7 @@
 
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Project.hxx>
+#include <Vsar_Names.hxx>
 
 using namespace boost;
 using namespace boost::lambda;
@@ -30,20 +31,15 @@ using namespace Vsar;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
-    BaseResult::BaseResult() : m_resultFullName()
+    BaseResult::BaseResult()
     {
-        //  Get result path name
-        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
-
-        m_resultFullName = (filesystem::path(pPrjProp->GetProjectPath()) /
-                            pPrjProp->GetResultName()).string();
     }
 
     BaseResult::~BaseResult()
     {
     }
 
-    void BaseResult::Load()
+    void BaseResult::Create()
     {
         CreateResultFile();
 
@@ -87,6 +83,65 @@ namespace Vsar
         {"Beam-time-displacement",          "beam_out.dat",     0, 1, 4, XyFunctionUnitTimeSec, XyFunctionUnitDisplacementM }
     };
 
+    class ResultBlock
+    {
+    public:
+        ResultBlock()
+        {
+        }
+
+        virtual ~ResultBlock()
+        {
+        }
+
+        virtual XyFunctionUnit  GetXUnit() const;
+        virtual XyFunctionUnit  GetYUnit() const = 0;
+
+        virtual std::string GetBlockName() const = 0;
+        virtual std::string GetKeyName() const = 0;
+    };
+
+    XyFunctionUnit ResultBlock::GetXUnit() const
+    {
+        return XyFunctionUnitTimeSec;
+    }
+
+    class DisplacementBlock
+    {
+    public:
+        DisplacementBlock();
+        ~DisplacementBlock();
+
+        virtual XyFunctionUnit  GetYUnit() const;
+
+        virtual std::string GetBlockName() const;
+        virtual std::string GetKeyName() const;
+
+        int GetNodeLabel() const
+        {
+            return m_nodeLabel;
+        }
+
+    protected:
+    private:
+        int  m_nodeLabel;
+    };
+
+    XyFunctionUnit DisplacementBlock::GetYUnit() const
+    {
+        return XyFunctionUnitDisplacementMm;
+    }
+
+    std::string DisplacementBlock::GetBlockName() const
+    {
+        return "DISPLACEMENTS";
+    }
+
+    std::string DisplacementBlock::GetKeyName() const
+    {
+        return "POINT ID";
+    }
+
     ResponseResult::ResponseResult()
     {
     }
@@ -95,10 +150,29 @@ namespace Vsar
     {
     }
 
+    std::string ResponseResult::GetResultPathName() const
+    {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+                                 pPrjProp->GetResponseResultName()).string();
+    }
+
+#if 0
     void ResponseResult::CreateRecords()
     {
         std::for_each(s_responseRecordItems, s_responseRecordItems + N_ELEMENTS(s_responseRecordItems),
-                      bind(&ResponseResult::CreateRecord, this, _1));
+            bind(&ResponseResult::CreateRecord, this, _1));
+    }
+#endif
+
+    void ResponseResult::CreateRecords()
+    {
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+        std::string    strSolverResultName(pPrjProp->GetProjectName().append("-").append(VSDANE_SOLUTION_NAME).append("*.pch"));
+        std::ifstream  solverResult((filesystem::path(pPrjProp->GetProjectPath()) /
+                                    strSolverResultName).string().c_str());
     }
 
     void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)

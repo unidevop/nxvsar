@@ -87,7 +87,7 @@ namespace Vsar
         }
         BOOST_SCOPE_EXIT_END
 
-        CleanProjectResult();
+        CleanResult();
 
         PreExecute();
 
@@ -97,17 +97,15 @@ namespace Vsar
         //LoadResult();
     }
 
-    void BaseSolveOperation::CleanAfuResult(const std::string &resultName)
+    void BaseSolveOperation::CleanAfuFile(const std::string &resultPathName)
     {
-        ResponseResult   respResult;
-        std::string      resultPathName(respResult.GetResultPathName());
-
         try
         {
-            Session::GetSession()->DataManager()->UnloadFile(resultPathName.c_str());
-
             if (filesystem::exists(resultPathName))
+            {
+                Session::GetSession()->DataManager()->UnloadFile(resultPathName.c_str());
                 filesystem::remove_all(resultPathName);
+            }
         }
         catch (std::exception &)
         {
@@ -155,9 +153,11 @@ namespace Vsar
         m_convertExcitation.Run();
     }
 
-    void SolveResponseOperation::CleanProjectResult()
+    void SolveResponseOperation::CleanResult()
     {
+        ResponseResult   respResult;
 
+        CleanAfuFile(respResult.GetResultPathName());
     }
 
     void SolveResponseOperation::Solve()
@@ -178,7 +178,7 @@ namespace Vsar
     {
         ResponseResult   respResult;
 
-        respResult.Load();
+        respResult.Create();
     }
 
     BaseTask::BaseTask(const BaseSolveOperation *solOper) : m_solOper(solOper)

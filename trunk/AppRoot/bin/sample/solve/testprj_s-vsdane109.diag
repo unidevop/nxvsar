@@ -1,0 +1,69 @@
+
+*** 20:28:28 *** 
+Starting Nastran Exporter
+
+*** 20:28:28 *** 
+Writing file I:\Project\Response\testcase\solve\testprj_s-vsdane109.dat
+
+*** 20:28:28 *** 
+Writing NX NASTRAN 7.1 compatible deck
+
+*** 20:28:28 *** 
+Writing Nastran System section
+
+*** 20:28:28 *** 
+Writing File Management section
+
+*** 20:28:28 *** 
+Writing Executive Control section
+
+*** 20:28:28 *** 
+Writing Case Control section
+
+*** 20:28:28 *** 
+Writing Bulk Data section
+
+*** 20:28:28 *** 
+Writing Nodes
+
+*** 20:28:28 *** 
+Writing Elements
+
+*** 20:28:28 *** 
+Writing Physical Properties
+
+*** 20:28:28 *** 
+Writing Materials
+
+*** 20:28:28 *** 
+Writing Degree-of-Freedom Sets
+
+*** 20:28:28 *** 
+Writing Loads and Constraints
+
+*** 20:28:28 *** 
+Writing Coordinate Systems
+
+*** 20:28:28 *** 
+Summary of Bulk Data cards written
+
++----------+----------+
+|   NAME   |  NUMBER  |
++----------+----------+
+| CBEAM    | 60       |
+| CBUSH    | 71       |
+| CHEXA    | 900      |
+| GRID     | 6440     |
+| MAT1     | 3        |
+| PARAM    | 8        |
+| PBEAM    | 1        |
+| PBUSH    | 2        |
+| PSOLID   | 2        |
+| SPC      | 33       |
+| SPCADD   | 1        |
+| TSTEP    | 2        |
++----------+----------+
+
+*** 20:28:28 *** 
+Nastran Deck Successfully Written
+

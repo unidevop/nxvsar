@@ -40,9 +40,9 @@ namespace Vsar
     protected:
         void CreateWorkDir();
 
-        virtual void CleanProjectResult() = 0;
+        virtual void CleanResult() = 0;
 
-        void CleanAfuResult(const std::string &resultName);
+        void CleanAfuFile(const std::string &resultName);
 
         virtual void PreExecute() = 0;
 
@@ -145,7 +145,7 @@ namespace Vsar
     protected:
         virtual void PreExecute();
 
-        virtual void CleanProjectResult();
+        virtual void CleanResult();
 
         virtual void Solve();
 

@@ -47,6 +47,12 @@ namespace Vsar
     const char * const MENU_ITEM_NAME_SOLVE_NOISE        = "VSAR_SOLVE_NOISE";
     const char * const MENU_ITEM_NAME_VIEW_RESULT        = "VSAR_VIEW_RESULT";
 
+
+    //////////////////////////////////////////////////////////////////////////
+    //  Result Name
+    const char * const RESPONSE_RESULT_FILE_SUFFIX_NAME         = "_response";
+    const char * const NOISE_RESULT_FILE_SUFFIX_NAME            = "_noise";
+
 }
 
 #endif //VSAR_INIT_NAMES_H_INCLUDED
