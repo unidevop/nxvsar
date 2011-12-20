@@ -39,10 +39,10 @@ namespace Vsar
 
         virtual void LoadResult() = 0;
 
+        virtual void CleanResult() = 0;
+
     protected:
         void CreateWorkDir();
-
-        virtual void CleanResult() = 0;
 
         void CleanAfuFile(const std::string &resultName);
 
@@ -144,10 +144,10 @@ namespace Vsar
 
         virtual void LoadResult();
 
+        virtual void CleanResult();
+
     protected:
         virtual void PreExecute();
-
-        virtual void CleanResult();
 
         virtual void Solve();
 

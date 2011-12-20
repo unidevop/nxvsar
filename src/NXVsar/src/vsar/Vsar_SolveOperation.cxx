@@ -48,6 +48,8 @@ using namespace NXOpen;
 using namespace NXOpen::CAE;
 using namespace Vsar;
 
+#pragma warning(push)
+#pragma warning(disable: 4355)
 //------------------------------------------------------------------------------
 // Declaration of global variables
 //------------------------------------------------------------------------------
@@ -103,7 +105,13 @@ namespace Vsar
         {
             if (filesystem::exists(resultPathName))
             {
-                Session::GetSession()->DataManager()->UnloadFile(resultPathName.c_str());
+                try
+                {
+                    Session::GetSession()->DataManager()->UnloadFile(resultPathName.c_str());
+                }
+                catch(NXException&) // maybe the file is not loaded, delete it anyway
+                {
+                }
                 filesystem::remove_all(resultPathName);
             }
         }
@@ -706,3 +714,5 @@ namespace Vsar
         pPropTab->SetIntegerPropertyValue("Number of Time Steps", numeric_cast<int>(pExp->Value()));
     }
 }
+
+#pragma warning(pop)

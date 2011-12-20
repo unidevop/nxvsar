@@ -4,7 +4,7 @@
 
 #include <string>
 #include <vector>
-//#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 //namespace NXOpen
 //{
@@ -16,6 +16,8 @@
 
 namespace Vsar
 {
+    class ResultBlock;
+
     class BaseResult
     {
     public:
@@ -36,6 +38,8 @@ namespace Vsar
 
     struct ResponseRecordItem;
 
+    typedef std::vector<boost::shared_ptr<ResultBlock>> StlResultBlockVector;
+
     class ResponseResult : public BaseResult
     {
     public:
@@ -46,6 +50,9 @@ namespace Vsar
 
     protected:
         void CreateRecords();
+
+        template<typename BlockType>
+        StlResultBlockVector ReadDataBlock(std::ifstream &ifStream);
 
     private:
 

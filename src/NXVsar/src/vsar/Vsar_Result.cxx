@@ -87,21 +87,25 @@ namespace Vsar
         {"Beam-time-displacement",          "beam_out.dat",     0, 1, 4, XyFunctionUnitTimeSec, XyFunctionUnitDisplacementM }
     };
 
-    class ResultProcessor
+    class ResultBlock
     {
     public:
-        ResultProcessor()
+        ResultBlock() : m_label(0)
         {
         }
 
-        virtual ~ResultProcessor()
+        virtual ~ResultBlock()
         {
         }
 
-        void Read(std::ifstream &ifStream)
+        bool Read(std::ifstream &ifStream)
         {
-            ReadHead(ifStream);
+            if (!ReadHead(ifStream))
+                return false;
+
             ReadBody(ifStream);
+
+            return true;
         }
 
         virtual void Write() = 0;
@@ -113,93 +117,37 @@ namespace Vsar
         virtual std::string GetKeyName() const = 0;
 
     protected:
-        virtual void ReadHead(std::ifstream &ifStream) = 0;
+        virtual bool ReadHead(std::ifstream &ifStream);
+        virtual void ReadHeadInfo(const std::string &strHeadLine);
         virtual void ReadBody(std::ifstream &ifStream) = 0;
+    protected:
+        int  m_label;
     };
 
-    XyFunctionUnit ResultProcessor::GetXUnit() const
+    XyFunctionUnit ResultBlock::GetXUnit() const
     {
         return XyFunctionUnitTimeSec;
     }
 
-    class DisplacementProcessor : public ResultProcessor
-    {
-    public:
-        //struct DataItem
-        //{
-        //    double   m_time;
-        //    Point3d  m_point;
-        //    Vector3d m_rotate;
-        //};
-
-        typedef boost::tuple<double, Point3d, Vector3d> DispDataItem;
-    public:
-        DisplacementProcessor();
-        virtual ~DisplacementProcessor();
-
-        virtual void Write();
-
-        virtual XyFunctionUnit  GetYUnit() const;
-
-        virtual std::string GetBlockName() const;
-        virtual std::string GetKeyName() const;
-
-        int GetNodeLabel() const
-        {
-            return m_nodeLabel;
-        }
-
-    protected:
-        virtual void ReadHead(std::ifstream &ifStream);
-        virtual void ReadBody(std::ifstream &ifStream);
-    private:
-        int  m_nodeLabel;
-
-        std::vector<DispDataItem>   m_values;
-    };
-
-    DisplacementProcessor::DisplacementProcessor() : m_nodeLabel(0), m_values()
-    {
-    }
-
-    DisplacementProcessor::~DisplacementProcessor()
-    {
-    }
-
-    XyFunctionUnit DisplacementProcessor::GetYUnit() const
-    {
-        return XyFunctionUnitDisplacementMm;
-    }
-
-    std::string DisplacementProcessor::GetBlockName() const
-    {
-        return "$DISPLACEMENTS";
-    }
-
-    std::string DisplacementProcessor::GetKeyName() const
-    {
-        return "POINT\\s*ID";
-    }
-
-    void DisplacementProcessor::ReadHead(std::ifstream &ifStream)
+    bool ResultBlock::ReadHead(std::ifstream &ifStream)
     {
         std::string  strRead;
         bool         found   = false;
 
         std::tr1::regex reg(std::string("^\\$").append(GetKeyName()).append("\\s*=\\s*(\\d+).*"));
 
-        while(ifStream.good())
+        while(!ifStream.eof())
         {
             if (found)  // found
             {
-                if (m_nodeLabel == 0)
+                if (m_label == 0)
                 {
                     std::getline(ifStream, strRead);
 
                     std::tr1::match_results<std::string::const_iterator> what;
                     if(std::tr1::regex_match(strRead, what, reg) && what.size() == 2)
                     {
-                        m_nodeLabel = boost::lexical_cast<int>(what[1]);
+                        m_label = boost::lexical_cast<int>(what[1]);
                     }
                 }
                 else
@@ -207,7 +155,10 @@ namespace Vsar
                     if (ifStream.peek() != '$')     // read content
                         break;
                     else
+                    {
                         std::getline(ifStream, strRead);
+                        ReadHeadInfo(strRead);
+                    }
                 }
             }
             else    // not found
@@ -220,14 +171,86 @@ namespace Vsar
                 ifStream.ignore(200, '\n');    // ignore rest of the line
             }
         }
+
+        return found;
     }
 
-    void DisplacementProcessor::ReadBody(std::ifstream &ifStream)
+    void ResultBlock::ReadHeadInfo(const std::string &strHeadLine)
     {
-
     }
 
-    void DisplacementProcessor::Write()
+    class DisplacementBlock : public ResultBlock
+    {
+    public:
+        //struct DataItem
+        //{
+        //    double   m_time;
+        //    Point3d  m_point;
+        //    Vector3d m_rotate;
+        //};
+
+        typedef boost::tuple<double, Point3d, Vector3d> DispDataItem;
+    public:
+        DisplacementBlock();
+        virtual ~DisplacementBlock();
+
+        virtual void Write();
+
+        virtual XyFunctionUnit  GetYUnit() const;
+
+        virtual std::string GetBlockName() const;
+        virtual std::string GetKeyName() const;
+
+    protected:
+        virtual void ReadBody(std::ifstream &ifStream);
+    private:
+
+        std::vector<DispDataItem>   m_values;
+    };
+
+    DisplacementBlock::DisplacementBlock() : m_values()
+    {
+    }
+
+    DisplacementBlock::~DisplacementBlock()
+    {
+    }
+
+    XyFunctionUnit DisplacementBlock::GetYUnit() const
+    {
+        return XyFunctionUnitDisplacementMm;
+    }
+
+    std::string DisplacementBlock::GetBlockName() const
+    {
+        return "$DISPLACEMENTS";
+    }
+
+    std::string DisplacementBlock::GetKeyName() const
+    {
+        return "POINT\\s*ID";
+    }
+
+    void DisplacementBlock::ReadBody(std::ifstream &ifStream)
+    {
+        std::string  strRead;
+        char         aStr[10];
+        double       time;
+        Point3d      coord;
+        Vector3d     rotate;
+
+        while(!ifStream.eof() && (ifStream.peek() != '$'))
+        {
+            ifStream >> time >> aStr >> coord.X >> coord.Y >> coord.Z;
+            ifStream.ignore(200, '\n');    // ignore rest of the line
+            ifStream >> aStr >> rotate.X >> rotate.Y >> rotate.Z;
+            ifStream.ignore(200, '\n');    // ignore rest of the line
+
+            m_values.push_back(DispDataItem(time, coord, rotate));
+        }
+    }
+
+    void DisplacementBlock::Write()
     {
         
     }
@@ -257,6 +280,24 @@ namespace Vsar
     }
 #endif
 
+    template<typename BlockType>
+    StlResultBlockVector ResponseResult::ReadDataBlock(std::ifstream &ifStream)
+    {
+        StlResultBlockVector vResultBlock;
+
+        //  Handle displacement result
+        ifStream.seekg(0, std::ios::beg);  // goto file head
+        while (!ifStream.eof())
+        {
+            boost::shared_ptr<ResultBlock> pResultBlock(new BlockType());
+
+            if (pResultBlock->Read(ifStream))
+                vResultBlock.push_back(pResultBlock);
+        }
+
+        return vResultBlock;
+    }
+
     void ResponseResult::CreateRecords()
     {
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
@@ -264,9 +305,11 @@ namespace Vsar
         std::ifstream  solverResult((filesystem::path(pPrjProp->GetProjectPath()) /
                                     strSolverResultName).string().c_str());
 
-        DisplacementProcessor dispProc;
+        StlResultBlockVector  vAllResultBlock;
+        StlResultBlockVector  vResultBlock;
 
-        dispProc.Read(solverResult);
+        vResultBlock = ReadDataBlock<DisplacementBlock>(solverResult);
+        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
     }
 
     void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)
@@ -302,7 +345,7 @@ namespace Vsar
                                        recordItem.m_srcResultFile).string());
 
         if (!filesystem::exists(datResultPathName))
-            NXException::Create(MSGTXT("Result file does not exist."));
+            throw NXException::Create(MSGTXT("Result file does not exist."));
 
         std::ifstream  ifDatResult(datResultPathName.c_str());
         std::vector<double>    srcRecLineItem(recordItem.m_columnCnt);
