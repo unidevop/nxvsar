@@ -12,6 +12,8 @@
 //#include <boost/bind.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+#include <boost/foreach.hpp>
 
 #include <NXOpen/ugmath.hxx>
 #include <NXOpen/Session.hxx>
@@ -62,6 +64,14 @@ namespace Vsar
         Session::GetSession()->AfuManager()->CreateNewAfuFile(GetResultPathName().c_str());
     }
 
+    std::string BaseResult::GetSolverResultPathName() const
+    {
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+        std::string    strSolverResultName(pPrjProp->GetProjectName().append("_s-").append(VSDANE_SOLUTION_NAME).append(".pch"));
+
+        return  ((filesystem::path(pPrjProp->GetProjectPath()) / strSolverResultName).string());
+    }
+
     struct ResponseRecordItem
     {
         std::string         m_recordName;
@@ -108,7 +118,7 @@ namespace Vsar
             return true;
         }
 
-        virtual void Write() = 0;
+        virtual void Write(const std::string &afuFile) = 0;
 
         virtual XyFunctionUnit  GetXUnit() const;
         virtual XyFunctionUnit  GetYUnit() const = 0;
@@ -133,6 +143,7 @@ namespace Vsar
     {
         std::string  strRead;
         bool         found   = false;
+        std::string  strBlockId(std::string("$").append(GetBlockName()));
 
         std::tr1::regex reg(std::string("^\\$").append(GetKeyName()).append("\\s*=\\s*(\\d+).*"));
 
@@ -164,7 +175,7 @@ namespace Vsar
             else    // not found
             {
                 ifStream >> strRead;
-                if (strRead == GetBlockName())
+                if (strRead == strBlockId)
                 {
                     found = true;
                 }
@@ -179,59 +190,43 @@ namespace Vsar
     {
     }
 
-    class DisplacementBlock : public ResultBlock
+    class NodeResultBlock : public ResultBlock
     {
     public:
-        //struct DataItem
-        //{
-        //    double   m_time;
-        //    Point3d  m_point;
-        //    Vector3d m_rotate;
-        //};
+        typedef boost::tuple<double, Point3d, Vector3d> NodeDataItem;
 
-        typedef boost::tuple<double, Point3d, Vector3d> DispDataItem;
     public:
-        DisplacementBlock();
-        virtual ~DisplacementBlock();
+        NodeResultBlock();
+        virtual ~NodeResultBlock();
 
-        virtual void Write();
+        virtual void Write(const std::string &afuFile);
 
-        virtual XyFunctionUnit  GetYUnit() const;
-
-        virtual std::string GetBlockName() const;
         virtual std::string GetKeyName() const;
 
     protected:
         virtual void ReadBody(std::ifstream &ifStream);
+
+        void WriteRecord(const std::string &afuFile, const std::string &recordName,
+            const std::vector<double> &xValues, const std::vector<double> &yValues);
     private:
 
-        std::vector<DispDataItem>   m_values;
+        std::vector<NodeDataItem>   m_values;
     };
 
-    DisplacementBlock::DisplacementBlock() : m_values()
+    NodeResultBlock::NodeResultBlock() : m_values()
     {
     }
 
-    DisplacementBlock::~DisplacementBlock()
+    NodeResultBlock::~NodeResultBlock()
     {
     }
 
-    XyFunctionUnit DisplacementBlock::GetYUnit() const
-    {
-        return XyFunctionUnitDisplacementMm;
-    }
-
-    std::string DisplacementBlock::GetBlockName() const
-    {
-        return "$DISPLACEMENTS";
-    }
-
-    std::string DisplacementBlock::GetKeyName() const
+    std::string NodeResultBlock::GetKeyName() const
     {
         return "POINT\\s*ID";
     }
 
-    void DisplacementBlock::ReadBody(std::ifstream &ifStream)
+    void NodeResultBlock::ReadBody(std::ifstream &ifStream)
     {
         std::string  strRead;
         char         aStr[10];
@@ -246,14 +241,142 @@ namespace Vsar
             ifStream >> aStr >> rotate.X >> rotate.Y >> rotate.Z;
             ifStream.ignore(200, '\n');    // ignore rest of the line
 
-            m_values.push_back(DispDataItem(time, coord, rotate));
+            m_values.push_back(NodeDataItem(time, coord, rotate));
         }
     }
 
-    void DisplacementBlock::Write()
+    void NodeResultBlock::WriteRecord(const std::string &afuFile, const std::string &recordName,
+                                        const std::vector<double> &xValues, const std::vector<double> &yValues)
     {
-        
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+        boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+
+        pAfuData->SetFileName(afuFile.c_str());
+        pAfuData->SetRecordName(recordName.c_str());
+        pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, GetXUnit(),
+                                    AfuData::OrdinateTypeReal, GetYUnit());
+        pAfuData->SetFunctionDataType(XyFunctionDataTypeTime);
+
+        pAfuData->SetRealData(xValues, yValues);
+
+        pAfuMgr->CreateRecord(pAfuData.get());
     }
+
+    void NodeResultBlock::Write(const std::string &afuFile)
+    {
+        std::vector<double> times;
+        std::vector<double> xCoords;
+        std::vector<double> yCoords;
+        std::vector<double> zCoords;
+
+        times.reserve(m_values.size());
+        xCoords.reserve(m_values.size());
+        yCoords.reserve(m_values.size());
+        zCoords.reserve(m_values.size());
+
+        BOOST_FOREACH(NodeDataItem dispItem, m_values)
+        {
+            times.push_back(dispItem.get<0>());
+            xCoords.push_back(dispItem.get<1>().X);
+            yCoords.push_back(dispItem.get<1>().Y);
+            zCoords.push_back(dispItem.get<1>().Z);
+        }
+
+        boost::format  recordName(boost::format("%1%-Node-%2%-%3%") % GetBlockName() % m_label);
+
+        WriteRecord(afuFile, (boost::format(recordName) % "X").str(), times, xCoords);
+        WriteRecord(afuFile, (boost::format(recordName) % "Y").str(), times, yCoords);
+        WriteRecord(afuFile, (boost::format(recordName) % "Z").str(), times, zCoords);
+    }
+
+    class DisplacementBlock : public NodeResultBlock
+    {
+    public:
+        DisplacementBlock();
+        virtual ~DisplacementBlock();
+
+        virtual XyFunctionUnit  GetYUnit() const;
+
+        virtual std::string GetBlockName() const;
+    };
+
+    DisplacementBlock::DisplacementBlock() : NodeResultBlock()
+    {
+    }
+
+    DisplacementBlock::~DisplacementBlock()
+    {
+    }
+
+    XyFunctionUnit DisplacementBlock::GetYUnit() const
+    {
+        return XyFunctionUnitDisplacementMm;
+    }
+
+    std::string DisplacementBlock::GetBlockName() const
+    {
+        return "DISPLACEMENTS";
+    }
+
+    class AccelerationBlock : public NodeResultBlock
+    {
+    public:
+        AccelerationBlock();
+        virtual ~AccelerationBlock();
+
+        virtual XyFunctionUnit  GetYUnit() const;
+
+        virtual std::string GetBlockName() const;
+    };
+
+    AccelerationBlock::AccelerationBlock() : NodeResultBlock()
+    {
+    }
+
+    AccelerationBlock::~AccelerationBlock()
+    {
+    }
+
+    XyFunctionUnit AccelerationBlock::GetYUnit() const
+    {
+        return XyFunctionUnitAccelerationMm;
+    }
+
+    std::string AccelerationBlock::GetBlockName() const
+    {
+        return "ACCELERATION";
+    }
+
+    class VelocityBlock : public NodeResultBlock
+    {
+    public:
+        VelocityBlock();
+        virtual ~VelocityBlock();
+
+        virtual XyFunctionUnit  GetYUnit() const;
+
+        virtual std::string GetBlockName() const;
+    };
+
+    VelocityBlock::VelocityBlock() : NodeResultBlock()
+    {
+    }
+
+    VelocityBlock::~VelocityBlock()
+    {
+    }
+
+    XyFunctionUnit VelocityBlock::GetYUnit() const
+    {
+        return XyFunctionUnitVelocityMm;
+    }
+
+    std::string VelocityBlock::GetBlockName() const
+    {
+        return "VELOCITY";
+    }
+
 
     ResponseResult::ResponseResult()
     {
@@ -286,7 +409,9 @@ namespace Vsar
         StlResultBlockVector vResultBlock;
 
         //  Handle displacement result
+        ifStream.clear();
         ifStream.seekg(0, std::ios::beg);  // goto file head
+
         while (!ifStream.eof())
         {
             boost::shared_ptr<ResultBlock> pResultBlock(new BlockType());
@@ -300,16 +425,34 @@ namespace Vsar
 
     void ResponseResult::CreateRecords()
     {
-        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
-        std::string    strSolverResultName(pPrjProp->GetProjectName().append("_s-").append(VSDANE_SOLUTION_NAME).append(".pch"));
-        std::ifstream  solverResult((filesystem::path(pPrjProp->GetProjectPath()) /
-                                    strSolverResultName).string().c_str());
+        std::ifstream  solverResult(GetSolverResultPathName().c_str());
 
         StlResultBlockVector  vAllResultBlock;
         StlResultBlockVector  vResultBlock;
 
         vResultBlock = ReadDataBlock<DisplacementBlock>(solverResult);
         vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
+
+        vResultBlock = ReadDataBlock<AccelerationBlock>(solverResult);
+        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
+
+        vResultBlock = ReadDataBlock<VelocityBlock>(solverResult);
+        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
+
+        std::string resultName(GetResultPathName());
+
+        if (!vAllResultBlock.empty())
+        {
+            BOOST_FOREACH(StlResultBlockVector::value_type pResultBlock, vAllResultBlock)
+            {
+                pResultBlock->Write(resultName);
+            }
+        }
+        else
+        {
+            // DELETE AFU
+            Session::GetSession()->AfuManager()->DeleteAfuFile(resultName.c_str());
+        }
     }
 
     void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)

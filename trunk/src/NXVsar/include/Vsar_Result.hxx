@@ -29,6 +29,8 @@ namespace Vsar
         bool IsResultExist() const;
 
         virtual std::string GetResultPathName() const = 0;
+
+        std::string GetSolverResultPathName() const;
     protected:
 
         void CreateResultFile();
