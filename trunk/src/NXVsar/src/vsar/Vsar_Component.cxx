@@ -502,9 +502,6 @@ namespace Vsar
 
     void BaseComponent::UpdateAssembleModel()
     {
-        // merge duplicate nodes
-        MergeDuplicateNodes();
-
         // Update Node and Element offset anyway
 //        if (CanUpdateRailSlabFEModel())
         {
@@ -512,6 +509,9 @@ namespace Vsar
 
             feLabelUpdater.Update();
         }
+
+        // merge duplicate nodes
+        MergeDuplicateNodes();
     }
 
     void BaseComponent::OnInit()
