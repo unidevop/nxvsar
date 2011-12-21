@@ -55,6 +55,7 @@
 #include <VsarUI_SelmiInfiniteSettings.hxx>
 #include <VsarUI_TunnelSettings.hxx>
 #include <VsarUI_SolveResponse.hxx>
+#include <VsarUI_SolveNoise.hxx>
 
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Init_Names.hxx>
@@ -173,7 +174,7 @@ struct MenuItemCallbackInfo
             {MENU_ITEM_NAME_SET_BASE,           SelmiInfiniteSettings::ShowDialog},
             {MENU_ITEM_NAME_SET_TUNNEL,         TunnelSettings::ShowDialog},
             {MENU_ITEM_NAME_SOLVE_RESPONSE,     SolveResponse::ShowDialog},
-            //{MENU_ITEM_NAME_SOLVE_NOISE,        TrainSettings::ShowDialog},
+            {MENU_ITEM_NAME_SOLVE_NOISE,        SolveNoise::ShowDialog},
             //{MENU_ITEM_NAME_VIEW_RESULT,        TrainSettings::ShowDialog}
         };
 

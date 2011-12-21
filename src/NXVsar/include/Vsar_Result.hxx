@@ -30,7 +30,8 @@ namespace Vsar
 
         virtual std::string GetResultPathName() const = 0;
 
-        std::string GetSolverResultPathName() const;
+        std::string GetNastranResultPathName() const;
+
     protected:
 
         void CreateResultFile();
@@ -42,7 +43,29 @@ namespace Vsar
 
     typedef std::vector<boost::shared_ptr<ResultBlock>> StlResultBlockVector;
 
-    class ResponseResult : public BaseResult
+    class NastranResult : public BaseResult
+    {
+    public:
+        NastranResult();
+        virtual ~NastranResult();
+
+    protected:
+        virtual void CreateRecords();
+
+        virtual StlResultBlockVector ExtractContent(std::ifstream &iResult) = 0;
+
+        template<typename BlockType>
+        StlResultBlockVector ReadDataBlock(std::ifstream &ifStream);
+
+    private:
+
+        //void CreateRecord(const ResponseRecordItem &recordItem);
+
+        //void ReadDataFromDat(const ResponseRecordItem &recordItem,
+        //                     std::vector<double> &xValues, std::vector<double> &yValues) const;
+    };
+
+    class ResponseResult : public NastranResult
     {
     public:
         ResponseResult();
@@ -51,17 +74,21 @@ namespace Vsar
         virtual std::string GetResultPathName() const;
 
     protected:
-        void CreateRecords();
 
-        template<typename BlockType>
-        StlResultBlockVector ReadDataBlock(std::ifstream &ifStream);
+        virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
+    };
 
-    private:
+    class NoiseIntermResult : public NastranResult
+    {
+    public:
+        NoiseIntermResult();
+        virtual ~NoiseIntermResult();
 
-        void CreateRecord(const ResponseRecordItem &recordItem);
+        virtual std::string GetResultPathName() const;
 
-        void ReadDataFromDat(const ResponseRecordItem &recordItem,
-                             std::vector<double> &xValues, std::vector<double> &yValues) const;
+    protected:
+
+        virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
     };
 }
 

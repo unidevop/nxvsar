@@ -40,7 +40,7 @@ namespace Vsar
 {
     class BaseProjectProperty;
 
-    class Status
+    class VSARINITEXPORT Status
     {
     public:
         enum ProjectStatus
@@ -143,6 +143,11 @@ namespace Vsar
         std::string GetResponseResultName() const
         {
             return GetProjectName().append(RESPONSE_RESULT_FILE_SUFFIX_NAME).append(".afu");
+        }
+
+        std::string GetNoiseIntermediateResultName() const
+        {
+            return GetProjectName().append(NOISE_INTERMEDIATE_RESULT_FILE_SUFFIX_NAME).append(".afu");
         }
 
         std::string GetNoiseResultName() const

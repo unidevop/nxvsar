@@ -6,6 +6,7 @@
 #include <fstream>
 #include <regex>
 #include <boost/filesystem.hpp>
+#include <boost/scope_exit.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 //#include <boost/function.hpp>
@@ -64,7 +65,7 @@ namespace Vsar
         Session::GetSession()->AfuManager()->CreateNewAfuFile(GetResultPathName().c_str());
     }
 
-    std::string BaseResult::GetSolverResultPathName() const
+    std::string BaseResult::GetNastranResultPathName() const
     {
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
         std::string    strSolverResultName(pPrjProp->GetProjectName().append("_s-").append(VSDANE_SOLUTION_NAME).append(".pch"));
@@ -378,21 +379,12 @@ namespace Vsar
     }
 
 
-    ResponseResult::ResponseResult()
+    NastranResult::NastranResult()
     {
     }
 
-    ResponseResult::~ResponseResult()
+    NastranResult::~NastranResult()
     {
-    }
-
-    std::string ResponseResult::GetResultPathName() const
-    {
-        //  Get result path name
-        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
-
-        return (filesystem::path(pPrjProp->GetProjectPath()) /
-                                 pPrjProp->GetResponseResultName()).string();
     }
 
 #if 0
@@ -404,7 +396,7 @@ namespace Vsar
 #endif
 
     template<typename BlockType>
-    StlResultBlockVector ResponseResult::ReadDataBlock(std::ifstream &ifStream)
+    StlResultBlockVector NastranResult::ReadDataBlock(std::ifstream &ifStream)
     {
         StlResultBlockVector vResultBlock;
 
@@ -423,23 +415,31 @@ namespace Vsar
         return vResultBlock;
     }
 
-    void ResponseResult::CreateRecords()
+    void NastranResult::CreateRecords()
     {
-        std::ifstream  solverResult(GetSolverResultPathName().c_str());
+        std::string  nastranResultName(GetNastranResultPathName());
 
         StlResultBlockVector  vAllResultBlock;
-        StlResultBlockVector  vResultBlock;
-
-        vResultBlock = ReadDataBlock<DisplacementBlock>(solverResult);
-        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
-
-        vResultBlock = ReadDataBlock<AccelerationBlock>(solverResult);
-        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
-
-        vResultBlock = ReadDataBlock<VelocityBlock>(solverResult);
-        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
-
         std::string resultName(GetResultPathName());
+
+        //  remove work dir
+        BOOST_SCOPE_EXIT((&vAllResultBlock)(&resultName))
+        {
+            if (vAllResultBlock.empty())
+            {
+                // DELETE AFU
+                Session::GetSession()->AfuManager()->DeleteAfuFile(resultName.c_str());
+            }
+        }
+        BOOST_SCOPE_EXIT_END
+
+        if (!filesystem::exists(nastranResultName))
+            throw NXException::Create("No solve result exists.");
+
+        std::ifstream  solverResult(nastranResultName.c_str());
+
+        vAllResultBlock = ExtractContent(solverResult);
+
 
         if (!vAllResultBlock.empty())
         {
@@ -448,57 +448,107 @@ namespace Vsar
                 pResultBlock->Write(resultName);
             }
         }
-        else
-        {
-            // DELETE AFU
-            Session::GetSession()->AfuManager()->DeleteAfuFile(resultName.c_str());
-        }
     }
 
-    void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)
+    ResponseResult::ResponseResult()
     {
-        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
-
-        boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
-
-        pAfuData->SetFileName(GetResultPathName().c_str());
-        pAfuData->SetRecordName(recordItem.m_recordName);
-        pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, recordItem.m_xUnit,
-                                    AfuData::OrdinateTypeReal, recordItem.m_yUnit);
-        pAfuData->SetFunctionDataType(XyFunctionDataTypeTime);
-
-        //  Read xy values from dat file
-        std::vector<double>     xValues;
-        std::vector<double>     yValues;
-
-        ReadDataFromDat(recordItem, xValues, yValues);
-
-        pAfuData->SetRealData(xValues, yValues);
-
-        pAfuMgr->CreateRecord(pAfuData.get());
     }
 
-    void ResponseResult::ReadDataFromDat(const ResponseRecordItem &recordItem,
-                                         std::vector<double> &xValues, std::vector<double> &yValues) const
+    ResponseResult::~ResponseResult()
     {
-        //  Get dat path name
+    }
+
+    std::string ResponseResult::GetResultPathName() const
+    {
+        //  Get result path name
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
 
-        std::string datResultPathName((filesystem::path(pPrjProp->GetProjectPath()) /
-                                       recordItem.m_srcResultFile).string());
-
-        if (!filesystem::exists(datResultPathName))
-            throw NXException::Create(MSGTXT("Result file does not exist."));
-
-        std::ifstream  ifDatResult(datResultPathName.c_str());
-        std::vector<double>    srcRecLineItem(recordItem.m_columnCnt);
-
-        while (ifDatResult.good())
-        {
-            std::for_each(srcRecLineItem.begin(), srcRecLineItem.end(), ifDatResult >> _1);
-
-            xValues.push_back(srcRecLineItem[recordItem.m_idxColumns[0]]);
-            yValues.push_back(srcRecLineItem[recordItem.m_idxColumns[1]]);
-        }
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+                                 pPrjProp->GetResponseResultName()).string();
     }
+
+    StlResultBlockVector ResponseResult::ExtractContent(std::ifstream &solverResult)
+    {
+        StlResultBlockVector  vResultBlock;
+        StlResultBlockVector vAllResultBlock;
+
+        vResultBlock = ReadDataBlock<DisplacementBlock>(solverResult);
+        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
+
+        vResultBlock = ReadDataBlock<AccelerationBlock>(solverResult);
+        vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
+
+        // TODO: element stress block
+
+        return vAllResultBlock;
+    }
+
+    NoiseIntermResult::NoiseIntermResult()
+    {
+    }
+
+    NoiseIntermResult::~NoiseIntermResult()
+    {
+    }
+
+    std::string NoiseIntermResult::GetResultPathName() const
+    {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+                                 pPrjProp->GetNoiseIntermediateResultName()).string();
+    }
+
+    StlResultBlockVector NoiseIntermResult::ExtractContent(std::ifstream &solverResult)
+    {
+        return ReadDataBlock<VelocityBlock>(solverResult);
+    }
+
+    //void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)
+    //{
+    //    AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+    //    boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+
+    //    pAfuData->SetFileName(GetResultPathName().c_str());
+    //    pAfuData->SetRecordName(recordItem.m_recordName);
+    //    pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, recordItem.m_xUnit,
+    //                                AfuData::OrdinateTypeReal, recordItem.m_yUnit);
+    //    pAfuData->SetFunctionDataType(XyFunctionDataTypeTime);
+
+    //    //  Read xy values from dat file
+    //    std::vector<double>     xValues;
+    //    std::vector<double>     yValues;
+
+    //    ReadDataFromDat(recordItem, xValues, yValues);
+
+    //    pAfuData->SetRealData(xValues, yValues);
+
+    //    pAfuMgr->CreateRecord(pAfuData.get());
+    //}
+
+    //void ResponseResult::ReadDataFromDat(const ResponseRecordItem &recordItem,
+    //                                     std::vector<double> &xValues, std::vector<double> &yValues) const
+    //{
+    //    //  Get dat path name
+    //    BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+    //    std::string datResultPathName((filesystem::path(pPrjProp->GetProjectPath()) /
+    //                                   recordItem.m_srcResultFile).string());
+
+    //    if (!filesystem::exists(datResultPathName))
+    //        throw NXException::Create(MSGTXT("Result file does not exist."));
+
+    //    std::ifstream  ifDatResult(datResultPathName.c_str());
+    //    std::vector<double>    srcRecLineItem(recordItem.m_columnCnt);
+
+    //    while (ifDatResult.good())
+    //    {
+    //        std::for_each(srcRecLineItem.begin(), srcRecLineItem.end(), ifDatResult >> _1);
+
+    //        xValues.push_back(srcRecLineItem[recordItem.m_idxColumns[0]]);
+    //        yValues.push_back(srcRecLineItem[recordItem.m_idxColumns[1]]);
+    //    }
+    //}
 }

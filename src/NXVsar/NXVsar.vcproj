@@ -105,6 +105,88 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Clean and signup"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;DEL /F /Q $(TargetDir)\NXOpen*.dll&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				Outputs="$(TargetDir)\$(TargetName).ilk"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include"
+				PreprocessorDefinitions="_SECURE_SCL=0;_USRDLL"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib"
+				OutputFile="$(UGII_USER_DIR)\application\libvsar.dll"
+				LinkIncremental="0"
+				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(ProjectDir)\lib&quot;;&quot;$(OutDir)&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary="$(OutDir)\$(TargetName).lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
@@ -168,88 +250,6 @@
 				ImportLibrary="$(OutDir)\$(TargetName).lib"
 				TargetMachine="17"
 				CLRThreadAttribute="0"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;DEL /F /Q $(TargetDir)\NXOpen*.dll&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
-				Outputs="$(TargetDir)\$(TargetName).ilk"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include;..\VsarInit\include"
-				PreprocessorDefinitions="_SECURE_SCL=0;_USRDLL"
-				RuntimeLibrary="2"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				IgnoreImportLibrary="true"
-				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libufun.lib libugopenint.lib libboost_filesystem-vc90-mt-1_46_1.lib libvsarinit.lib"
-				OutputFile="$(UGII_USER_DIR)\application\libvsar.dll"
-				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(ProjectDir)\lib&quot;;&quot;$(OutDir)&quot;"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)\$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -442,6 +442,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\vsarint\VsarUI_SolveNoise.cxx"
+				>
+			</File>
+			<File
 				RelativePath=".\src\vsarint\VsarUI_SolveResponse.cxx"
 				>
 			</File>
@@ -529,6 +533,10 @@
 			</File>
 			<File
 				RelativePath=".\include\VsarUI_SlabSettings.hxx"
+				>
+			</File>
+			<File
+				RelativePath=".\include\VsarUI_SolveNoise.hxx"
 				>
 			</File>
 			<File

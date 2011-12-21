@@ -228,7 +228,7 @@ namespace Vsar
     const char * const CONVERT_EXCITATION_INPUT_FILE_NAME       = "excitation_nodes.dat";
 
     //  Noise input names
-    const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node*.dat";
+    const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node%1%.dat";
     const char * const NOISE_COORDINATE_INPUT_FILE_NAME         = "output_point.dat";
     const char * const NOISE_OUTPUT_FILE_NAME                   = "Rail_Noise_Time**.out";
 
