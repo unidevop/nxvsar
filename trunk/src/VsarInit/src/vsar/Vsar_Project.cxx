@@ -483,6 +483,11 @@ namespace Vsar
                     prjStatus = Status::ProjectStatus_ResponseSolved;
                     isPrjPrt = true;
                 }
+                else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED) == 0)
+                {
+                    prjStatus = Status::ProjectStatus_NoiseSolved;
+                    isPrjPrt = true;
+                }
             }
         }
 

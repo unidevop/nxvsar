@@ -9,6 +9,7 @@
 #include <boost/scope_exit.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/cast.hpp>
+#include <boost/foreach.hpp>
 
 #include <uf_unit_types.h>
 #include <uf.h>
@@ -35,6 +36,8 @@
 #include <NXOpen/CAE_ModelingObjectPropertyTable.hxx>
 #include <NXOpen/CAE_ModelingObjectPropertyTableCollection.hxx>
 #include <NXOpen/CAE_PropertyTable.hxx>
+#include <NXOpen/CAE_AfuManager.hxx>
+#include <NXOpen/CAE_AfuDataConvertor.hxx>
 
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Project.hxx>
@@ -48,8 +51,8 @@ using namespace NXOpen;
 using namespace NXOpen::CAE;
 using namespace Vsar;
 
-#pragma warning(push)
-#pragma warning(disable: 4355)
+//#pragma warning(push)
+//#pragma warning(disable: 4355)
 //------------------------------------------------------------------------------
 // Declaration of global variables
 //------------------------------------------------------------------------------
@@ -96,7 +99,8 @@ namespace Vsar
         //  Solve
         Solve();
 
-        //LoadResult();
+        if (CanAutoLoadResult())
+            LoadResult();
     }
 
     void BaseSolveOperation::CleanAfuFile(const std::string &resultPathName)
@@ -145,8 +149,7 @@ namespace Vsar
         m_workDir = workPath;
     }
 
-    SolveResponseOperation::SolveResponseOperation() : BaseSolveOperation(),
-        m_computeExcitation(this), m_convertExcitation(this)
+    SolveResponseOperation::SolveResponseOperation() : BaseSolveOperation()
     {
     }
 
@@ -156,9 +159,13 @@ namespace Vsar
 
     void SolveResponseOperation::PreExecute()
     {
-        m_computeExcitation.Run();
+        ComputeExcitationTask  computeExcitation(this);
 
-        m_convertExcitation.Run();
+        computeExcitation.Run();
+
+        ConvertExcitationTask  convertExcitation(this);
+
+        convertExcitation.Run();
     }
 
     void SolveResponseOperation::CleanResult()
@@ -166,6 +173,10 @@ namespace Vsar
         ResponseResult   respResult;
 
         CleanAfuFile(respResult.GetResultPathName());
+
+        NoiseIntermResult noiseIntermResult;
+
+        CleanAfuFile(noiseIntermResult.GetResultPathName());
     }
 
     void SolveResponseOperation::Solve()
@@ -182,11 +193,73 @@ namespace Vsar
             SimSolution::SetupCheckOptionDoNotCheck);
     }
 
+    bool SolveResponseOperation::CanAutoLoadResult() const
+    {
+        return false;
+    }
+
     void SolveResponseOperation::LoadResult()
     {
         ResponseResult   respResult;
 
         respResult.Create();
+
+        NoiseIntermResult noiseIntermResult;
+
+        noiseIntermResult.Create();
+
+        //  modify project status
+        if (filesystem::exists(respResult.GetResultPathName()))
+            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
+    }
+
+    SolveNoiseOperation::SolveNoiseOperation() : BaseSolveOperation()
+    {
+    }
+
+    SolveNoiseOperation::~SolveNoiseOperation()
+    {
+    }
+
+    void SolveNoiseOperation::PreExecute()
+    {
+        // convert to FFT
+        ComputeExcitationTask  computeExcitation(this);
+
+        computeExcitation.Run();
+    }
+
+    void SolveNoiseOperation::CleanResult()
+    {
+        //NoiseResult   respResult;
+
+        //CleanAfuFile(respResult.GetResultPathName());
+    }
+
+    void SolveNoiseOperation::Solve()
+    {
+        //BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        //SimPart             *pSimPart  = pPrjProp->GetSimPart();
+
+        //SimSimulation *pSim = pSimPart->Simulation();
+        //std::string    strSol(std::string("Solution[").append(VSDANE_SOLUTION_NAME).append("]"));
+
+        //SimSolution * pSolution(dynamic_cast<SimSolution*>(pSim->FindObject(strSol)));
+
+        //pSolution->Solve(SimSolution::SolveOptionSolve,
+        //    SimSolution::SetupCheckOptionDoNotCheck);
+    }
+
+    bool SolveNoiseOperation::CanAutoLoadResult() const
+    {
+        return false;
+    }
+
+    void SolveNoiseOperation::LoadResult()
+    {
+        //NoiseResult   respResult;
+
+        //respResult.Create();
     }
 
     BaseTask::BaseTask(const BaseSolveOperation *solOper) : m_solOper(solOper)
@@ -288,7 +361,7 @@ namespace Vsar
         return SOLVE_ELASTIC_FAIL_LOG_NAME;
     }
 
-    std::vector<std::string> ComputeExcitationTask:: GetOutputResults() const
+    std::vector<std::string> ComputeExcitationTask::GetOutputResults() const
     {
         return std::vector<std::string>();
     }
@@ -476,14 +549,6 @@ namespace Vsar
         return results;
     }
 
-    ExcitationInput::ExcitationInput(const filesystem::path &targetDir) : m_targetDir(targetDir)
-    {
-    }
-
-    ExcitationInput::~ExcitationInput()
-    {
-    }
-
     void ExcitationInput::Generate() const
     {
         CopyIrrData();
@@ -653,6 +718,59 @@ namespace Vsar
         WriteInputData(vInputItems, CALCULATION_INPUT_FILE_NAME);
     }
 
+    void NoiseInput::Generate() const
+    {
+        std::string afuFileName(GetIntermediateResult());
+
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+        AfuDataConvertor *pAfuConvert = pAfuMgr->AfuDataConvertor();
+        //std::ofstream  inputFile(filesystem::path(m_targetDir / intermResultPathName).string().c_str());
+        
+        std::vector<int>  recordIndices(pAfuMgr->GetRecordIndexes(afuFileName.c_str()));
+
+        BOOST_FOREACH(int idx, recordIndices)
+        {
+            AfuData *pAfuData = NULL;
+
+            std::string recordName(pAfuMgr->GetAfuData(afuFileName.c_str(), idx, &pAfuData).GetText());
+            std::vector<double> xValues, yValues;
+
+            yValues = pAfuData->GetRealData(xValues);
+
+            std::vector<double> freqVals, yReals, yImags;
+            yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
+        }
+    }
+
+    std::string NoiseInput::GetIntermediateResult() const
+    {
+        NoiseIntermResult  noiseIntermResult;
+
+        std::string intermResultPathName(noiseIntermResult.GetResultPathName());
+
+        if (filesystem::exists(intermResultPathName))
+        {
+            // Load it anyway
+            try
+            {
+                FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
+                pDataMgr->LoadFile(intermResultPathName.c_str());
+            }
+            catch (std::exception &)
+            {
+            }
+        }
+        else
+            noiseIntermResult.Create();
+
+        return intermResultPathName;
+    }
+
+    void NoiseInput::ConvertData()
+    {
+    }
+
     SolveSettings::SolveSettings(bool bOutputElems, const std::vector<TaggedObject*> &outputElems,
         bool bOutputNodes, const std::vector<TaggedObject*> &outputNodes,
         bool bOutputNodesForNoise) : m_bOutputElems(bOutputElems), m_outputElems(outputElems),
@@ -715,4 +833,4 @@ namespace Vsar
     }
 }
 
-#pragma warning(pop)
+//#pragma warning(pop)

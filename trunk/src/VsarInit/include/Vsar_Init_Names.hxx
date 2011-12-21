@@ -50,8 +50,9 @@ namespace Vsar
 
     //////////////////////////////////////////////////////////////////////////
     //  Result Name
-    const char * const RESPONSE_RESULT_FILE_SUFFIX_NAME         = "_response";
-    const char * const NOISE_RESULT_FILE_SUFFIX_NAME            = "_noise";
+    const char * const RESPONSE_RESULT_FILE_SUFFIX_NAME             = "_response";
+    const char * const NOISE_INTERMEDIATE_RESULT_FILE_SUFFIX_NAME   = "_noise_intermediate";
+    const char * const NOISE_RESULT_FILE_SUFFIX_NAME                = "_noise";
 
 }
 

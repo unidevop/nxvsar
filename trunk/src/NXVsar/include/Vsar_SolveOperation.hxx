@@ -19,6 +19,8 @@ namespace NXOpen
 
 namespace Vsar
 {
+    //////////////////////////////////////////////////////////////////////////
+    // Solve Operations
     class BaseSolveOperation
     {
     public:
@@ -50,6 +52,8 @@ namespace Vsar
 
         virtual void Solve() = 0;
 
+        virtual bool CanAutoLoadResult() const = 0;
+
         //virtual void PrepareInputFiles() const = 0;
 
     protected:
@@ -57,6 +61,45 @@ namespace Vsar
         boost::filesystem::path   m_solDir;
     };
 
+    class SolveResponseOperation : public BaseSolveOperation
+    {
+    public:
+        SolveResponseOperation();
+        virtual ~SolveResponseOperation();
+
+        virtual void LoadResult();
+
+        virtual void CleanResult();
+
+    protected:
+        virtual void PreExecute();
+
+        virtual void Solve();
+
+        virtual bool CanAutoLoadResult() const;
+    };
+
+    class SolveNoiseOperation : public BaseSolveOperation
+    {
+    public:
+        SolveNoiseOperation();
+        virtual ~SolveNoiseOperation();
+
+        virtual void LoadResult();
+
+        virtual void CleanResult();
+
+    protected:
+        virtual void PreExecute();
+
+        virtual void Solve();
+
+        virtual bool CanAutoLoadResult() const;
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////
+    // Compute Tasks
     class BaseTask
     {
     public:
@@ -136,27 +179,28 @@ namespace Vsar
         int     m_nodeOffset;
     };
 
-    class SolveResponseOperation : public BaseSolveOperation
+
+    //////////////////////////////////////////////////////////////////////////
+    // excitation input
+
+    class BaseExeInput
     {
     public:
-        SolveResponseOperation();
-        virtual ~SolveResponseOperation();
+        BaseExeInput(const boost::filesystem::path &targetDir) : m_targetDir(targetDir)
+        {
+        }
 
-        virtual void LoadResult();
+        virtual ~BaseExeInput()
+        {
+        }
 
-        virtual void CleanResult();
+        virtual void Generate() const = 0;
 
     protected:
-        virtual void PreExecute();
-
-        virtual void Solve();
-
-    private:
-        ComputeExcitationTask  m_computeExcitation;
-        ConvertExcitationTask  m_convertExcitation;
+        boost::filesystem::path   m_targetDir;
     };
 
-    class ExcitationInput
+    class ExcitationInput : public BaseExeInput
     {
     public:
         struct InputItem
@@ -170,11 +214,15 @@ namespace Vsar
         typedef std::vector<InputItem>  StlInputItemVector;
 
     public:
-        ExcitationInput(const boost::filesystem::path &targetDir);
+        ExcitationInput(const boost::filesystem::path &targetDir) : BaseExeInput(targetDir)
+        {
+        }
 
-        ~ExcitationInput();
+        virtual ~ExcitationInput()
+        {
+        }
 
-        void Generate() const;
+        virtual void Generate() const;
 
     protected:
 
@@ -186,10 +234,30 @@ namespace Vsar
         void WriteCalculationData() const;
 
         void WriteInputData(const StlInputItemVector &vInputItems, const std::string &fileName) const;
-    private:
-        boost::filesystem::path   m_targetDir;
     };
 
+    //////////////////////////////////////////////////////////////////////////
+    // Noise input
+    class NoiseInput : public BaseExeInput
+    {
+    public:
+        NoiseInput(const boost::filesystem::path &targetDir) : BaseExeInput(targetDir)
+        {
+        }
+
+        virtual ~NoiseInput()
+        {
+        }
+
+        virtual void Generate() const;
+
+    protected:
+        std::string GetIntermediateResult() const;
+        void ConvertData();
+    };
+
+    //////////////////////////////////////////////////////////////////////////
+    // Solver settings
     class SolveSettings
     {
     public:
