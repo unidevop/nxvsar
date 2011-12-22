@@ -37,7 +37,13 @@
 #include <uf_defs.h>
 #include <VsarUI_SolveNoise.hxx>
 
+#include <boost/foreach.hpp>
+
+#include <uf_object_types.h>
+#include <uf_ui_types.h>
+
 #include <NXOpen/UI.hxx>
+#include <NXOpen/Point.hxx>
 #include <NXOpen/NXMessageBox.hxx>
 #include <NXOpen/BlockStyler_UIBlock.hxx>
 #include <NXOpen/BlockStyler_PropertyList.hxx>
@@ -52,6 +58,42 @@ using namespace Vsar;
 
 namespace VsarUI
 {
+    //SelectPoint::SelectPoint() : BaseDialog("SelectPoint.dlx")
+    //{
+    //}
+
+    //SelectPoint::~SelectPoint()
+    //{
+    //}
+
+    ////------------------------------------------------------------------------------
+    ////Callback Name: initialize_cb
+    ////------------------------------------------------------------------------------
+    //void SelectPoint::InitializeCb()
+    //{
+    //    try
+    //    {
+    //        CompositeBlock *pTopBlock = m_theDialog->TopBlock();
+
+    //        m_selectPoint         = pTopBlock->FindBlock("selectPoint");
+    //    }
+    //    catch(std::exception& ex)
+    //    {
+    //        //---- Enter your exception handling code here -----
+    //        theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+    //    }
+    //}
+
+    //int SelectPoint::ApplyCb()
+    //{
+    //    return 0;
+    //}
+
+    //int SelectPoint::UpdateCb(NXOpen::BlockStyler::UIBlock* block)
+    //{
+    //    return 0;
+    //}
+
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
@@ -98,7 +140,18 @@ namespace VsarUI
         {
             CompositeBlock *pTopBlock = m_theDialog->TopBlock();
 
-            m_outputPoints         = pTopBlock->FindBlock("outputPoints");
+            //m_outputPointList         = pTopBlock->FindBlock("outputPointList");
+            m_selectPoints         = pTopBlock->FindBlock("selectPoints");
+            //m_specifyPoint         = pTopBlock->FindBlock("specifyPoint");
+
+            boost::scoped_ptr<PropertyList> pSelPtsPropList(m_selectPoints->GetProperties());
+
+            std::vector<Selection::MaskTriple> maskTriples;
+
+            maskTriples.push_back(Selection::MaskTriple(UF_point_type, UF_all_subtype, UF_UI_SEL_FEATURE_BODY));
+
+            pSelPtsPropList->SetSelectionFilter("SelectionFilter",
+                Selection::SelectionActionClearAndEnableSpecific, maskTriples);
         }
         catch(std::exception& ex)
         {
@@ -124,6 +177,12 @@ namespace VsarUI
         }
     }
 
+    int SolveNoise::FilterCb(NXOpen::BlockStyler::UIBlock *pBlock, NXOpen::TaggedObject *pSel)
+    {
+        //  TODO: Filter
+        return UF_UI_SEL_ACCEPT;
+    }
+
     //------------------------------------------------------------------------------
     //Callback Name: apply_cb
     //------------------------------------------------------------------------------
@@ -132,14 +191,24 @@ namespace VsarUI
         int errorCode = 0;
         try
         {
-            //SolveSettings solveSettings(CanOutputElements(), GetOutputElements(),
-            //    CanOutputNodes(), GetOutputNodes(), CanOutputNodesForNoise());
+            boost::scoped_ptr<PropertyList> pSelPtsPropList(m_selectPoints->GetProperties());
 
-            //solveSettings.Apply();
+            std::vector<TaggedObject*>  selPts(pSelPtsPropList->GetTaggedObjectVector("SelectedObjects"));
 
-            //SolveResponseOperation   solveOper;
+            std::vector<Point*> outputPoints;
 
-            //solveOper.Execute();
+            outputPoints.reserve(selPts.size());
+            BOOST_FOREACH(TaggedObject *pSelObj, selPts)
+            {
+                Point *pPoint = dynamic_cast<Point*>(pSelObj);
+
+                if (pPoint)
+                    outputPoints.push_back(pPoint);
+            }
+
+            SolveNoiseOperation        solveOper(outputPoints);
+
+            solveOper.Execute();
         }
         catch(std::exception& ex)
         {
@@ -157,6 +226,9 @@ namespace VsarUI
     {
         try
         {
+            if (block == m_selectPoints)
+            {
+            }
         }
         catch(std::exception& ex)
         {

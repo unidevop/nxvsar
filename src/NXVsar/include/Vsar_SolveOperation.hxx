@@ -9,6 +9,7 @@
 namespace NXOpen
 {
     class TaggedObject;
+    class Point;
 
     namespace CAE
     {
@@ -82,7 +83,7 @@ namespace Vsar
     class SolveNoiseOperation : public BaseSolveOperation
     {
     public:
-        SolveNoiseOperation();
+        SolveNoiseOperation(const std::vector<NXOpen::Point*> &pts);
         virtual ~SolveNoiseOperation();
 
         virtual void LoadResult();
@@ -95,6 +96,9 @@ namespace Vsar
         virtual void Solve();
 
         virtual bool CanAutoLoadResult() const;
+
+    private:
+        std::vector<NXOpen::Point*>    m_outputPoints;
     };
 
 
@@ -241,7 +245,8 @@ namespace Vsar
     class NoiseInput : public BaseExeInput
     {
     public:
-        NoiseInput(const boost::filesystem::path &targetDir) : BaseExeInput(targetDir)
+        NoiseInput(const boost::filesystem::path &targetDir,
+                  const std::vector<NXOpen::Point*> &pts) : BaseExeInput(targetDir), m_outputPoints(pts)
         {
         }
 
@@ -254,6 +259,9 @@ namespace Vsar
     protected:
         std::string GetIntermediateResult() const;
         void ConvertData();
+
+    private:
+        const std::vector<NXOpen::Point*> &m_outputPoints;
     };
 
     //////////////////////////////////////////////////////////////////////////

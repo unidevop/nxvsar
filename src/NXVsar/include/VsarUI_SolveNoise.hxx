@@ -73,6 +73,19 @@ namespace VsarUI
 #define                SnapPointTypesOnByDefault_Poles (1 <<15);
 #define     SnapPointTypesOnByDefault_BoundedGridPoint (1 <<16);
 
+    //class SelectPoint : public BaseDialog
+    //{
+    //public:
+    //    SelectPoint();
+    //    ~SelectPoint();
+
+    //    virtual void InitializeCb();
+    //    virtual int ApplyCb();
+    //    virtual int UpdateCb(NXOpen::BlockStyler::UIBlock* block);
+
+    //private:
+    //    NXOpen::BlockStyler::UIBlock* m_selectPoint;// Block type: Specify Point
+    //};
 
     class SolveNoise : public BaseDialog
     {
@@ -94,6 +107,7 @@ namespace VsarUI
         virtual void InitializeCb();
         virtual void DialogShownCb();
         virtual int ApplyCb();
+        virtual int FilterCb(NXOpen::BlockStyler::UIBlock *pBlock, NXOpen::TaggedObject *pSel);
         virtual int UpdateCb(NXOpen::BlockStyler::UIBlock* block);
 
     protected:
@@ -108,7 +122,10 @@ namespace VsarUI
         //bool CanOutputNodesForNoise() const;
 
     private:
-        NXOpen::BlockStyler::UIBlock* m_outputPoints;// Block type: Select Elements
+        //NXOpen::BlockStyler::UIBlock* m_outputPointList;// Block type: Select Elements
+
+        NXOpen::BlockStyler::UIBlock* m_selectPoints;// Block type: Select Elements
+        //NXOpen::BlockStyler::UIBlock* m_specifyPoint;// Block type: Select Elements
 
     };
 }
