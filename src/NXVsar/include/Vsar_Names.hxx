@@ -42,6 +42,8 @@ namespace Vsar
     const char * const SLAB_BASE_CONNECTION_COLLECTOR_NAME      = "Slab_Base_Connection_Collector";
     const char * const SLAB_BASE_CONNECTION_NAME                = "SLAB_BASE_CONNECTION";
 
+    const char * const SLAB_CENTER_POINT_NAME                   = "SLAB_CENTER_POINT";
+
     // Base
     const char * const BASE_MESH_COLLECTOR_NAME                 = "Base_Mesh_Collector";
 
@@ -226,6 +228,9 @@ namespace Vsar
 
     //  Read_excitation input names
     const char * const CONVERT_EXCITATION_INPUT_FILE_NAME       = "excitation_nodes.dat";
+
+    //  Response result name
+    const char * const RESPONSE_RESULT_RECORD_PATTERN_NAME      = "%1%-Node-%2%-%3%";
 
     //  Noise input names
     const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node%1%.dat";

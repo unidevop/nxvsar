@@ -246,8 +246,9 @@ namespace Vsar
     {
     public:
         NoiseInput(const boost::filesystem::path &targetDir,
-                  const std::vector<NXOpen::Point*> &pts) : BaseExeInput(targetDir), m_outputPoints(pts)
+                  const std::vector<NXOpen::Point*> &pts) : BaseExeInput(targetDir), m_outputPoints(pts), m_refNodeSeq()
         {
+            ConstructRefNodeSequence();
         }
 
         virtual ~NoiseInput()
@@ -257,11 +258,25 @@ namespace Vsar
         virtual void Generate() const;
 
     protected:
+        void ConstructRefNodeSequence();
+
         std::string GetIntermediateResult() const;
-        void ConvertData();
+
+        std::string GetTargetInputName(const std::string &recordName) const;
+
+        void WriteFrequenceData() const;
+
+        void WriteRecord(const std::string &recordName, const std::vector<double> &freqVals,
+                         const std::vector<double> &yReals, const std::vector<double> &yImags) const;
+
+        void WriteOutputPoints() const;
+
+        NXOpen::Point* GetSlabCenter() const;
 
     private:
         const std::vector<NXOpen::Point*> &m_outputPoints;
+
+        std::vector<NXOpen::TaggedObject*>  m_refNodeSeq;
     };
 
     //////////////////////////////////////////////////////////////////////////
