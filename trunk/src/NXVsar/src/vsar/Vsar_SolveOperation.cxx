@@ -3,13 +3,17 @@
 #include <Vsar_SolveOperation.hxx>
 
 #include <cstdlib>
+#include <cmath>
 #include <fstream>
+#include <iomanip>
+#include <regex>
 
 #include <boost/filesystem.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/cast.hpp>
 #include <boost/foreach.hpp>
+#include <boost/format.hpp>
 
 #include <uf_unit_types.h>
 #include <uf.h>
@@ -22,6 +26,7 @@
 #include <NXOpen/ExpressionCollection.hxx>
 #include <NXOpen/UnitCollection.hxx>
 #include <NXOpen/Point.hxx>
+#include <NXOpen/PointCollection.hxx>
 #include <NXOpen/NXException.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 #include <NXOpen/CAE_CaeGroup.hxx>
@@ -462,14 +467,14 @@ namespace Vsar
         return std::vector<tag_t>(tNodes, tNodes + nodeCnt);
     }
 
-    class NodePosComparer : public std::binary_function<tag_t, tag_t, bool>
+    class NodePosZComparer : public std::binary_function<tag_t, tag_t, bool>
     {
     public:
-        NodePosComparer()
+        NodePosZComparer()
         {
         }
 
-        ~NodePosComparer()
+        ~NodePosZComparer()
         {
         }
 
@@ -519,7 +524,7 @@ namespace Vsar
     {
         std::vector<tag_t>   railNodes(GetRailNodes());
 
-        std::sort(railNodes.begin(), railNodes.end(), NodePosComparer());
+        std::sort(railNodes.begin(), railNodes.end(), NodePosZComparer());
 
         WriteInputData(railNodes);
     }
@@ -720,15 +725,67 @@ namespace Vsar
         WriteInputData(vInputItems, CALCULATION_INPUT_FILE_NAME);
     }
 
+
+    class NodePosXZComparer : public std::binary_function<tag_t, tag_t, bool>
+    {
+    public:
+        NodePosXZComparer()
+        {
+        }
+
+        ~NodePosXZComparer()
+        {
+        }
+
+        bool operator () (TaggedObject *pNode1, TaggedObject *pNode2) const
+        {
+            int errCode = 0;
+            int label   = 0;
+            UF_SF_node_btype_t    bType;
+            UF_SF_mid_node_type_t eType;
+            double  absPos1[3];
+            double  absPos2[3];
+
+            errCode = UF_SF_ask_node(pNode1->Tag(), &label, &bType, &eType, absPos1);
+            if (errCode != 0)
+                throw NXException::Create(errCode);
+
+            errCode = UF_SF_ask_node(pNode2->Tag(), &label, &bType, &eType, absPos2);
+            if (errCode != 0)
+                throw NXException::Create(errCode);
+
+            return (absPos1[0] > absPos2[0]) || (absPos1[2] < absPos2[2]);
+        }
+    };
+
+    void NoiseInput::ConstructRefNodeSequence()
+    {
+        //  Get all ref nodes
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+
+        CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
+
+        m_refNodeSeq = pGroup->GetEntities();
+
+        std::sort(m_refNodeSeq.begin(), m_refNodeSeq.end(), NodePosXZComparer());
+    }
+
     void NoiseInput::Generate() const
+    {
+        WriteOutputPoints();
+
+        WriteFrequenceData();
+    }
+
+    void NoiseInput::WriteFrequenceData() const
     {
         std::string afuFileName(GetIntermediateResult());
 
         AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
         AfuDataConvertor *pAfuConvert = pAfuMgr->AfuDataConvertor();
-        //std::ofstream  inputFile(filesystem::path(m_targetDir / intermResultPathName).string().c_str());
-        
+
         std::vector<int>  recordIndices(pAfuMgr->GetRecordIndexes(afuFileName.c_str()));
 
         BOOST_FOREACH(int idx, recordIndices)
@@ -743,7 +800,21 @@ namespace Vsar
             std::vector<double> freqVals, yReals, yImags;
             yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
 
-            std::string recordName(pAfuData->RecordName().GetText());
+            WriteRecord(pAfuData->RecordName().GetText(), freqVals, yReals, yImags);
+        }
+    }
+
+    void NoiseInput::WriteRecord(const std::string &recordName, const std::vector<double> &freqVals,
+                                 const std::vector<double> &yReals, const std::vector<double> &yImags) const
+    {
+        std::ofstream  inputFile(filesystem::path(m_targetDir / GetTargetInputName(recordName)).string().c_str());
+
+        for (unsigned int idx = 0; idx < freqVals.size(); idx++)
+        {
+            //  write values
+            inputFile << std::setw(15) << freqVals[idx] << " " <<
+                         std::setw(15) << yReals[idx] << " " <<
+                         std::setw(15) << yImags[idx] << std::endl;
         }
     }
 
@@ -771,8 +842,81 @@ namespace Vsar
         return intermResultPathName;
     }
 
-    void NoiseInput::ConvertData()
+    std::string NoiseInput::GetTargetInputName(const std::string &recordName) const
     {
+        int nodeLabel = 0;
+
+        //  Get Node Label
+        std::tr1::regex reg(std::string("-Node-(\\d+)-"));
+
+        std::tr1::match_results<std::string::const_iterator> what;
+        if(std::tr1::regex_match(recordName, what, reg) && what.size() == 2)
+        {
+            nodeLabel = boost::lexical_cast<int>(what[1]);
+        }
+
+        std::vector<int>    nodeLabels;
+
+        // TODO: 
+        nodeLabels.reserve(m_refNodeSeq.size());
+        BOOST_FOREACH(TaggedObject *pNode, m_refNodeSeq)
+        {
+            int label   = 0;
+            UF_SF_node_btype_t    bType;
+            UF_SF_mid_node_type_t eType;
+            double  absPos[3];
+
+            UF_SF_ask_node(pNode->Tag(), &label, &bType, &eType, absPos);
+            nodeLabels.push_back(label);
+        }
+
+        int nodeIndex = std::find(nodeLabels.begin(), nodeLabels.end(), nodeLabel) - nodeLabels.begin() + 1;
+
+        return (boost::format(NOISE_FREQUENCE_INPUT_FILE_NAME) % nodeIndex).str();
+    }
+
+    void NoiseInput::WriteOutputPoints() const
+    {
+        Point *pCenterPt = GetSlabCenter();
+
+        if (!pCenterPt)
+            throw NXException::Create("The slab center point has been deleted.");
+
+        Point3d centerCoord(pCenterPt->Coordinates());
+
+        std::ofstream   inputFile(filesystem::path(m_targetDir / NOISE_COORDINATE_INPUT_FILE_NAME).string().c_str());
+
+        const double mmToM = 0.001;
+
+        BOOST_FOREACH(Point *pOutputPt, m_outputPoints)
+        {
+            //  convert the coordinate to first slab
+            Point3d coord(pOutputPt->Coordinates());
+
+            coord.Z = std::fmod(coord.Z, centerCoord.Z * 2);
+
+            //  write relative coordinate
+            inputFile << std::setw(15) << mmToM * (coord.X - centerCoord.X) << " " <<
+                         std::setw(15) << mmToM * (coord.Y - centerCoord.Y) << " " <<
+                         std::setw(15) << mmToM * (coord.Z - centerCoord.Z) << std::endl;
+        }
+    }
+
+    Point* NoiseInput::GetSlabCenter() const
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+        PointCollection     *pPoints   = pSimPart->Points();
+
+        std::string        pointName(SLAB_CENTER_POINT_NAME);
+        //  Get points
+        for (PointCollection::iterator iter = pPoints->begin(); iter != pPoints->end(); ++iter)
+        {
+            if (pointName.compare((*iter)->Name().GetText()) == 0)
+                return *iter;
+        }
+
+        return NULL;
     }
 
     SolveSettings::SolveSettings(bool bOutputElems, const std::vector<TaggedObject*> &outputElems,

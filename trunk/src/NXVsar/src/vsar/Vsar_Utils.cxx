@@ -154,7 +154,7 @@ namespace Vsar
         //  Get body prototypes
         for (BodyCollection::iterator iter = pBodyProtoCol->begin(); iter != pBodyProtoCol->end(); ++iter)
         {
-            if (bodyName.compare((*iter)->Name().GetUTF8Text()) == 0)
+            if (bodyName.compare((*iter)->Name().GetText()) == 0)
                 bodyProtos.push_back(*iter);
         }
 

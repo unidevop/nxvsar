@@ -284,7 +284,7 @@ namespace Vsar
             zCoords.push_back(dispItem.get<1>().Z);
         }
 
-        boost::format  recordName(boost::format("%1%-Node-%2%-%3%") % GetBlockName() % m_label);
+        boost::format  recordName(boost::format(RESPONSE_RESULT_RECORD_PATTERN_NAME) % GetBlockName() % m_label);
 
         WriteRecord(afuFile, (boost::format(recordName) % "X").str(), times, xCoords);
         WriteRecord(afuFile, (boost::format(recordName) % "Y").str(), times, yCoords);
@@ -439,7 +439,6 @@ namespace Vsar
         std::ifstream  solverResult(nastranResultName.c_str());
 
         vAllResultBlock = ExtractContent(solverResult);
-
 
         if (!vAllResultBlock.empty())
         {
