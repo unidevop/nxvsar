@@ -21,6 +21,7 @@
 #include <NXOpen/Expression.hxx>
 #include <NXOpen/ExpressionCollection.hxx>
 #include <NXOpen/UnitCollection.hxx>
+#include <NXOpen/Point.hxx>
 #include <NXOpen/NXException.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 #include <NXOpen/CAE_CaeGroup.hxx>
@@ -213,7 +214,8 @@ namespace Vsar
             Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
     }
 
-    SolveNoiseOperation::SolveNoiseOperation() : BaseSolveOperation()
+    SolveNoiseOperation::SolveNoiseOperation(const std::vector<NXOpen::Point*> &pts)
+        : BaseSolveOperation(), m_outputPoints(pts)
     {
     }
 
@@ -224,9 +226,9 @@ namespace Vsar
     void SolveNoiseOperation::PreExecute()
     {
         // convert to FFT
-        ComputeExcitationTask  computeExcitation(this);
+        NoiseInput  noiseInput(m_workDir, m_outputPoints);
 
-        computeExcitation.Run();
+        noiseInput.Generate();
     }
 
     void SolveNoiseOperation::CleanResult()
@@ -252,7 +254,7 @@ namespace Vsar
 
     bool SolveNoiseOperation::CanAutoLoadResult() const
     {
-        return false;
+        return true;
     }
 
     void SolveNoiseOperation::LoadResult()
@@ -733,13 +735,15 @@ namespace Vsar
         {
             AfuData *pAfuData = NULL;
 
-            std::string recordName(pAfuMgr->GetAfuData(afuFileName.c_str(), idx, &pAfuData).GetText());
+            pAfuMgr->GetAfuData(afuFileName.c_str(), idx, &pAfuData);
             std::vector<double> xValues, yValues;
 
             yValues = pAfuData->GetRealData(xValues);
 
             std::vector<double> freqVals, yReals, yImags;
             yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
+
+            std::string recordName(pAfuData->RecordName().GetText());
         }
     }
 
