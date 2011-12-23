@@ -206,6 +206,7 @@ namespace Vsar
     //const char * const SOLVER_ELASTIC_EXE_NAME                  = "elastic.exe";
     const char * const SOLVER_ELASTIC_EXE_NAME                  = "ForceActOnRail.exe";
     const char * const SOLVER_ELASTIC_CONVERT_EXE_NAME          = "read_excitation.exe";
+    const char * const SOLVER_NOISE_EXE_NAME                    = "noise.exe";
 
     // log file
     const char * const SOLVE_ELASTIC_SUCCESS_LOG_NAME           = "elastic_finished.log";
@@ -213,7 +214,7 @@ namespace Vsar
 
     const char * const SOLVE_CONVERT_ELASTIC_FAIL_LOG_NAME      = "read_excitation_error.log";
 
-    const char * const SOLVE_NOISE_FAIL_LOG_NAME                = "noise_error.log";
+    const char * const SOLVE_NOISE_FAIL_LOG_NAME                = "rail_noise_error.log";
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -234,7 +235,7 @@ namespace Vsar
 
     //  Noise input names
     const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node%1%.dat";
-    const char * const NOISE_COORDINATE_INPUT_FILE_NAME         = "output_point.dat";
+    const char * const NOISE_COORDINATE_INPUT_FILE_NAME         = "output_points.dat";
     const char * const NOISE_OUTPUT_FILE_NAME                   = "Rail_Noise_Time**.out";
 
 

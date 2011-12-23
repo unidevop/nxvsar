@@ -156,7 +156,7 @@ namespace Vsar
                 {
                     std::getline(ifStream, strRead);
 
-                    std::tr1::match_results<std::string::const_iterator> what;
+                    std::tr1::smatch what;
                     if(std::tr1::regex_match(strRead, what, reg) && what.size() == 2)
                     {
                         m_label = boost::lexical_cast<int>(what[1]);

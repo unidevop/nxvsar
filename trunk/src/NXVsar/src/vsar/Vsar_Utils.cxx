@@ -51,6 +51,10 @@
 #include <NXOpen/CAE_CAEConnectionCollection.hxx>
 #include <NXOpen/CAE_CAEConnection.hxx>
 #include <NXOpen/CAE_CAEConnectionBuilder.hxx>
+#include <NXOpen/CAE_FEModelOccurrence.hxx>
+#include <NXOpen/CAE_IMeshManager.hxx>
+#include <NXOpen/CAE_SimPart.hxx>
+#include <NXOpen/CAE_SimSimulation.hxx>
 #include <NXOpen/SelectTaggedObjectList.hxx>
 
 
@@ -446,6 +450,38 @@ namespace Vsar
         }
 
         return caeFaces;
+    }
+
+    FEModelOccurrence* GetFEModelOccByMeshName(const std::string &meshName)
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+
+        SimPart             *pSimPart  = pPrjProp->GetSimPart();
+
+        FEModelOccurrence   *pFEModelOcc = NULL;
+        FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
+
+        std::string strMeshFindName(std::string("MeshOccurrence[").append(meshName).append("]"));
+
+        std::vector<FEModelOccurrence*>  childFeModelOcc(pSimFEModel->GetChildren());
+
+        for (std::vector<FEModelOccurrence*>::iterator iter = childFeModelOcc.begin();
+            iter != childFeModelOcc.end(); ++iter)
+        {
+            IMeshManager        *pMeshMgr    = (*iter)->MeshManager();
+
+            try
+            {
+                Mesh *pRailMesh = polymorphic_cast<Mesh*>(pMeshMgr->FindObject(strMeshFindName.c_str()));
+                pFEModelOcc = *iter;
+                break;
+            }
+            catch (std::exception&)
+            {
+            }
+        }
+
+        return pFEModelOcc;
     }
 
 #if 0
