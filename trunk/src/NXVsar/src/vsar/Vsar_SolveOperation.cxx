@@ -241,9 +241,9 @@ namespace Vsar
 
     void SolveNoiseOperation::CleanResult()
     {
-        //NoiseResult   respResult;
+        NoiseResult   respResult(m_workDir, m_outputPoints);
 
-        //CleanAfuFile(respResult.GetResultPathName());
+        CleanAfuFile(respResult.GetResultPathName());
     }
 
     void SolveNoiseOperation::Solve()
@@ -269,9 +269,9 @@ namespace Vsar
 
     void SolveNoiseOperation::LoadResult()
     {
-        //NoiseResult   respResult;
+        NoiseResult   respResult(m_workDir, m_outputPoints);
 
-        //respResult.Create();
+        respResult.Create();
     }
 
     BaseTask::BaseTask(const BaseSolveOperation *solOper) : m_solOper(solOper)
