@@ -230,13 +230,18 @@ namespace Vsar
     //  Read_excitation input names
     const char * const CONVERT_EXCITATION_INPUT_FILE_NAME       = "excitation_nodes.dat";
 
-    //  Response result name
+    //  Response result record name
     const char * const RESPONSE_RESULT_RECORD_PATTERN_NAME      = "%1%-Node-%2%-%3%";
 
     //  Noise input names
-    const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node%1%.dat";
+    const char * const NOISE_FREQUENCE_INPUT_FILE_NAME          = "node%1%.txt";
     const char * const NOISE_COORDINATE_INPUT_FILE_NAME         = "output_points.dat";
-    const char * const NOISE_OUTPUT_FILE_NAME                   = "Rail_Noise_Time**.out";
+    const char * const NOISE_TIME_OUTPUT_FILE_NAME              = "Rail_Noise_Time%02d.out";
+    const char * const NOISE_FREQ_OUTPUT_FILE_NAME              = "Rail_Noise_Freq%02d.out";
+
+    //  Noise result record name
+    const char * const NOISE_RESULT_TIME_RECORD_PATTERN_NAME    = "Time_SoundPressure_(%.2f,%.2f,%.2f)";
+    const char * const NOISE_RESULT_FREQ_RECORD_PATTERN_NAME    = "Freq_SoundPressure_(%.2f,%.2f,%.2f)";
 
 
     enum CompLayer

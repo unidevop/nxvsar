@@ -40,7 +40,7 @@ namespace Vsar
     // Declaration of global variables
     //------------------------------------------------------------------------------
     //extern NewProject *theVsar_NewProject;
-    int ReportError( char *file, int line, char *call, int irc);
+    int ReportError(const std::string &file, int line, const std::string &call, int irc);
 
 #ifndef UF_CALL
 #define UF_CALL(X) (ReportError( __FILE__, __LINE__, #X, (X)))

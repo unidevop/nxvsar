@@ -19,6 +19,7 @@
 #include <NXOpen/ugmath.hxx>
 #include <NXOpen/Session.hxx>
 #include <NXOpen/NXException.hxx>
+#include <NXOpen/Point.hxx>
 #include <NXOpen/CAE_AfuManager.hxx>
 #include <NXOpen/CAE_AfuData.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
@@ -38,10 +39,6 @@ using namespace Vsar;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
-    BaseResult::BaseResult()
-    {
-    }
-
     BaseResult::~BaseResult()
     {
     }
@@ -379,14 +376,6 @@ namespace Vsar
     }
 
 
-    NastranResult::NastranResult()
-    {
-    }
-
-    NastranResult::~NastranResult()
-    {
-    }
-
 #if 0
     void ResponseResult::CreateRecords()
     {
@@ -417,24 +406,25 @@ namespace Vsar
 
     void NastranResult::CreateRecords()
     {
-        std::string  nastranResultName(GetNastranResultPathName());
-
-        StlResultBlockVector  vAllResultBlock;
         std::string resultName(GetResultPathName());
 
         //  remove work dir
-        BOOST_SCOPE_EXIT((&vAllResultBlock)(&resultName))
+        BOOST_SCOPE_EXIT((&resultName))
         {
-            if (vAllResultBlock.empty())
-            {
-                // DELETE AFU
-                Session::GetSession()->AfuManager()->DeleteAfuFile(resultName.c_str());
-            }
+            AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+            // DELETE AFU
+            if (pAfuMgr->GetRecordIndexes(resultName.c_str()).empty())
+                pAfuMgr->DeleteAfuFile(resultName.c_str());
         }
         BOOST_SCOPE_EXIT_END
 
+        std::string  nastranResultName(GetNastranResultPathName());
+
         if (!filesystem::exists(nastranResultName))
             throw NXException::Create("No solve result exists.");
+
+        StlResultBlockVector  vAllResultBlock;
 
         std::ifstream  solverResult(nastranResultName.c_str());
 
@@ -447,14 +437,6 @@ namespace Vsar
                 pResultBlock->Write(resultName);
             }
         }
-    }
-
-    ResponseResult::ResponseResult()
-    {
-    }
-
-    ResponseResult::~ResponseResult()
-    {
     }
 
     std::string ResponseResult::GetResultPathName() const
@@ -482,14 +464,8 @@ namespace Vsar
         return vAllResultBlock;
     }
 
-    NoiseIntermResult::NoiseIntermResult()
-    {
-    }
-
-    NoiseIntermResult::~NoiseIntermResult()
-    {
-    }
-
+    //////////////////////////////////////////////////////////////////////////
+    //  NoiseIntermResult
     std::string NoiseIntermResult::GetResultPathName() const
     {
         //  Get result path name
@@ -504,50 +480,106 @@ namespace Vsar
         return ReadDataBlock<VelocityBlock>(solverResult);
     }
 
-    //void ResponseResult::CreateRecord(const ResponseRecordItem &recordItem)
-    //{
-    //    AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+    //////////////////////////////////////////////////////////////////////////
+    //  NoiseResult
+    std::string NoiseResult::GetResultPathName() const
+    {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
 
-    //    boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+                                 pPrjProp->GetNoiseResultName()).string();
+    }
 
-    //    pAfuData->SetFileName(GetResultPathName().c_str());
-    //    pAfuData->SetRecordName(recordItem.m_recordName);
-    //    pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, recordItem.m_xUnit,
-    //                                AfuData::OrdinateTypeReal, recordItem.m_yUnit);
-    //    pAfuData->SetFunctionDataType(XyFunctionDataTypeTime);
+    void NoiseResult::CreateRecords()
+    {
+        std::string resultName(GetResultPathName());
 
-    //    //  Read xy values from dat file
-    //    std::vector<double>     xValues;
-    //    std::vector<double>     yValues;
+        //  remove work dir
+        BOOST_SCOPE_EXIT((&resultName))
+        {
+            AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
-    //    ReadDataFromDat(recordItem, xValues, yValues);
+                // DELETE AFU
+            if (pAfuMgr->GetRecordIndexes(resultName.c_str()).empty())
+                pAfuMgr->DeleteAfuFile(resultName.c_str());
+        }
+        BOOST_SCOPE_EXIT_END
 
-    //    pAfuData->SetRealData(xValues, yValues);
+        std::string noiseOutputName;
+        std::string recordName;
 
-    //    pAfuMgr->CreateRecord(pAfuData.get());
-    //}
+        for (unsigned int idx = 0; idx < m_outputPoints.size(); idx++)
+        {
+            //  output time-sound pressure
+            Point3d   coord(m_outputPoints[idx]->Coordinates());
 
-    //void ResponseResult::ReadDataFromDat(const ResponseRecordItem &recordItem,
-    //                                     std::vector<double> &xValues, std::vector<double> &yValues) const
-    //{
-    //    //  Get dat path name
-    //    BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+            noiseOutputName = (boost::format(NOISE_TIME_OUTPUT_FILE_NAME) % (idx+1)).str();
+            recordName      = (boost::format(NOISE_RESULT_TIME_RECORD_PATTERN_NAME) %
+                coord.X % coord.Y % coord.Z).str();
 
-    //    std::string datResultPathName((filesystem::path(pPrjProp->GetProjectPath()) /
-    //                                   recordItem.m_srcResultFile).string());
+            WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeTime,
+                        XyFunctionUnitTimeSec, XyFunctionUnitStressPa);
 
-    //    if (!filesystem::exists(datResultPathName))
-    //        throw NXException::Create(MSGTXT("Result file does not exist."));
+            //  output frequency-sound pressure
+            noiseOutputName = (boost::format(NOISE_FREQ_OUTPUT_FILE_NAME) % (idx+1)).str();
+            recordName      = (boost::format(NOISE_RESULT_FREQ_RECORD_PATTERN_NAME) %
+                coord.X % coord.Y % coord.Z).str();
 
-    //    std::ifstream  ifDatResult(datResultPathName.c_str());
-    //    std::vector<double>    srcRecLineItem(recordItem.m_columnCnt);
+            WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeSpectrum,
+                        XyFunctionUnitFrequencyHz, XyFunctionUnitStressPa);
+        }
+    }
 
-    //    while (ifDatResult.good())
-    //    {
-    //        std::for_each(srcRecLineItem.begin(), srcRecLineItem.end(), ifDatResult >> _1);
+    void NoiseResult::WriteRecord(const std::string &noiseOutputName, const std::string &recordName,
+                                  XyFunctionDataType funcType, XyFunctionUnit xUnit, XyFunctionUnit yUnit)
+    {
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
-    //        xValues.push_back(srcRecLineItem[recordItem.m_idxColumns[0]]);
-    //        yValues.push_back(srcRecLineItem[recordItem.m_idxColumns[1]]);
-    //    }
-    //}
+        boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+
+        pAfuData->SetFileName(GetResultPathName().c_str());
+        pAfuData->SetRecordName(recordName.c_str());
+        pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, xUnit,
+                                    AfuData::OrdinateTypeReal, yUnit);
+        pAfuData->SetFunctionDataType(funcType);
+
+        //  Read xy values from dat file
+        std::vector<double>     xValues;
+        std::vector<double>     yValues;
+
+        ReadDataFromDat(noiseOutputName, xValues, yValues);
+
+        pAfuData->SetRealData(xValues, yValues);
+
+        pAfuMgr->CreateRecord(pAfuData.get());
+    }
+
+    void NoiseResult::ReadDataFromDat(const std::string &noiseOutputName,
+                                      std::vector<double> &xValues, std::vector<double> &yValues) const
+    {
+        //  Get dat path name
+        std::string datResultPathName((m_srcDir / noiseOutputName).string());
+
+        if (!filesystem::exists(datResultPathName))
+            throw NXException::Create((boost::format(MSGTXT("Result file %1% does not exist.")) % noiseOutputName).str().c_str());
+
+        std::ifstream  ifDatResult(datResultPathName.c_str());
+
+        // omit first line
+        std::string  strLine;
+
+        std::getline(ifDatResult, strLine);
+
+        double          xVal = 0.0;
+        double          yVal = 0.0;
+
+        while (!ifDatResult.eof())
+        {
+            ifDatResult >> xVal >> yVal;
+
+            xValues.push_back(xVal);
+            yValues.push_back(yVal);
+        }
+    }
 }
