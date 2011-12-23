@@ -4,9 +4,9 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <regex>
 #include <fstream>
 #include <iomanip>
-#include <regex>
 
 #include <boost/filesystem.hpp>
 #include <boost/scope_exit.hpp>
@@ -39,6 +39,8 @@
 #include <NXOpen/CAE_FEModelOccurrence.hxx>
 #include <NXOpen/CAE_Mesh.hxx>
 #include <NXOpen/CAE_IMeshManager.hxx>
+#include <NXOpen/CAE_FENode.hxx>
+#include <NXOpen/CAE_FENodeLabelMap.hxx>
 #include <NXOpen/CAE_ModelingObjectPropertyTable.hxx>
 #include <NXOpen/CAE_ModelingObjectPropertyTableCollection.hxx>
 #include <NXOpen/CAE_PropertyTable.hxx>
@@ -51,6 +53,7 @@
 #include <Vsar_Component.hxx>
 #include <Vsar_Names.hxx>
 #include <Vsar_Result.hxx>
+#include <Vsar_Utils.hxx>
 
 using namespace boost;
 using namespace NXOpen;
@@ -245,16 +248,18 @@ namespace Vsar
 
     void SolveNoiseOperation::Solve()
     {
-        //BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
-        //SimPart             *pSimPart  = pPrjProp->GetSimPart();
+        filesystem::path  exePathName = filesystem::path(GetInstallPath()) /
+            SOLVER_FOLDER_NAME / SOLVER_NOISE_EXE_NAME;
 
-        //SimSimulation *pSim = pSimPart->Simulation();
-        //std::string    strSol(std::string("Solution[").append(VSDANE_SOLUTION_NAME).append("]"));
+        //  set work dir
+        filesystem::current_path(GetWorkDir());
 
-        //SimSolution * pSolution(dynamic_cast<SimSolution*>(pSim->FindObject(strSol)));
+        std::system(exePathName.string().c_str());
 
-        //pSolution->Solve(SimSolution::SolveOptionSolve,
-        //    SimSolution::SetupCheckOptionDoNotCheck);
+        filesystem::path failLogPath = GetWorkDir() / SOLVE_NOISE_FAIL_LOG_NAME;
+
+        if (filesystem::exists(failLogPath))
+            throw NXException::Create("Failed to solve noise.");
     }
 
     bool SolveNoiseOperation::CanAutoLoadResult() const
@@ -446,6 +451,13 @@ namespace Vsar
             {
             }
         }
+
+        //FEModelOccurrence *pRailFEModelOcc = GetFEModelOccByMeshName(RAIL_MESH_NAME);
+
+        //int elemOffset = 0;
+        //int csysOffset = 0;
+
+        //pRailFEModelOcc->GetLabelOffsets(&m_nodeOffset, &elemOffset, &csysOffset);
 #if 0
         FemPart      *pFemPart  = pPrjProp->GetRailSlabFemPart();
         IMeshManager *pMeshMgr  = pFemPart->BaseFEModel()->MeshManager();
@@ -793,14 +805,20 @@ namespace Vsar
             AfuData *pAfuData = NULL;
 
             pAfuMgr->GetAfuData(afuFileName.c_str(), idx, &pAfuData);
-            std::vector<double> xValues, yValues;
 
-            yValues = pAfuData->GetRealData(xValues);
+            std::string recordName(pAfuData->RecordName().GetText());
 
-            std::vector<double> freqVals, yReals, yImags;
-            yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
+            if(std::tr1::regex_search(recordName, std::tr1::regex("-Node-\\d+-Y$")))
+            {
+                std::vector<double> xValues, yValues;
 
-            WriteRecord(pAfuData->RecordName().GetText(), freqVals, yReals, yImags);
+                yValues = pAfuData->GetRealData(xValues);
+
+                std::vector<double> freqVals, yReals, yImags;
+                yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
+
+                WriteRecord(recordName, freqVals, yReals, yImags);
+            }
         }
     }
 
@@ -847,30 +865,19 @@ namespace Vsar
         int nodeLabel = 0;
 
         //  Get Node Label
-        std::tr1::regex reg(std::string("-Node-(\\d+)-"));
+        std::tr1::regex reg("-Node-(\\d+)-");
 
-        std::tr1::match_results<std::string::const_iterator> what;
-        if(std::tr1::regex_match(recordName, what, reg) && what.size() == 2)
+        std::tr1::smatch what;
+        if(std::tr1::regex_search(recordName, what, reg) && what.size() == 2)
         {
             nodeLabel = boost::lexical_cast<int>(what[1]);
         }
 
-        std::vector<int>    nodeLabels;
+        FEModelOccurrence *pRailFEModelOcc       = GetFEModelOccByMeshName(RAIL_MESH_NAME);
+        FENodeLabelMap    *pRailSlabNodeLabelMap = pRailFEModelOcc->FenodeLabelMap();
+        FENode            *pFENode               = pRailSlabNodeLabelMap->GetNode(nodeLabel);
 
-        // TODO: 
-        nodeLabels.reserve(m_refNodeSeq.size());
-        BOOST_FOREACH(TaggedObject *pNode, m_refNodeSeq)
-        {
-            int label   = 0;
-            UF_SF_node_btype_t    bType;
-            UF_SF_mid_node_type_t eType;
-            double  absPos[3];
-
-            UF_SF_ask_node(pNode->Tag(), &label, &bType, &eType, absPos);
-            nodeLabels.push_back(label);
-        }
-
-        int nodeIndex = std::find(nodeLabels.begin(), nodeLabels.end(), nodeLabel) - nodeLabels.begin() + 1;
+        int nodeIndex = std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode) - m_refNodeSeq.begin() + 1;
 
         return (boost::format(NOISE_FREQUENCE_INPUT_FILE_NAME) % nodeIndex).str();
     }

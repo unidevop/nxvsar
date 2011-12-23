@@ -30,6 +30,7 @@ namespace NXOpen
         class MeshCollector;
         class CAEBody;
         class CAEFace;
+        class FEModelOccurrence;
     }
 }
 
@@ -75,6 +76,8 @@ namespace Vsar
                             const std::vector<NXOpen::TaggedObject*> &slabConnectPts,
                             const std::string &connName,
                             const std::string &connColName);
+
+    NXOpen::CAE::FEModelOccurrence* GetFEModelOccByMeshName(const std::string &meshName);
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)
