@@ -47,13 +47,13 @@ MENU VSAR_MENU_BAR
   LABEL Sol&ve
   !BITMAP calculator.bmp
   
-  !SEPARATOR
+  SEPARATOR
   
-  !BUTTON VSAR_VIEW_RESULT
-  !LABEL Create Res&ult...
-  !MESSAGE Create afu result
-  !SENSITIVITY OFF
-  !ACTIONS libvsar.dll
+  BUTTON VSAR_LOAD_RESULT
+  LABEL Load Res&ult
+  MESSAGE Load response and noise result
+  SENSITIVITY OFF
+  ACTIONS libvsar.dll
 
 END_OF_MENU
 

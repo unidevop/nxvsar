@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 #include <string>
 #include <vector>
+//#include <bitset>
 #include <boost/scoped_ptr.hpp>
 #include <boost/filesystem.hpp>
 #include <NXOpen/MenuBar_MenuButton.hxx>
@@ -45,16 +46,18 @@ namespace Vsar
     public:
         enum ProjectStatus
         {
-            ProjectStatus_None,
-            ProjectStatus_Defined,
-            ProjectStatus_ResponseSolved,
-            ProjectStatus_NoiseSolved
+            ProjectStatus_None                  = 1 << 1,
+            ProjectStatus_Defined               = 1 << 2,
+            ProjectStatus_ResponseSolved        = 1 << 3,
+            ProjectStatus_ResponseNoiseSolved   = 1 << 4,
+            ProjectStatus_NoiseSolved           = 1 << 5
         };
 
         typedef struct
         {
             std::string                                      m_buttonName;
-            NXOpen::MenuBar::MenuButton::SensitivityStatus   m_sensStatus;
+            //NXOpen::MenuBar::MenuButton::SensitivityStatus   m_sensStatus;
+            unsigned int                                     m_status;
         }MenuItemSensitivity;
 
     public:
@@ -64,7 +67,7 @@ namespace Vsar
         void Switch(ProjectStatus status);
 
     protected:
-        void SetMenuItemSensitivity(const MenuItemSensitivity &menuItemData);
+        void SetMenuItemSensitivity(const MenuItemSensitivity &menuItemData, ProjectStatus status);
     };
 
     class VSARINITEXPORT Project

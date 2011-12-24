@@ -53,8 +53,8 @@ AS_POPUP_MENU
 
 END_DROPDOWN
 
-!SEPARATOR
+SEPARATOR
 
-!BUTTON VSAR_VIEW_RESULT
-!LABEL Create &Result...
-!MESSAGE Create afu result
+BUTTON VSAR_LOAD_RESULT
+LABEL Load Res&ult
+MESSAGE Load response and noise result

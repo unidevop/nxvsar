@@ -219,7 +219,7 @@ namespace Vsar
 
         //  modify project status
         if (filesystem::exists(respResult.GetResultPathName()))
-            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
+            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved); // TODO:
     }
 
     SolveNoiseOperation::SolveNoiseOperation(const std::vector<NXOpen::Point*> &pts)
