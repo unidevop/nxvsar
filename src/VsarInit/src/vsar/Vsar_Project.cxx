@@ -51,7 +51,23 @@ namespace Vsar
     {
     }
 
-    void Status::SetMenuItemSensitivity(const MenuItemSensitivity &menuItemData)
+    static Status::MenuItemSensitivity s_menuItemSens[] = 
+    {
+        {MENU_ITEM_NAME_NEW_PROJECT,    Status::ProjectStatus_None | Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved },
+        {MENU_ITEM_NAME_SET_TRAIN,      Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SET_RAIL,       Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SET_SLAB,       Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SET_BRACE,      Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SET_BRIDGE,     0},
+        {MENU_ITEM_NAME_SET_BASE,       0},
+        {MENU_ITEM_NAME_SET_TUNNEL,     0},
+        {MENU_ITEM_NAME_EXECUTE_SOLVE,  Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SOLVE_RESPONSE, Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_SOLVE_NOISE,    Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
+        {MENU_ITEM_NAME_LOAD_RESULT,    Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved}
+    };
+
+    void Status::SetMenuItemSensitivity(const MenuItemSensitivity &menuItemData, ProjectStatus status)
     {
         try
         {
@@ -59,7 +75,20 @@ namespace Vsar
 
             if (pMenuButton)
             {
-                pMenuButton->SetButtonSensitivity(menuItemData.m_sensStatus);
+                MenuButton::SensitivityStatus sens;
+
+                if (menuItemData.m_status)
+                {
+                    sens = (menuItemData.m_status & status) ?
+                        MenuButton::SensitivityStatusSensitive : MenuButton::SensitivityStatusInsensitive;
+                }
+                else
+                {
+                    sens = (menuItemData.m_buttonName == Project::Instance()->GetProperty()->GetBraceMenuItemName()) ?
+                        MenuButton::SensitivityStatusSensitive : MenuButton::SensitivityStatusInsensitive;
+                }
+
+                pMenuButton->SetButtonSensitivity(sens);
             }
         }
         catch (NXException &)
@@ -69,117 +98,41 @@ namespace Vsar
 
     void Status::Switch(ProjectStatus status)
     {
+        std::for_each(s_menuItemSens, s_menuItemSens + N_ELEMENTS(s_menuItemSens),
+            boost::bind(&Status::SetMenuItemSensitivity, this, _1, status));
+
+        std::string  prjStatusVal;
+
         switch (status)
         {
-        case ProjectStatus_None:
-            {
-                MenuItemSensitivity menuItemsSens[] =
-                {
-                    {MENU_ITEM_NAME_NEW_PROJECT,    MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_TRAIN,      MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_RAIL,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_SLAB,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BRACE,      MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BRIDGE,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BASE,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusInsensitive},
-                    //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusInsensitive}
-                };
-
-                std::for_each(menuItemsSens, menuItemsSens + N_ELEMENTS(menuItemsSens),
-                    boost::bind(&Status::SetMenuItemSensitivity, this, _1));
-                break;
-            }
         case ProjectStatus_Defined:
             {
-                MenuItemSensitivity menuItemsSens[] =
-                {
-                    {MENU_ITEM_NAME_NEW_PROJECT,    MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_TRAIN,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_RAIL,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_SLAB,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRACE,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRIDGE,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BASE,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusInsensitive},
-                    //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusInsensitive}
-                };
-
-                std::for_each(menuItemsSens, menuItemsSens + N_ELEMENTS(menuItemsSens),
-                    boost::bind(&Status::SetMenuItemSensitivity, this, _1));
-
-                MenuItemSensitivity braceItem = {Project::Instance()->GetProperty()->GetBraceMenuItemName(),
-                                                 MenuButton::SensitivityStatusSensitive};
-
-                SetMenuItemSensitivity(braceItem);
-                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS, ATTRIBUTE_PROJECT_STATUS_DEFINED, Update::OptionLater);
+                prjStatusVal = ATTRIBUTE_PROJECT_STATUS_DEFINED;
                 break;
             }
         case ProjectStatus_ResponseSolved:
             {
-                MenuItemSensitivity menuItemsSens[] =
-                {
-                    {MENU_ITEM_NAME_NEW_PROJECT,    MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_TRAIN,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_RAIL,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_SLAB,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRACE,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRIDGE,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BASE,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusSensitive},
-                    //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusSensitive}
-                };
-
-                std::for_each(menuItemsSens, menuItemsSens + N_ELEMENTS(menuItemsSens),
-                    boost::bind(&Status::SetMenuItemSensitivity, this, _1));
-
-                MenuItemSensitivity braceItem = {Project::Instance()->GetProperty()->GetBraceMenuItemName(),
-                                                 MenuButton::SensitivityStatusSensitive};
-
-                SetMenuItemSensitivity(braceItem);
-                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS, ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED, Update::OptionLater);
+                prjStatusVal = ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED;
+                break;
+            }
+        case ProjectStatus_ResponseNoiseSolved:
+            {
+                prjStatusVal = ATTRIBUTE_PROJECT_STATUS_RESPONSE_NOISE_SOLVED;
                 break;
             }
         case ProjectStatus_NoiseSolved:
             {
-                MenuItemSensitivity menuItemsSens[] =
-                {
-                    {MENU_ITEM_NAME_NEW_PROJECT,    MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_TRAIN,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_RAIL,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_SLAB,       MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRACE,      MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SET_BRIDGE,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_BASE,       MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_SET_TUNNEL,     MenuButton::SensitivityStatusInsensitive},
-                    {MENU_ITEM_NAME_EXECUTE_SOLVE,  MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_RESPONSE, MenuButton::SensitivityStatusSensitive},
-                    {MENU_ITEM_NAME_SOLVE_NOISE,    MenuButton::SensitivityStatusSensitive},
-                    //{MENU_ITEM_NAME_VIEW_RESULT,    MenuButton::SensitivityStatusSensitive}
-                };
-
-                std::for_each(menuItemsSens, menuItemsSens + N_ELEMENTS(menuItemsSens),
-                    boost::bind(&Status::SetMenuItemSensitivity, this, _1));
-
-                MenuItemSensitivity braceItem = {Project::Instance()->GetProperty()->GetBraceMenuItemName(),
-                                                 MenuButton::SensitivityStatusSensitive};
-
-                SetMenuItemSensitivity(braceItem);
-                Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS,
-                    ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED, Update::OptionLater);
+                prjStatusVal = ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED;
                 break;
             }
         default:
             break;
+        }
+
+        if (!prjStatusVal.empty())
+        {
+            Project::Instance()->GetProperty()->GetSimPart()->SetAttribute(ATTRIBUTE_PROJECT_STATUS,
+                prjStatusVal.c_str(), Update::OptionLater);
         }
     }
 

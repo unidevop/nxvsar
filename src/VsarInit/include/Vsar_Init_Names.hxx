@@ -32,6 +32,7 @@ namespace Vsar
 
     const char * const ATTRIBUTE_PROJECT_STATUS_DEFINED  = "PROJECT_DEFINED";
     const char * const ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED   = "PROJECT_RESPONSE_SOLVED";
+    const char * const ATTRIBUTE_PROJECT_STATUS_RESPONSE_NOISE_SOLVED   = "PROJECT_RESPONSE_NOISE_SOLVED";
     const char * const ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED      = "PROJECT_NOISE_SOLVED";
 
     const char * const MENU_ITEM_NAME_NEW_PROJECT        = "VSAR_NEW_PROJECT";
@@ -45,7 +46,7 @@ namespace Vsar
     const char * const MENU_ITEM_NAME_EXECUTE_SOLVE      = "VSAR_EXECUTE_SOLVE";
     const char * const MENU_ITEM_NAME_SOLVE_RESPONSE     = "VSAR_SOLVE_RESPONSE";
     const char * const MENU_ITEM_NAME_SOLVE_NOISE        = "VSAR_SOLVE_NOISE";
-    const char * const MENU_ITEM_NAME_VIEW_RESULT        = "VSAR_VIEW_RESULT";
+    const char * const MENU_ITEM_NAME_LOAD_RESULT        = "VSAR_LOAD_RESULT";
 
 
     //////////////////////////////////////////////////////////////////////////

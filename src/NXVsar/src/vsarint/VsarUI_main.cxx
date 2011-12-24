@@ -175,7 +175,7 @@ struct MenuItemCallbackInfo
             {MENU_ITEM_NAME_SET_TUNNEL,         TunnelSettings::ShowDialog},
             {MENU_ITEM_NAME_SOLVE_RESPONSE,     SolveResponse::ShowDialog},
             {MENU_ITEM_NAME_SOLVE_NOISE,        SolveNoise::ShowDialog},
-            //{MENU_ITEM_NAME_VIEW_RESULT,        TrainSettings::ShowDialog}
+            //{MENU_ITEM_NAME_LOAD_RESULT,        TrainSettings::ShowDialog}
         };
 
         std::string  menuItemName(param ? param : "");
