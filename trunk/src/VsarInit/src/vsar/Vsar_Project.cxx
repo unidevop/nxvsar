@@ -64,7 +64,7 @@ namespace Vsar
         {MENU_ITEM_NAME_EXECUTE_SOLVE,  Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
         {MENU_ITEM_NAME_SOLVE_RESPONSE, Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
         {MENU_ITEM_NAME_SOLVE_NOISE,    Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved},
-        {MENU_ITEM_NAME_LOAD_RESULT,    Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved}
+        {MENU_ITEM_NAME_LOAD_RESULT,    Status::ProjectStatus_Defined | Status::ProjectStatus_ResponseSolved | Status::ProjectStatus_ResponseNoiseSolved | Status::ProjectStatus_NoiseSolved}
     };
 
     void Status::SetMenuItemSensitivity(const MenuItemSensitivity &menuItemData, ProjectStatus status)

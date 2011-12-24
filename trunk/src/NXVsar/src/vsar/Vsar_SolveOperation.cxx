@@ -112,7 +112,7 @@ namespace Vsar
             LoadResult();
     }
 
-    void BaseSolveOperation::CleanAfuFile(const std::string &resultPathName)
+    void BaseSolveOperation::CleanResultFile(const std::string &resultPathName)
     {
         try
         {
@@ -181,11 +181,11 @@ namespace Vsar
     {
         ResponseResult   respResult;
 
-        CleanAfuFile(respResult.GetResultPathName());
+        CleanResultFile(respResult.GetResultPathName());
 
         NoiseIntermResult noiseIntermResult;
 
-        CleanAfuFile(noiseIntermResult.GetResultPathName());
+        CleanResultFile(noiseIntermResult.GetResultPathName());
     }
 
     void SolveResponseOperation::Solve()
@@ -211,15 +211,17 @@ namespace Vsar
     {
         ResponseResult   respResult;
 
-        respResult.Create();
+        respResult.Load();
 
         NoiseIntermResult noiseIntermResult;
 
         noiseIntermResult.Create();
 
         //  modify project status
-        if (filesystem::exists(respResult.GetResultPathName()))
-            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved); // TODO:
+        if (noiseIntermResult.IsResultExist())
+            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseNoiseSolved);
+        else if (respResult.IsResultExist())
+            Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
     }
 
     SolveNoiseOperation::SolveNoiseOperation(const std::vector<NXOpen::Point*> &pts)
@@ -243,7 +245,7 @@ namespace Vsar
     {
         NoiseResult   respResult(m_workDir, m_outputPoints);
 
-        CleanAfuFile(respResult.GetResultPathName());
+        CleanResultFile(respResult.GetResultPathName());
     }
 
     void SolveNoiseOperation::Solve()
@@ -269,9 +271,13 @@ namespace Vsar
 
     void SolveNoiseOperation::LoadResult()
     {
-        NoiseResult   respResult(m_workDir, m_outputPoints);
+        NoiseResult   noiseResult(m_workDir, m_outputPoints);
 
-        respResult.Create();
+        noiseResult.Create();
+
+        //  modify project status
+        if (noiseResult.IsResultExist())
+            Project::GetStatus()->Switch(Status::ProjectStatus_NoiseSolved);
     }
 
     BaseTask::BaseTask(const BaseSolveOperation *solOper) : m_solOper(solOper)
@@ -794,6 +800,20 @@ namespace Vsar
     {
         std::string afuFileName(GetIntermediateResult());
 
+        //  unload intermidate result
+        BOOST_SCOPE_EXIT((&afuFileName))
+        {
+            try
+            {
+                FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
+                pDataMgr->UnloadFile(afuFileName.c_str());
+            }
+            catch (std::exception &)
+            {
+            }
+        }
+        BOOST_SCOPE_EXIT_END
+
         AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
         AfuDataConvertor *pAfuConvert = pAfuMgr->AfuDataConvertor();
@@ -831,8 +851,8 @@ namespace Vsar
         {
             //  write values
             inputFile << std::setw(15) << freqVals[idx] << " " <<
-                         std::setw(15) << yReals[idx] << " " <<
-                         std::setw(15) << yImags[idx] << std::endl;
+                         std::setw(15) << mmToMConvert * yReals[idx] << " " <<
+                         std::setw(15) << mmToMConvert * yImags[idx] << std::endl;
         }
     }
 
@@ -893,8 +913,6 @@ namespace Vsar
 
         std::ofstream   inputFile(filesystem::path(m_targetDir / NOISE_COORDINATE_INPUT_FILE_NAME).string().c_str());
 
-        const double mmToM = 0.001;
-
         BOOST_FOREACH(Point *pOutputPt, m_outputPoints)
         {
             //  convert the coordinate to first slab
@@ -903,9 +921,9 @@ namespace Vsar
             coord.Z = std::fmod(coord.Z, centerCoord.Z * 2);
 
             //  write relative coordinate
-            inputFile << std::setw(15) << mmToM * (coord.X - centerCoord.X) << " " <<
-                         std::setw(15) << mmToM * (coord.Y - centerCoord.Y) << " " <<
-                         std::setw(15) << mmToM * (coord.Z - centerCoord.Z) << std::endl;
+            inputFile << std::setw(15) << mmToMConvert * (coord.X - centerCoord.X) << " " <<
+                         std::setw(15) << mmToMConvert * (coord.Y - centerCoord.Y) << " " <<
+                         std::setw(15) << mmToMConvert * (coord.Z - centerCoord.Z) << std::endl;
         }
     }
 

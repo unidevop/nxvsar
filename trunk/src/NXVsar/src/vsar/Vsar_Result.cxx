@@ -16,6 +16,8 @@
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
 
+#include <uf_ui.h>
+
 #include <NXOpen/ugmath.hxx>
 #include <NXOpen/Session.hxx>
 #include <NXOpen/NXException.hxx>
@@ -27,6 +29,7 @@
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Project.hxx>
 #include <Vsar_Names.hxx>
+#include <Vsar_SolveOperation.hxx>
 
 using namespace boost;
 using namespace boost::lambda;
@@ -43,7 +46,44 @@ namespace Vsar
     {
     }
 
-    void BaseResult::Create()
+    bool BaseResult::IsResultExist() const
+    {
+        return filesystem::exists(GetResultPathName());
+    }
+
+    bool BaseResult::Load() const
+    {
+        bool success = false;
+
+        if (IsResultExist())
+        {
+            try
+            {
+                FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
+
+                pDataMgr->LoadFile(GetResultPathName().c_str());
+            }
+            catch (std::exception &)
+            {
+            }
+            success = true;
+        }
+        else
+            success = false;
+
+        return success;
+    }
+
+    std::string ResponseResult::GetResultPathName() const
+    {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+            pPrjProp->GetResponseResultName()).string();
+    }
+
+    void BaseAfuResult::Create()
     {
         CreateResultFile();
 
@@ -52,24 +92,22 @@ namespace Vsar
         CreateRecords();
     }
 
-    bool BaseResult::IsResultExist() const
-    {
-        return filesystem::exists(GetResultPathName());
-    }
-
-    void BaseResult::CreateResultFile()
+    void BaseAfuResult::CreateResultFile()
     {
         Session::GetSession()->AfuManager()->CreateNewAfuFile(GetResultPathName().c_str());
     }
 
-    std::string BaseResult::GetNastranResultPathName() const
+    std::string BaseAfuResult::GetNastranResultPathName() const
     {
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
-        std::string    strSolverResultName(pPrjProp->GetProjectName().append("_s-").append(VSDANE_SOLUTION_NAME).append(".pch"));
+
+        std::string    strSolverResultName((boost::format(NASTRAN_PCH_RESULT_FILE_PATTERN_NAME) %
+            pPrjProp->GetProjectName() % VSDANE_SOLUTION_NAME).str());
 
         return  ((filesystem::path(pPrjProp->GetProjectPath()) / strSolverResultName).string());
     }
 
+#if 0
     struct ResponseRecordItem
     {
         std::string         m_recordName;
@@ -94,6 +132,7 @@ namespace Vsar
         {"Slab-time-displacement",          "fslab_out.dat",    0, 1, 4, XyFunctionUnitTimeSec, XyFunctionUnitDisplacementM },
         {"Beam-time-displacement",          "beam_out.dat",     0, 1, 4, XyFunctionUnitTimeSec, XyFunctionUnitDisplacementM }
     };
+#endif
 
     class ResultBlock
     {
@@ -375,15 +414,6 @@ namespace Vsar
         return "VELOCITY";
     }
 
-
-#if 0
-    void ResponseResult::CreateRecords()
-    {
-        std::for_each(s_responseRecordItems, s_responseRecordItems + N_ELEMENTS(s_responseRecordItems),
-            bind(&ResponseResult::CreateRecord, this, _1));
-    }
-#endif
-
     template<typename BlockType>
     StlResultBlockVector NastranResult::ReadDataBlock(std::ifstream &ifStream)
     {
@@ -439,6 +469,7 @@ namespace Vsar
         }
     }
 
+#if 0
     std::string ResponseResult::GetResultPathName() const
     {
         //  Get result path name
@@ -463,6 +494,7 @@ namespace Vsar
 
         return vAllResultBlock;
     }
+#endif
 
     //////////////////////////////////////////////////////////////////////////
     //  NoiseIntermResult
@@ -581,5 +613,29 @@ namespace Vsar
             xValues.push_back(xVal);
             yValues.push_back(yVal);
         }
+    }
+
+    void ResultsLoader::operator() ()
+    {
+        bool             respResultLoaded  = false;
+        bool             noiseResultLoaded = false;
+
+        SolveResponseOperation  solveRespOper;
+
+        solveRespOper.LoadResult();
+
+        NoiseResult noiseResult(filesystem::path(""), std::vector<Point*>());  // for result query only
+
+        noiseResultLoaded = noiseResult.Load();
+
+        std::string strRespStatus = (respResultLoaded) ?
+            "Successfully loaded response result. " :
+            "Failed to load response result, please solve first. ";
+
+        std::string strNoiseStatus = (noiseResultLoaded) ?
+                "Successfully loaded noise result." :
+                "Failed to load noise result, please solve first.";
+
+        UF_UI_set_status(const_cast<char*>((strRespStatus + strNoiseStatus).c_str()));
     }
 }

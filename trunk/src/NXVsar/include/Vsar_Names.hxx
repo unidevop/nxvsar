@@ -180,8 +180,6 @@ namespace Vsar
 
     //  Solution
 
-    const char * const VSDANE_SOLUTION_NAME                     = "Vsdane109";
-
     const char * const TRAIN_SPEED_ID_NAME                      = "trainSpeed";
     const char * const TRAIN_SPEED_EXP_NAME                     = "Train_Speed";
 
@@ -243,6 +241,9 @@ namespace Vsar
     const char * const NOISE_RESULT_TIME_RECORD_PATTERN_NAME    = "Time_SoundPressure_(%.2f,%.2f,%.2f)";
     const char * const NOISE_RESULT_FREQ_RECORD_PATTERN_NAME    = "Freq_SoundPressure_(%.2f,%.2f,%.2f)";
 
+    const char * const NASTRAN_PCH_RESULT_FILE_PATTERN_NAME     = "%1%_s-%2%.pch";
+
+    const double mmToMConvert = 0.001;
 
     enum CompLayer
     {

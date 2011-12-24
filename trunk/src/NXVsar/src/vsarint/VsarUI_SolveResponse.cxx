@@ -76,7 +76,7 @@ namespace VsarUI
         try
         {
             // The following method shows the dialog immediately
-            pSolveDlg->Show(BlockDialog::DialogModeCreate);
+            pSolveDlg->Show(BlockDialog::DialogModeEdit);
         }
         catch(std::exception& ex)
         {
@@ -215,7 +215,6 @@ namespace VsarUI
             {
                 SolveResponseOperation   solveOper;
 
-                solveOper.CleanResult();
                 solveOper.LoadResult();
             }
         }
