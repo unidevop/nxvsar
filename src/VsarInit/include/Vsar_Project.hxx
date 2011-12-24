@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 #include <string>
 #include <vector>
-//#include <bitset>
+#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/filesystem.hpp>
 #include <NXOpen/MenuBar_MenuButton.hxx>
@@ -143,19 +143,27 @@ namespace Vsar
 
         std::string GetProjectPath() const;
 
+#if 0
         std::string GetResponseResultName() const
         {
             return GetProjectName().append(RESPONSE_RESULT_FILE_SUFFIX_NAME).append(".afu");
         }
+#endif
 
         std::string GetNoiseIntermediateResultName() const
         {
-            return GetProjectName().append(NOISE_INTERMEDIATE_RESULT_FILE_SUFFIX_NAME).append(".afu");
+            return (boost::format(NOISE_INTERMEDIATE_RESULT_FILE_PATTERN_NAME) % GetProjectName()).str();
+        }
+
+        std::string GetResponseResultName() const
+        {
+            return (boost::format(RESPONSE_RESULT_FILE_PATTERN_NAME) %
+                GetProjectName() % VSDANE_SOLUTION_NAME).str();
         }
 
         std::string GetNoiseResultName() const
         {
-            return GetProjectName().append(NOISE_RESULT_FILE_SUFFIX_NAME).append(".afu");
+            return (boost::format(NOISE_RESULT_FILE_PATTERN_NAME) % GetProjectName()).str();
         }
 
         NXOpen::CAE::SimPart* GetSimPart() const

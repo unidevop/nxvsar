@@ -48,12 +48,17 @@ namespace Vsar
     const char * const MENU_ITEM_NAME_SOLVE_NOISE        = "VSAR_SOLVE_NOISE";
     const char * const MENU_ITEM_NAME_LOAD_RESULT        = "VSAR_LOAD_RESULT";
 
-
     //////////////////////////////////////////////////////////////////////////
     //  Result Name
+#if 0
     const char * const RESPONSE_RESULT_FILE_SUFFIX_NAME             = "_response";
-    const char * const NOISE_INTERMEDIATE_RESULT_FILE_SUFFIX_NAME   = "_noise_intermediate";
-    const char * const NOISE_RESULT_FILE_SUFFIX_NAME                = "_noise";
+#endif
+    const char * const VSDANE_SOLUTION_NAME                         = "Vsdane109";
+
+    const char * const NOISE_INTERMEDIATE_RESULT_FILE_PATTERN_NAME  = "%1%_noise_intermediate.afu";
+    const char * const NOISE_RESULT_FILE_PATTERN_NAME               = "%1%_noise.afu";
+
+    const char * const RESPONSE_RESULT_FILE_PATTERN_NAME            = "%1%_s-%2%.op2";
 
 }
 

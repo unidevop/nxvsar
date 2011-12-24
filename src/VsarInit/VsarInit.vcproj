@@ -302,7 +302,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(UGII_BASE_DIR)\ugopen;$(BOOST_ROOT);.\include"
+				AdditionalIncludeDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(BOOST_ROOT)&quot;;.\include"
 				PreprocessorDefinitions="LIBVSARINIT;_SECURE_SCL=0;_USRDLL"
 				RuntimeLibrary="2"
 				WarningLevel="3"

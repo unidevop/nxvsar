@@ -31,11 +31,39 @@ namespace Vsar
 
         virtual ~BaseResult() = 0;
 
-        void Create();
-
         bool IsResultExist() const;
 
+        bool Load() const;
+
         virtual std::string GetResultPathName() const = 0;
+    };
+
+    class ResponseResult : public BaseResult
+    {
+    public:
+        ResponseResult() : BaseResult()
+        {
+        }
+
+        virtual ~ResponseResult()
+        {
+        }
+
+        virtual std::string GetResultPathName() const;
+    };
+
+    class BaseAfuResult : public BaseResult
+    {
+    public:
+        BaseAfuResult()
+        {
+        }
+
+        virtual ~BaseAfuResult()
+        {
+        }
+
+        void Create();
 
         std::string GetNastranResultPathName() const;
 
@@ -46,14 +74,12 @@ namespace Vsar
         virtual void CreateRecords() = 0;
     };
 
-    struct ResponseRecordItem;
-
     typedef std::vector<boost::shared_ptr<ResultBlock>> StlResultBlockVector;
 
-    class NastranResult : public BaseResult
+    class NastranResult : public BaseAfuResult
     {
     public:
-        NastranResult() : BaseResult()
+        NastranResult() : BaseAfuResult()
         {
         }
 
@@ -68,15 +94,9 @@ namespace Vsar
 
         template<typename BlockType>
         StlResultBlockVector ReadDataBlock(std::ifstream &ifStream);
-
-    private:
-
-        //void CreateRecord(const ResponseRecordItem &recordItem);
-
-        //void ReadDataFromDat(const ResponseRecordItem &recordItem,
-        //                     std::vector<double> &xValues, std::vector<double> &yValues) const;
     };
 
+#if 0
     class ResponseResult : public NastranResult
     {
     public:
@@ -94,6 +114,7 @@ namespace Vsar
 
         virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
     };
+#endif
 
     class NoiseIntermResult : public NastranResult
     {
@@ -113,11 +134,11 @@ namespace Vsar
         virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
     };
 
-    class NoiseResult : public BaseResult
+    class NoiseResult : public BaseAfuResult
     {
     public:
         NoiseResult(const boost::filesystem::path &srcDir,
-                    const std::vector<NXOpen::Point*> &pts) : BaseResult(),
+                    const std::vector<NXOpen::Point*> &pts) : BaseAfuResult(),
                     m_srcDir(srcDir), m_outputPoints(pts)
         {
         }
@@ -142,6 +163,20 @@ namespace Vsar
 
         boost::filesystem::path   m_srcDir;
         const std::vector<NXOpen::Point*> &m_outputPoints;
+    };
+
+    class ResultsLoader
+    {
+    public:
+        ResultsLoader()
+        {
+        }
+
+        ~ResultsLoader()
+        {
+        }
+
+        void operator () ();
     };
 }
 

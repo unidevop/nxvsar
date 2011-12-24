@@ -47,7 +47,7 @@ namespace Vsar
     protected:
         void CreateWorkDir();
 
-        void CleanAfuFile(const std::string &resultName);
+        void CleanResultFile(const std::string &resultName);
 
         virtual void PreExecute() = 0;
 

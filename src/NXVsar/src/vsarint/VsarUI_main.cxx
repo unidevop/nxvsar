@@ -59,6 +59,7 @@
 
 #include <Vsar_Init_Utils.hxx>
 #include <Vsar_Init_Names.hxx>
+#include <Vsar_Result.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -175,7 +176,7 @@ struct MenuItemCallbackInfo
             {MENU_ITEM_NAME_SET_TUNNEL,         TunnelSettings::ShowDialog},
             {MENU_ITEM_NAME_SOLVE_RESPONSE,     SolveResponse::ShowDialog},
             {MENU_ITEM_NAME_SOLVE_NOISE,        SolveNoise::ShowDialog},
-            //{MENU_ITEM_NAME_LOAD_RESULT,        TrainSettings::ShowDialog}
+            {MENU_ITEM_NAME_LOAD_RESULT,        ResultsLoader()}
         };
 
         std::string  menuItemName(param ? param : "");
