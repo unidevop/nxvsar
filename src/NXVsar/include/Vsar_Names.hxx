@@ -50,6 +50,8 @@ namespace Vsar
     //  Part Name
     const char * const RAIL_SLAB_FEM_PART_NAME                  = "RailSlab_f";
     const char * const BRIDGE_FEM_PART_NAME                     = "Bridge_f";
+    const char * const BASE_FEM_PART_NAME                       = "Base_f";
+    const char * const TUNNEL_FEM_PART_NAME                     = "Tunnel_f";
     const char * const SLAB_PRT_PART_NAME                       = "slab";
     const char * const SLABS_PRT_PART_NAME                      = "slabs";
     const char * const BEAM_PRT_PART_NAME                       = "beam";
@@ -62,7 +64,9 @@ namespace Vsar
     //////////////////////////////////////////////////////////////////////////
     //  Expression Name-Value
     //  Rail
-    const char * const MASS_DENSITY_ID_NAME                     = "density";      // common id name
+    const char * const LINEAR_DENSITY_ID_NAME                   = "linearDensity";      // common id name
+    const char * const RAIL_LINEAR_DENSITY_EXP_NAME             = "Rail_Linear_Density";
+
     const char * const RAIL_MASS_DENSITY_EXP_NAME               = "Rail_Mass_Density";
 
     const char * const ELASTIC_MODULUS_ID_NAME                  = "elasticModulus";      // common id name
@@ -108,8 +112,8 @@ namespace Vsar
 
     const char * const BRIDGE_POISSON_RATIO_EXP_NAME            = "Bridge_Poisson_Ratio";
 
-    const char * const UNIT_WEIGHT_ID_NAME                      = "unitWeight";      // common id name
-    const char * const BRIDGE_UNIT_WEIGHT_EXP_NAME              = "Bridge_UnitWeight";
+    const char * const BRIDGE_MASS_DENSITY_ID_NAME              = "massDensity";      // common id name
+    const char * const BRIDGE_MASS_DENSITY_EXP_NAME             = "Bridge_Mass_Density";
 
     const char * const WIDTH_ID_NAME                            = "width";      // common id name
     const char * const WIDTH_EXP_NAME                           = "Width";
@@ -135,6 +139,11 @@ namespace Vsar
 
     const char * const TUNNEL_H3_ID_NAME                        = "h3";
     const char * const TUNNEL_H3_EXP_NAME                       = "Height_Bottom";
+
+    const char * const TUNNEL_CONCRETE_ELASTIC_MODULUS_EXP_NAME = "Tunnel_Concrete_Elastic_Modulus";
+    const char * const TUNNEL_CONCRETE_MASS_DENSITY_EXP_NAME    = "Tunnel_Concrete_Mass_Density";
+    const char * const TUNNEL_SECTION_INERTIA_EXP_NAME          = "Tunnel_Section_Inertia";
+
 
     // Train
     const char * const TRAIN_CARRIAGE_COUNT_ID_NAME             = "carriageCount";

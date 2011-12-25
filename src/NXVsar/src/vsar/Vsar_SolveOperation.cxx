@@ -674,7 +674,7 @@ namespace Vsar
         InputItem inputDataItem[] =
         {
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_ELASTIC_MODULUS_EXP_NAME, UF_UNIT_PRESSURE_N__m2},
-            {RAIL_SLAB_FEM_PART_NAME,    RAIL_MASS_DENSITY_EXP_NAME,    UF_UNIT_MASSDENSITY_kg__m3},
+            {RAIL_SLAB_FEM_PART_NAME,    RAIL_LINEAR_DENSITY_EXP_NAME,  UF_UNIT_MASSPERLENGTH_kg__m},
             //{RAIL_SLAB_FEM_PART_NAME,    "0",   UF_UNIT_AREA_m2},
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_SECTION_INERTIA_EXP_NAME, UF_UNIT_MOMENT_OF_INERTIA_m4},
             {RAIL_SLAB_FEM_PART_NAME,    RAIL_ELEMENT_SIZE_EXP_NAME,    UF_UNIT_LENGTH_m}
@@ -711,18 +711,59 @@ namespace Vsar
     {
         // TODO: Handle Base and Tunnel
         // Bridge
-        InputItem inputDataItem[] =
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        switch (pPrjProp->GetProjectType())
         {
-            {BRIDGE_FEM_PART_NAME,       BRIDGE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
-            {BRIDGE_FEM_PART_NAME,       BRIDGE_UNIT_WEIGHT_EXP_NAME,       UF_UNIT_MASS_kg},
-            {BEAM_PRT_PART_NAME,         SECTION_AREA_EXP_NAME,             UF_UNIT_AREA_m2},
-            {BRIDGE_FEM_PART_NAME,       BRIDGE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4},
-            {BEAM_PRT_PART_NAME,         WIDTH_EXP_NAME,                    UF_UNIT_LENGTH_m}
-        };
+        case Project::ProjectType_Bridge:
+            {
+                InputItem inputDataItem[] =
+                {
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_MASS_DENSITY_EXP_NAME,      UF_UNIT_MASSDENSITY_kg__m3},
+                    {BEAM_PRT_PART_NAME,         SECTION_AREA_EXP_NAME,             UF_UNIT_AREA_m2},
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4}/*,
+                    {BEAM_PRT_PART_NAME,         WIDTH_EXP_NAME,                    UF_UNIT_LENGTH_m}*/
+                };
 
-        StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
+                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
 
-        WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+            }
+            break;
+        case Project::ProjectType_Selmi_Infinite:   // TODO
+            {
+                InputItem inputDataItem[] =
+                {
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_MASS_DENSITY_EXP_NAME,      UF_UNIT_MASSDENSITY_kg__m3},
+                    {BEAM_PRT_PART_NAME,         SECTION_AREA_EXP_NAME,             UF_UNIT_AREA_m2},
+                    {BRIDGE_FEM_PART_NAME,       BRIDGE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4}
+                };
+
+                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
+
+                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+            }
+            break;
+        case Project::ProjectType_Tunnel:
+            {
+                InputItem inputDataItem[] =
+                {
+                    {TUNNEL_FEM_PART_NAME,   TUNNEL_CONCRETE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
+                    {TUNNEL_FEM_PART_NAME,   TUNNEL_CONCRETE_MASS_DENSITY_EXP_NAME,      UF_UNIT_MASSDENSITY_kg__m3},
+                    {TUNNEL_PRT_PART_NAME,   SECTION_AREA_EXP_NAME,                      UF_UNIT_AREA_m2},
+                    {TUNNEL_FEM_PART_NAME,   TUNNEL_SECTION_INERTIA_EXP_NAME,            UF_UNIT_MOMENT_OF_INERTIA_m4}
+                };
+
+                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
+
+                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+            }
+            break;
+        default:
+            break;
+        }
     }
 
     void ExcitationInput::WriteCalculationData() const
