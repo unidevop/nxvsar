@@ -54,7 +54,7 @@ namespace VsarUI
 {
     static CompAttrInfo attrExpInfo[] =
     {
-        {MASS_DENSITY_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, RAIL_MASS_DENSITY_EXP_NAME},
+        {LINEAR_DENSITY_ID_NAME,       RAIL_SLAB_FEM_PART_NAME, RAIL_LINEAR_DENSITY_EXP_NAME},
         {ELASTIC_MODULUS_ID_NAME,    RAIL_SLAB_FEM_PART_NAME, RAIL_ELASTIC_MODULUS_EXP_NAME},
         {POISSON_RATIO_ID_NAME,      RAIL_SLAB_FEM_PART_NAME, RAIL_POISSON_RATIO_EXP_NAME}
     };
@@ -111,7 +111,7 @@ namespace VsarUI
             m_eleSize = pTopBlock->FindBlock("eleSize");
 
             //grpMaterial = pTopBlock->FindBlock("grpMaterial");
-            m_density = pTopBlock->FindBlock(MASS_DENSITY_ID_NAME);
+            m_density = pTopBlock->FindBlock(LINEAR_DENSITY_ID_NAME);
             m_elasticModulus = pTopBlock->FindBlock(ELASTIC_MODULUS_ID_NAME);
             m_poissonRatio = pTopBlock->FindBlock(POISSON_RATIO_ID_NAME);
         }

@@ -116,7 +116,7 @@ namespace VsarUI
 
             //grpMaterial = pTopBlock->FindBlock("grpMaterial");
             m_elasticModulus = pTopBlock->FindBlock(ELASTIC_MODULUS_ID_NAME);
-            m_unitWeight = pTopBlock->FindBlock(UNIT_WEIGHT_ID_NAME);
+            m_massDensity = pTopBlock->FindBlock(BRIDGE_MASS_DENSITY_ID_NAME);
             m_poissonRatio = pTopBlock->FindBlock(POISSON_RATIO_ID_NAME);
         }
         catch(std::exception& ex)
@@ -186,7 +186,7 @@ namespace VsarUI
             {
                 //---------Enter your code here-----------
             }
-            else if(block == m_unitWeight)
+            else if(block == m_massDensity)
             {
                 //---------Enter your code here-----------
             }
