@@ -259,7 +259,7 @@ namespace Vsar
         ElementTypeBuilder          *pEleTypeBuilder = pMesh3dHexBuilder->ElementType();
 
         pEleTypeBuilder->SetElementDimension(CAE::ElementTypeBuilder::ElementTypeSweepSolid);
-        pEleTypeBuilder->SetElementTypeName("CHEXA(20)");
+        pEleTypeBuilder->SetElementTypeName("CHEXA(8)");
 
         DestinationCollectorBuilder *pDstColBulder   = pEleTypeBuilder->DestinationCollector();
 
@@ -275,7 +275,7 @@ namespace Vsar
         PropertyTable *pPropTable = pMesh3dHexBuilder->PropertyTable();
 
         pPropTable->SetBooleanPropertyValue("mapped mesh option bool", false);
-        pPropTable->SetIntegerPropertyValue("quad only option", 0);
+        pPropTable->SetIntegerPropertyValue("quad only option", 1);
         pPropTable->SetBooleanPropertyValue("project vertices option", false);
         pPropTable->SetBooleanPropertyValue("target face smoothing option", false);
 

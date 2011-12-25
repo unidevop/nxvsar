@@ -567,6 +567,7 @@ namespace Vsar
         int    numDuplicates = 0;
         double tolerance     = 0.001;
 
+        //  TODO: Merge necessary mesh
         int iErr = UF_SF_check_model_duplicate_nodes(0, NULL_TAG, true, tolerance, &numDuplicates);
 
         if (iErr != 0)
