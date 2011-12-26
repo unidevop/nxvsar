@@ -33,6 +33,7 @@
 #include <NXOpen/CAE_FEModelOccurrence.hxx>
 #include <NXOpen/CAE_FEElementLabelMap.hxx>
 #include <NXOpen/CAE_FENodeLabelMap.hxx>
+#include <NXOpen/CAE_Mesh.hxx>
 
 #include <uf_sf.h>
 
@@ -305,15 +306,19 @@ namespace Vsar
             UpdateRailSlabConnection();
 
         if (CanUpdateRailSlabFEModel() || CanUpdateRailSlabConnection())
-            MergeDuplicateNodes();
+        {
+            std::vector<Mesh*> meshToMergeNodes;
+
+            MergeDuplicateNodes(meshToMergeNodes);
+        }
     }
 
     void BaseComponent::UpdateBraseModel()
     {
+        BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
+
         if (CanUpdateBraseFEModel())
         {
-            BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
-
             if (pPrjProp->GetProjectType() == Project::ProjectType_Bridge)
             {
                 CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
@@ -334,7 +339,22 @@ namespace Vsar
             UpdateBaseSlabConnection();
 
         if (CanUpdateBraseFEModel() || CanUpdateBraseConnection())
-            MergeDuplicateNodes();
+        {
+            std::vector<Mesh*> meshToMergeNodes;
+
+            if (pPrjProp->GetProjectType() == Project::ProjectType_Tunnel)
+            {
+                CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
+
+                meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                    FIND_MESH_PATTERN_NAME, TUNNEL_CONCRETE_MESH_NAME));
+
+                meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                    FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
+            }
+
+            MergeDuplicateNodes(meshToMergeNodes);
+        }
     }
 
     std::vector<Body*> BaseComponent::GetGeoModelOccs(FemPart *pFemPart, const std::string &bodyPrtName, const std::string &bodyName)
@@ -511,7 +531,25 @@ namespace Vsar
         }
 
         // merge duplicate nodes
-        MergeDuplicateNodes();
+        std::vector<Mesh*> meshToMergeNodes;
+
+        BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
+
+        if (pPrjProp->GetProjectType() == Project::ProjectType_Tunnel)
+        {
+            CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
+
+            meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                FIND_MESH_PATTERN_NAME, TUNNEL_CONCRETE_MESH_NAME));
+
+            meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
+
+            meshToMergeNodes.push_back(GetMeshByName(pPrjProp->GetRailSlabFemPart(),
+                FIND_MESH_PATTERN_NAME, RAIL_SLAB_CONNECTION_MESH_NAME));
+        }
+
+        MergeDuplicateNodes(meshToMergeNodes);
     }
 
     void BaseComponent::OnInit()
@@ -562,13 +600,18 @@ namespace Vsar
         }
     }
 
-    void BaseComponent::MergeDuplicateNodes()
+    void BaseComponent::MergeDuplicateNodes(const std::vector<Mesh*> &meshToMergeNodes)
     {
         int    numDuplicates = 0;
         double tolerance     = 0.001;
 
-        //  TODO: Merge necessary mesh
-        int iErr = UF_SF_check_model_duplicate_nodes(0, NULL_TAG, true, tolerance, &numDuplicates);
+        std::vector<tag_t>  tMeshesToMearge(meshToMergeNodes.size());
+
+        std::transform(meshToMergeNodes.begin(), meshToMergeNodes.end(),
+                  tMeshesToMearge.begin(), boost::bind(&Mesh::Tag, _1));
+
+        int iErr = UF_SF_check_model_duplicate_nodes(0, tMeshesToMearge.empty() ? NULL_TAG : &tMeshesToMearge[0],
+            true, tolerance, &numDuplicates);
 
         if (iErr != 0)
             throw NXException::Create(iErr);

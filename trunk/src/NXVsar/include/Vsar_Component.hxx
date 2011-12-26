@@ -20,6 +20,7 @@ namespace NXOpen
         class FemPart;
         class IFEModel;
         class CAEBody;
+        class Mesh;
     }
 }
 
@@ -95,7 +96,7 @@ namespace Vsar
 
         virtual bool CanUpdateBraseConnection() const;
 
-        void MergeDuplicateNodes();
+        void MergeDuplicateNodes(const std::vector<NXOpen::CAE::Mesh*> &meshToMergeNodes);
 
         void SetFeGeometryData( NXOpen::CAE::FemPart * pFemPart, const std::vector<NXOpen::Body*> &bodyOccs, bool syncLines );
 

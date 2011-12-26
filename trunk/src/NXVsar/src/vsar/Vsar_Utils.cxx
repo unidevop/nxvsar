@@ -38,6 +38,7 @@
 #include <NXOpen/Assemblies_Component.hxx>
 
 #include <NXOpen/CAE_BaseFEModel.hxx>
+#include <NXOpen/CAE_BaseFemPart.hxx>
 #include <NXOpen/CAE_CAEBody.hxx>
 #include <NXOpen/CAE_CAEFace.hxx>
 #include <NXOpen/CAE_MeshManager.hxx>
@@ -67,6 +68,7 @@
 #endif
 
 #include <Vsar_Project.hxx>
+#include <Vsar_Names.hxx>
 
 using namespace boost;
 using namespace NXOpen;
@@ -452,7 +454,7 @@ namespace Vsar
         FEModelOccurrence   *pFEModelOcc = NULL;
         FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
 
-        std::string strMeshFindName(std::string("MeshOccurrence[").append(meshName).append("]"));
+        std::string strMeshFindName((boost::format(FIND_MESH_OCC_PATTERN_NAME) % meshName).str());
 
         std::vector<FEModelOccurrence*>  childFeModelOcc(pSimFEModel->GetChildren());
 
@@ -473,6 +475,15 @@ namespace Vsar
         }
 
         return pFEModelOcc;
+    }
+
+    Mesh* GetMeshByName(BaseFemPart *pBaseFem, const std::string &meshNamePattern, const std::string &meshName)
+    {
+        IMeshManager *pMeshMgr  = pBaseFem->BaseFEModel()->MeshManager();
+
+        std::string    strMeshFindName((boost::format(meshNamePattern) % meshName).str());
+
+        return polymorphic_cast<Mesh*>(pMeshMgr->FindObject(strMeshFindName.c_str()));
     }
 
 #if 0

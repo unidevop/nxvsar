@@ -47,6 +47,9 @@ namespace Vsar
     // Base
     const char * const BASE_MESH_COLLECTOR_NAME                 = "Base_Mesh_Collector";
 
+    // Tunnel
+    const char * const TUNNEL_CONCRETE_MESH_NAME                = "Concrete_Tunnel_Mesh";
+
     //  Part Name
     const char * const RAIL_SLAB_FEM_PART_NAME                  = "RailSlab_f";
     const char * const BRIDGE_FEM_PART_NAME                     = "Bridge_f";
@@ -143,6 +146,12 @@ namespace Vsar
     const char * const TUNNEL_CONCRETE_ELASTIC_MODULUS_EXP_NAME = "Tunnel_Concrete_Elastic_Modulus";
     const char * const TUNNEL_CONCRETE_MASS_DENSITY_EXP_NAME    = "Tunnel_Concrete_Mass_Density";
     const char * const TUNNEL_SECTION_INERTIA_EXP_NAME          = "Tunnel_Section_Inertia";
+
+
+    // Base
+    const char * const BASE_ELASTIC_MODULUS_EXP_NAME            = "Base_Elastic_Modulus";
+    const char * const BASE_MASS_DENSITY_EXP_NAME               = "Base_Mass_Density";
+    const char * const BASE_SECTION_INERTIA_EXP_NAME            = "Base_Section_Inertia";
 
 
     // Train
@@ -251,6 +260,11 @@ namespace Vsar
     const char * const NOISE_RESULT_FREQ_RECORD_PATTERN_NAME    = "Freq_SoundPressure_(%.2f,%.2f,%.2f)";
 
     const char * const NASTRAN_PCH_RESULT_FILE_PATTERN_NAME     = "%1%_s-%2%.pch";
+
+    //  Find Object name
+    const char * const FIND_MESH_PATTERN_NAME                   = "Mesh[%1%]";
+    const char * const FIND_MESH_OCC_PATTERN_NAME               = "MeshOccurrence[%1%]";
+
 
     const double mmToMConvert = 0.001;
 

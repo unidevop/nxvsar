@@ -26,11 +26,13 @@ namespace NXOpen
     {
         class IFEModel;
         class BaseFEModel;
+        class BaseFemPart;
         class MeshManager;
         class MeshCollector;
         class CAEBody;
         class CAEFace;
         class FEModelOccurrence;
+        class Mesh;
     }
 }
 
@@ -78,6 +80,9 @@ namespace Vsar
                             const std::string &connColName);
 
     NXOpen::CAE::FEModelOccurrence* GetFEModelOccByMeshName(const std::string &meshName);
+
+    NXOpen::CAE::Mesh* GetMeshByName(NXOpen::CAE::BaseFemPart *pBaseFem,
+                                     const std::string &meshNamePattern, const std::string &meshName);
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)

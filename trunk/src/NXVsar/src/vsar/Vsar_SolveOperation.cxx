@@ -136,7 +136,7 @@ namespace Vsar
 
     void BaseSolveOperation::CreateWorkDir()
     {
-        filesystem::path strScratchDir(m_solDir);   //  TODO: Use custom scratch dir in future
+        filesystem::path strScratchDir(m_solDir);   //  Use custom scratch dir in future
         filesystem::path workFolder;
         filesystem::path workPath;
 
@@ -431,7 +431,8 @@ namespace Vsar
 
         Mesh *pRailMesh = NULL;
 
-        std::string strRailMeshName(std::string("MeshOccurrence[").append(RAIL_MESH_NAME).append("]"));
+        std::string strRailMeshName((boost::format(FIND_MESH_OCC_PATTERN_NAME) % RAIL_MESH_NAME).str());
+
         SimPart             *pSimPart  = pPrjProp->GetSimPart();
 
         FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
@@ -709,9 +710,10 @@ namespace Vsar
 
     void ExcitationInput::WriteBeamData() const
     {
-        // TODO: Handle Base and Tunnel
         // Bridge
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        StlInputItemVector vInputItems;
 
         switch (pPrjProp->GetProjectType())
         {
@@ -726,24 +728,20 @@ namespace Vsar
                     {BEAM_PRT_PART_NAME,         WIDTH_EXP_NAME,                    UF_UNIT_LENGTH_m}*/
                 };
 
-                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
-
-                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+                vInputItems.insert(vInputItems.end(), inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
             }
             break;
-        case Project::ProjectType_Selmi_Infinite:   // TODO
+        case Project::ProjectType_Selmi_Infinite:
             {
                 InputItem inputDataItem[] =
                 {
-                    {BRIDGE_FEM_PART_NAME,       BRIDGE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
-                    {BRIDGE_FEM_PART_NAME,       BRIDGE_MASS_DENSITY_EXP_NAME,      UF_UNIT_MASSDENSITY_kg__m3},
-                    {BEAM_PRT_PART_NAME,         SECTION_AREA_EXP_NAME,             UF_UNIT_AREA_m2},
-                    {BRIDGE_FEM_PART_NAME,       BRIDGE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4}
+                    {BASE_FEM_PART_NAME,     BASE_ELASTIC_MODULUS_EXP_NAME,   UF_UNIT_PRESSURE_N__m2},
+                    {BASE_FEM_PART_NAME,     BASE_MASS_DENSITY_EXP_NAME,      UF_UNIT_MASSDENSITY_kg__m3},
+                    {BASE_PRT_PART_NAME,     SECTION_AREA_EXP_NAME,           UF_UNIT_AREA_m2},
+                    {BASE_FEM_PART_NAME,     BASE_SECTION_INERTIA_EXP_NAME,   UF_UNIT_MOMENT_OF_INERTIA_m4}
                 };
 
-                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
-
-                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+                vInputItems.insert(vInputItems.end(), inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
             }
             break;
         case Project::ProjectType_Tunnel:
@@ -756,14 +754,14 @@ namespace Vsar
                     {TUNNEL_FEM_PART_NAME,   TUNNEL_SECTION_INERTIA_EXP_NAME,            UF_UNIT_MOMENT_OF_INERTIA_m4}
                 };
 
-                StlInputItemVector vInputItems(inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
-
-                WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
+                vInputItems.insert(vInputItems.end(), inputDataItem, inputDataItem + N_ELEMENTS(inputDataItem));
             }
             break;
         default:
             break;
         }
+
+        WriteInputData(vInputItems, BEAM_INPUT_FILE_NAME);
     }
 
     void ExcitationInput::WriteCalculationData() const
