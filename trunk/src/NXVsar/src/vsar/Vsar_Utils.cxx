@@ -445,18 +445,13 @@ namespace Vsar
         return caeFaces;
     }
 
-    FEModelOccurrence* GetFEModelOccByMeshName(const std::string &meshName)
+    FEModelOccurrence* GetFEModelOccByMeshName(IHierarchicalFEModel *pHieFeModel, const std::string &meshName)
     {
-        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
-
-        SimPart             *pSimPart  = pPrjProp->GetSimPart();
-
         FEModelOccurrence   *pFEModelOcc = NULL;
-        FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
 
         std::string strMeshFindName((boost::format(FIND_MESH_OCC_PATTERN_NAME) % meshName).str());
 
-        std::vector<FEModelOccurrence*>  childFeModelOcc(pSimFEModel->GetChildren());
+        std::vector<FEModelOccurrence*>  childFeModelOcc(pHieFeModel->GetChildren());
 
         for (std::vector<FEModelOccurrence*>::iterator iter = childFeModelOcc.begin();
             iter != childFeModelOcc.end(); ++iter)
@@ -477,9 +472,9 @@ namespace Vsar
         return pFEModelOcc;
     }
 
-    Mesh* GetMeshByName(BaseFemPart *pBaseFem, const std::string &meshNamePattern, const std::string &meshName)
+    Mesh* GetMeshByName(IFEModel *pFEModel, const std::string &meshNamePattern, const std::string &meshName)
     {
-        IMeshManager *pMeshMgr  = pBaseFem->BaseFEModel()->MeshManager();
+        IMeshManager *pMeshMgr  = pFEModel->MeshManager();
 
         std::string    strMeshFindName((boost::format(meshNamePattern) % meshName).str());
 
