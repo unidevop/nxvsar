@@ -32,6 +32,7 @@ namespace NXOpen
         class CAEBody;
         class CAEFace;
         class FEModelOccurrence;
+        class IHierarchicalFEModel;
         class Mesh;
     }
 }
@@ -79,9 +80,10 @@ namespace Vsar
                             const std::string &connName,
                             const std::string &connColName);
 
-    NXOpen::CAE::FEModelOccurrence* GetFEModelOccByMeshName(const std::string &meshName);
+    NXOpen::CAE::FEModelOccurrence* GetFEModelOccByMeshName(NXOpen::CAE::IHierarchicalFEModel *pHieFeModel,
+        const std::string &meshName);
 
-    NXOpen::CAE::Mesh* GetMeshByName(NXOpen::CAE::BaseFemPart *pBaseFem,
+    NXOpen::CAE::Mesh* GetMeshByName(NXOpen::CAE::IFEModel *pFEModel,
                                      const std::string &meshNamePattern, const std::string &meshName);
 }
 

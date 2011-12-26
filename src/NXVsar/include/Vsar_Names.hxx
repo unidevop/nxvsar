@@ -11,8 +11,6 @@ namespace Vsar
     const char * const SLAB_PART_NAME                           = "slab.prt";
     const char * const SLAB_BODY_NAME                           = "SLAB_BODY";
     const char * const SLAB_ASSEM_NAME                          = "slabs.prt";
-    const char * const SLAB_MESH_NAME                           = "Slab_Mesh";
-    const char * const SLAB_MESH_COLLECTOR_NAME                 = "Slab_Mesh_Collector";
     const char * const SLAB_ELEMENT_SIZE_NAME                   = "Slab_Element_Size";
 
     const char * const FACE_NAME_TOP                            = "TOP_FACE";
@@ -37,6 +35,8 @@ namespace Vsar
 
     // Slab
     const char * const SLAB_CONNECT_TO_RAIL_NAME                = "SLAB_CONNECT_TO_RAIL_POINT";
+    const char * const SLAB_MESH_NAME                           = "Slab_Mesh";
+    const char * const SLAB_MESH_COLLECTOR_NAME                 = "Slab_Mesh_Collector";
 
     const char * const SLAB_BASE_CONNECTION_MESH_NAME           = "Slab_Base_Connection_Mesh";
     const char * const SLAB_BASE_CONNECTION_COLLECTOR_NAME      = "Slab_Base_Connection_Collector";
@@ -264,6 +264,8 @@ namespace Vsar
     //  Find Object name
     const char * const FIND_MESH_PATTERN_NAME                   = "Mesh[%1%]";
     const char * const FIND_MESH_OCC_PATTERN_NAME               = "MeshOccurrence[%1%]";
+    const char * const FIND_MESH_COL_PATTERN_NAME               = "MeshCollector[%1%]";
+    const char * const FIND_MESH_COL_OCC_PATTERN_NAME           = "MeshCollectorOccurrence[%1%]";
 
 
     const double mmToMConvert = 0.001;

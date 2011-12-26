@@ -932,7 +932,11 @@ namespace Vsar
             nodeLabel = boost::lexical_cast<int>(what[1]);
         }
 
-        FEModelOccurrence *pRailFEModelOcc       = GetFEModelOccByMeshName(RAIL_MESH_NAME);
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        SimPart             *pSimPart  = pPrjProp->GetSimPart();
+        FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
+
+        FEModelOccurrence *pRailFEModelOcc       = GetFEModelOccByMeshName(pSimFEModel, RAIL_MESH_NAME);
         FENodeLabelMap    *pRailSlabNodeLabelMap = pRailFEModelOcc->FenodeLabelMap();
         FENode            *pFENode               = pRailSlabNodeLabelMap->GetNode(nodeLabel);
 

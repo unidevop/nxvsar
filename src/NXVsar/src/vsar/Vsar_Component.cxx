@@ -6,6 +6,8 @@
 #include <boost/scope_exit.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <boost/lambda/bind.hpp>
 #include <boost/cast.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -344,12 +346,12 @@ namespace Vsar
 
             if (pPrjProp->GetProjectType() == Project::ProjectType_Tunnel)
             {
-                CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
+                CAE::BaseFEModel *pBaseFeModel    = pPrjProp->GetBraceFemPart()->BaseFEModel();
 
-                meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                meshToMergeNodes.push_back(GetMeshByName(pBaseFeModel,
                     FIND_MESH_PATTERN_NAME, TUNNEL_CONCRETE_MESH_NAME));
 
-                meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
+                meshToMergeNodes.push_back(GetMeshByName(pBaseFeModel,
                     FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
             }
 
@@ -537,16 +539,27 @@ namespace Vsar
 
         if (pPrjProp->GetProjectType() == Project::ProjectType_Tunnel)
         {
-            CAE::FemPart        *pBaseFem    = pPrjProp->GetBraceFemPart();
+            CAE::BaseFemPart        *pBaseFem    = pPrjProp->GetAFemPart();
 
-            meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
-                FIND_MESH_PATTERN_NAME, TUNNEL_CONCRETE_MESH_NAME));
+            AssyFEModel *pAFEModel = polymorphic_cast<AssyFEModel*>(pBaseFem->BaseFEModel());
 
-            meshToMergeNodes.push_back(GetMeshByName(pBaseFem,
-                FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
+            std::vector<FEModelOccurrence*>  childFeModelOcc(pAFEModel->GetChildren());
 
-            meshToMergeNodes.push_back(GetMeshByName(pPrjProp->GetRailSlabFemPart(),
-                FIND_MESH_PATTERN_NAME, RAIL_SLAB_CONNECTION_MESH_NAME));
+            FEModelOccurrence *pRailFeModelOcc = GetFEModelOccByMeshName(pAFEModel, RAIL_MESH_NAME);
+
+            IMeshManager *pMeshMgr  = pRailFeModelOcc->MeshManager();
+
+            //std::string    strMeshFindName((boost::format(FIND_MESH_COL_OCC_PATTERN_NAME) % SLAB_MESH_COLLECTOR_NAME).str());
+            //polymorphic_cast<IMeshCollector*>(pMeshMgr->FindObject(strMeshFindName.c_str()));
+            //meshToMergeNodes.push_back(GetMeshByName(pRailFeModelOcc,
+            //    FIND_MESH_OCC_PATTERN_NAME, SLAB_MESH_NAME));
+
+            //FEModelOccurrence *pBaseFeModelOcc = std::find_if(childFeModelOcc.begin(), childFeModelOcc.end(),
+            //    _1 != pRailFeModelOcc);
+            FEModelOccurrence *pBaseFeModelOcc = (pRailFeModelOcc == childFeModelOcc[0]) ? childFeModelOcc[1] : childFeModelOcc[0];
+
+            meshToMergeNodes.push_back(GetMeshByName(pBaseFeModelOcc,
+                FIND_MESH_OCC_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
         }
 
         MergeDuplicateNodes(meshToMergeNodes);
