@@ -490,7 +490,7 @@ namespace Vsar
         vResultBlock = ReadDataBlock<AccelerationBlock>(solverResult);
         vAllResultBlock.insert(vAllResultBlock.end(), vResultBlock.begin(), vResultBlock.end());
 
-        // TODO: element stress block
+        // element stress block
 
         return vAllResultBlock;
     }
