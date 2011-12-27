@@ -509,11 +509,11 @@ namespace Vsar
 
     std::vector<Mesh*> GetMeshesInCollector(IFEModel *pFeModel, const std::string &meshNamePattern, const std::string &meshColName)
     {
-        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
+        IMeshManager   *pMeshMgr = pFeModel->MeshManager();
 
         std::string meshColFullName((boost::format(meshNamePattern) % meshColName).str());
 
-        MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
+        IMeshCollector *pMeshCol = polymorphic_cast<IMeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
         //  delete meshes in the collector first
         std::vector<Mesh*>  existingMeshes(pMeshMgr->GetMeshes());
