@@ -10,9 +10,11 @@
 #include <boost/lambda/bind.hpp>
 #include <boost/cast.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/foreach.hpp>
 
 #include <NXOpen/Session.hxx>
 #include <NXOpen/NXException.hxx>
+#include <NXOpen/LogFile.hxx>
 #include <NXOpen/PartCollection.hxx>
 #include <NXOpen/Part.hxx>
 #include <NXOpen/Expression.hxx>
@@ -270,8 +272,9 @@ namespace Vsar
 
             pFem->BaseFEModel()->UpdateFemodel();
         }
-        catch (...)
+        catch (std::exception &ex)
         {
+            pSession->LogFile()->WriteLine(ex.what());
             pSession->UndoToLastVisibleMark();
             throw;
         }
@@ -298,6 +301,9 @@ namespace Vsar
             bodyOccs.insert(bodyOccs.end(), tmpBodyOccs.begin(), tmpBodyOccs.end());
 
             SetFeGeometryData(pRailSlabFem, bodyOccs, true);
+
+            // delete slab meshes first in case of update error.
+            DeleteMeshesInCollector(pRailSlabFem->BaseFEModel(), SLAB_MESH_COLLECTOR_NAME);
 
             UpdateSweptMesh(pRailSlabFem->BaseFEModel(), GetCaeBodies(tmpBodyOccs),
                 SLAB_MESH_COLLECTOR_NAME, SLAB_MESH_NAME,
@@ -543,9 +549,13 @@ namespace Vsar
 
             AssyFEModel *pAFEModel = polymorphic_cast<AssyFEModel*>(pBaseFem->BaseFEModel());
 
-            std::vector<FEModelOccurrence*>  childFeModelOcc(pAFEModel->GetChildren());
-
             FEModelOccurrence *pRailFeModelOcc = GetFEModelOccByMeshName(pAFEModel, RAIL_MESH_NAME);
+
+            //  add to slab meshes to merge list
+            std::vector<Mesh*> slabMeshes(GetMeshesInCollector(pRailFeModelOcc,
+                FIND_MESH_COL_OCC_PATTERN_NAME, SLAB_MESH_COLLECTOR_NAME));
+
+            meshToMergeNodes.insert(meshToMergeNodes.end(), slabMeshes.begin(), slabMeshes.end());
 
             IMeshManager *pMeshMgr  = pRailFeModelOcc->MeshManager();
 
@@ -554,10 +564,14 @@ namespace Vsar
             //meshToMergeNodes.push_back(GetMeshByName(pRailFeModelOcc,
             //    FIND_MESH_OCC_PATTERN_NAME, SLAB_MESH_NAME));
 
-            //FEModelOccurrence *pBaseFeModelOcc = std::find_if(childFeModelOcc.begin(), childFeModelOcc.end(),
-            //    _1 != pRailFeModelOcc);
-            FEModelOccurrence *pBaseFeModelOcc = (pRailFeModelOcc == childFeModelOcc[0]) ? childFeModelOcc[1] : childFeModelOcc[0];
+            std::vector<FEModelOccurrence*>  childFeModelOcc(pAFEModel->GetChildren());
 
+            std::vector<FEModelOccurrence*>::iterator iter = std::find_if(childFeModelOcc.begin(), childFeModelOcc.end(),
+                lambda::_1 != pRailFeModelOcc);
+
+            FEModelOccurrence *pBaseFeModelOcc = (iter != childFeModelOcc.end()) ? *iter : NULL;
+
+            //  add slab-base connection mesh to merge list
             meshToMergeNodes.push_back(GetMeshByName(pBaseFeModelOcc,
                 FIND_MESH_OCC_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
         }
@@ -577,7 +591,7 @@ namespace Vsar
 
         MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
 
-        std::string meshColFullName = std::string("MeshCollector[").append(meshColName).append("]");
+        std::string meshColFullName((boost::format(FIND_MESH_COL_PATTERN_NAME) % meshColName).str());
 
         MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
@@ -623,7 +637,8 @@ namespace Vsar
         std::transform(meshToMergeNodes.begin(), meshToMergeNodes.end(),
                   tMeshesToMearge.begin(), boost::bind(&Mesh::Tag, _1));
 
-        int iErr = UF_SF_check_model_duplicate_nodes(0, tMeshesToMearge.empty() ? NULL_TAG : &tMeshesToMearge[0],
+        int iErr = UF_SF_check_model_duplicate_nodes(tMeshesToMearge.size(),
+            tMeshesToMearge.empty() ? NULL_TAG : &tMeshesToMearge[0],
             true, tolerance, &numDuplicates);
 
         if (iErr != 0)

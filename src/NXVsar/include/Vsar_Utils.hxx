@@ -85,6 +85,11 @@ namespace Vsar
 
     NXOpen::CAE::Mesh* GetMeshByName(NXOpen::CAE::IFEModel *pFEModel,
                                      const std::string &meshNamePattern, const std::string &meshName);
+
+    void DeleteMeshesInCollector(NXOpen::CAE::IFEModel *pFeModel, const std::string &meshColName);
+
+    std::vector<NXOpen::CAE::Mesh*> GetMeshesInCollector(NXOpen::CAE::IFEModel *pFeModel,
+        const std::string &meshNamePattern, const std::string &meshColName);
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)
