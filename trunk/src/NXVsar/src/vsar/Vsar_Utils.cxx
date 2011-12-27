@@ -11,13 +11,18 @@
 #endif
 
 #include <sstream>
+#include <functional>
+#include <algorithm>
 
 #include <boost/filesystem.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/bind.hpp>
+//#include <boost/lambda/lambda.hpp>
+//#include <boost/lambda/bind.hpp>
 #include <boost/cast.hpp>
+#include <boost/foreach.hpp>
 
 #include <NXOpen/Session.hxx>
 #include <NXOpen/NXException.hxx>
@@ -385,7 +390,7 @@ namespace Vsar
 
         MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
 
-        std::string meshColFullName = std::string("MeshCollector[").append(connColName).append("]");
+        std::string meshColFullName((boost::format(FIND_MESH_COL_PATTERN_NAME) % connColName).str());
 
         MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
 
@@ -479,6 +484,51 @@ namespace Vsar
         std::string    strMeshFindName((boost::format(meshNamePattern) % meshName).str());
 
         return polymorphic_cast<Mesh*>(pMeshMgr->FindObject(strMeshFindName.c_str()));
+    }
+
+    void DeleteMeshesInCollector(IFEModel *pFeModel, const std::string &meshColName)
+    {
+        std::vector<Mesh*>  existingMeshes(GetMeshesInCollector(pFeModel, FIND_MESH_COL_PATTERN_NAME, meshColName));
+
+        if (!existingMeshes.empty())
+        {
+            Session *pSession   = Session::GetSession();
+            Update  *pUpdateMgr = pSession->UpdateManager();
+
+            BOOST_FOREACH(Mesh *pMesh, existingMeshes)
+            {
+                pUpdateMgr->AddToDeleteList(pMesh);
+            }
+
+            //std::for_each(existingMeshes.begin(), existingMeshes.end(),
+            //    boost::bind<void, NXObject*>(boost::bind<void, NXObject*>(&Update::AddToDeleteList, pUpdateMgr), _1));
+
+            pUpdateMgr->DoUpdate(pSession->GetNewestUndoMark(Session::MarkVisibilityAnyVisibility));
+        }
+    }
+
+    std::vector<Mesh*> GetMeshesInCollector(IFEModel *pFeModel, const std::string &meshNamePattern, const std::string &meshColName)
+    {
+        MeshManager   *pMeshMgr = polymorphic_cast<MeshManager*>(pFeModel->MeshManager());
+
+        std::string meshColFullName((boost::format(meshNamePattern) % meshColName).str());
+
+        MeshCollector *pMeshCol = polymorphic_cast<MeshCollector*>(pMeshMgr->FindObject(meshColFullName.c_str()));
+
+        //  delete meshes in the collector first
+        std::vector<Mesh*>  existingMeshes(pMeshMgr->GetMeshes());
+
+        if (!existingMeshes.empty())
+        {
+            existingMeshes.erase(std::remove_if(existingMeshes.begin(), existingMeshes.end(),
+                boost::bind(std::not_equal_to<IMeshCollector*>(), boost::bind(&Mesh::MeshCollector, _1), pMeshCol)),
+                existingMeshes.end());
+
+            //existingMeshes.erase(std::remove_if(existingMeshes.begin(), existingMeshes.end(),
+            //    boost::bind(&Mesh::MeshCollector, _1) != lambda::var(pMeshCol)), existingMeshes.end());
+        }
+
+        return existingMeshes;
     }
 
 #if 0
