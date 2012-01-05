@@ -360,8 +360,8 @@ namespace Vsar
                 meshToMergeNodes.push_back(GetMeshByName(pBaseFeModel,
                     FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
             }
-
-            MergeDuplicateNodes(meshToMergeNodes);
+            else    // TODO:
+                MergeDuplicateNodes(meshToMergeNodes);
         }
     }
 
@@ -575,8 +575,8 @@ namespace Vsar
             meshToMergeNodes.push_back(GetMeshByName(pBaseFeModelOcc,
                 FIND_MESH_OCC_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
         }
-
-        MergeDuplicateNodes(meshToMergeNodes);
+        else    // TODO:
+            MergeDuplicateNodes(meshToMergeNodes);
     }
 
     void BaseComponent::OnInit()
