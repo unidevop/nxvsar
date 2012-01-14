@@ -24,6 +24,7 @@
 #include <NXOpen/Point.hxx>
 #include <NXOpen/CAE_AfuManager.hxx>
 #include <NXOpen/CAE_AfuData.hxx>
+#include <NXOpen/CAE_AfuDataConvertor.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 
 #include <Vsar_Init_Utils.hxx>
@@ -538,33 +539,69 @@ namespace Vsar
         }
         BOOST_SCOPE_EXIT_END
 
-        std::string noiseOutputName;
-        std::string recordName;
-
         for (unsigned int idx = 0; idx < m_outputPoints.size(); idx++)
         {
-            //  output time-sound pressure
-            Point3d   coord(m_outputPoints[idx]->Coordinates());
+            std::vector<double>     xValues;
+            std::vector<double>     yValues;
 
-            noiseOutputName = (boost::format(NOISE_TIME_OUTPUT_FILE_NAME) % (idx+1)).str();
-            recordName      = (boost::format(NOISE_RESULT_TIME_RECORD_PATTERN_NAME) %
-                coord.X % coord.Y % coord.Z).str();
+            OutputTimeRecord(idx, xValues, yValues);
 
-            WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeTime,
-                        XyFunctionUnitTimeSec, XyFunctionUnitStressPa);
-
-            //  output frequency-sound pressure
-            noiseOutputName = (boost::format(NOISE_FREQ_OUTPUT_FILE_NAME) % (idx+1)).str();
-            recordName      = (boost::format(NOISE_RESULT_FREQ_RECORD_PATTERN_NAME) %
-                coord.X % coord.Y % coord.Z).str();
-
-            WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeSpectrum,
-                        XyFunctionUnitFrequencyHz, XyFunctionUnitStressPa);
+            OutputFreqRecord(idx, xValues, yValues);
         }
     }
 
-    void NoiseResult::WriteRecord(const std::string &noiseOutputName, const std::string &recordName,
-                                  XyFunctionDataType funcType, XyFunctionUnit xUnit, XyFunctionUnit yUnit)
+    void NoiseResult::OutputTimeRecord(int idxRecord, std::vector<double> &xValues, std::vector<double> &yValues)
+    {
+        //  output time-sound pressure
+        Point3d   coord(m_outputPoints[idxRecord]->Coordinates());
+
+        std::string noiseOutputName;
+        std::string recordName;
+
+        noiseOutputName = (boost::format(NOISE_TIME_OUTPUT_FILE_NAME) % (idxRecord+1)).str();
+        recordName      = (boost::format(NOISE_RESULT_TIME_RECORD_PATTERN_NAME) %
+            coord.X % coord.Y % coord.Z).str();
+
+        //  Read xy values from dat file
+        ReadDataFromDat(noiseOutputName, xValues, yValues);
+
+        WriteRecord(recordName, XyFunctionDataTypeTime,
+            XyFunctionUnitTimeSec, XyFunctionUnitUnknown, xValues, yValues);
+    }
+
+    void NoiseResult::OutputFreqRecord(int idxRecord, const std::vector<double> &xValues, const std::vector<double> &yValues)
+    {
+        //  output frequency-sound pressure
+        Point3d   coord(m_outputPoints[idxRecord]->Coordinates());
+
+        //std::string noiseOutputName;
+        std::string recordName;
+
+        //noiseOutputName = (boost::format(NOISE_FREQ_OUTPUT_FILE_NAME) % (idxRecord+1)).str();
+        recordName      = (boost::format(NOISE_RESULT_FREQ_RECORD_PATTERN_NAME) %
+            coord.X % coord.Y % coord.Z).str();
+
+#if 0
+        WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeSpectrum,
+            XyFunctionUnitFrequencyHz, XyFunctionUnitStressPa);
+#endif
+
+        //  FFT Time-Sound data
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+        AfuDataConvertor *pAfuConvert = pAfuMgr->AfuDataConvertor();
+
+        std::vector<double> freqVals, yReals, yImags;
+
+        yImags = pAfuConvert->GetFftFrequencyData(xValues, yValues, freqVals, yReals);
+
+        WriteRecord(recordName, XyFunctionDataTypeGeneral,
+            XyFunctionUnitFrequencyHz, XyFunctionUnitUnknown, freqVals, yReals, yImags);
+    }
+
+    void NoiseResult::WriteRecord(const std::string &recordName, XyFunctionDataType funcType,
+                                  XyFunctionUnit xUnit, XyFunctionUnit yUnit,
+                                  const std::vector<double> &xValues, const std::vector<double> &yValues)
     {
         AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
@@ -576,13 +613,31 @@ namespace Vsar
                                     AfuData::OrdinateTypeReal, yUnit);
         pAfuData->SetFunctionDataType(funcType);
 
-        //  Read xy values from dat file
-        std::vector<double>     xValues;
-        std::vector<double>     yValues;
-
-        ReadDataFromDat(noiseOutputName, xValues, yValues);
+        // The following API is not available
+        // Modify Y Axis Label to "Sound Pressure"
+        // Modify Y Unit Label to "decibal"
 
         pAfuData->SetRealData(xValues, yValues);
+
+        pAfuMgr->CreateRecord(pAfuData.get());
+    }
+
+    void NoiseResult::WriteRecord(const std::string &recordName, XyFunctionDataType funcType,
+                                  XyFunctionUnit xUnit, XyFunctionUnit yUnit,
+                                  const std::vector<double> &xValues,
+                                  const std::vector<double> &yRealValues, const std::vector<double> &yImagValues)
+    {
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+        boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+
+        pAfuData->SetFileName(GetResultPathName().c_str());
+        pAfuData->SetRecordName(recordName.c_str());
+        pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, xUnit,
+                                    AfuData::OrdinateTypeRealImaginary, yUnit);
+        pAfuData->SetFunctionDataType(funcType);
+
+        pAfuData->SetComplexData(xValues, yRealValues, yImagValues);
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }
