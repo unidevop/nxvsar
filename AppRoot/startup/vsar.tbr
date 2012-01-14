@@ -20,14 +20,14 @@ BUTTON VSAR_SET_SLAB
 LABEL &Slab Settings...
 
 BEGIN_DROPDOWN VSAR_SET_BRACE
-LABEL &Brace Settings
+LABEL &Base Settings
 AS_POPUP_MENU
   
   BUTTON VSAR_SET_BRIDGE
   LABEL &Bridge Settings...
 
   BUTTON VSAR_SET_BASE
-  LABEL Ba&se Settings...
+  LABEL &Semi-Infinite Settings...
 
   BUTTON VSAR_SET_TUNNEL
   LABEL Tun&nel Settings...
