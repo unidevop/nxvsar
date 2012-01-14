@@ -39,7 +39,7 @@ MENU VSAR_MENU_BAR
   ACTIONS libvsar.dll
   
   CASCADE_BUTTON VSAR_SET_BRACE
-  LABEL &Brace Settings
+  LABEL &Base Settings
   
   SEPARATOR
 
@@ -67,7 +67,7 @@ MENU VSAR_SET_BRACE
   ACTIONS libvsar.dll
 
   BUTTON VSAR_SET_BASE
-  LABEL Ba&se Settings...
+  LABEL &Semi-Infinite Settings...
   MESSAGE Set Base parameters
   SENSITIVITY OFF
   ACTIONS libvsar.dll
