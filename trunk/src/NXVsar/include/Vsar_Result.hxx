@@ -153,12 +153,21 @@ namespace Vsar
 
         virtual void CreateRecords();
 
-        void WriteRecord(const std::string &noiseOutputName, const std::string &recordName,
-                         NXOpen::CAE::XyFunctionDataType funcType, NXOpen::CAE::XyFunctionUnit xUnit, NXOpen::CAE::XyFunctionUnit yUnit);
+        void WriteRecord(const std::string &recordName, NXOpen::CAE::XyFunctionDataType funcType,
+                         NXOpen::CAE::XyFunctionUnit xUnit, NXOpen::CAE::XyFunctionUnit yUnit,
+                         const std::vector<double> &xValues, const std::vector<double> &yValues);
+
+        void WriteRecord(const std::string &recordName, NXOpen::CAE::XyFunctionDataType funcType,
+                         NXOpen::CAE::XyFunctionUnit xUnit, NXOpen::CAE::XyFunctionUnit yUnit,
+                         const std::vector<double> &xValues,
+                         const std::vector<double> &yRealValues, const std::vector<double> &yImagValues);
 
         void ReadDataFromDat(const std::string &noiseOutputName,
             std::vector<double> &xValues, std::vector<double> &yValues) const;
 
+        void OutputTimeRecord(int idxRecord, std::vector<double> &xValues, std::vector<double> &yValues);
+
+        void OutputFreqRecord(int idxRecord, const std::vector<double> &xValues, const std::vector<double> &yValues);
     private:
 
         boost::filesystem::path   m_srcDir;

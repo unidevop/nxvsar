@@ -91,7 +91,7 @@ namespace Vsar
                 pMenuButton->SetButtonSensitivity(sens);
             }
         }
-        catch (NXException &)
+        catch (std::exception &)
         {
         }
     }
@@ -434,6 +434,11 @@ namespace Vsar
                 else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_RESPONSE_SOLVED) == 0)
                 {
                     prjStatus = Status::ProjectStatus_ResponseSolved;
+                    isPrjPrt = true;
+                }
+                else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_RESPONSE_NOISE_SOLVED) == 0)
+                {
+                    prjStatus = Status::ProjectStatus_ResponseNoiseSolved;
                     isPrjPrt = true;
                 }
                 else if (prjAttrStatus.compare(ATTRIBUTE_PROJECT_STATUS_NOISE_SOLVED) == 0)
