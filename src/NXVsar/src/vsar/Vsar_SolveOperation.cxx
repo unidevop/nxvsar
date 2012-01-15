@@ -179,9 +179,13 @@ namespace Vsar
 
     void SolveResponseOperation::CleanResult()
     {
-        ResponseResult   respResult;
+        ResponseOp2Result   respResult;
 
         CleanResultFile(respResult.GetResultPathName());
+
+        ResponseAfuResult   respAfuResult;
+
+        CleanResultFile(respAfuResult.GetResultPathName());
 
         NoiseIntermResult noiseIntermResult;
 
@@ -209,9 +213,13 @@ namespace Vsar
 
     void SolveResponseOperation::LoadResult()
     {
-        ResponseResult   respResult;
+        ResponseOp2Result   respResult;
 
         respResult.Load();
+
+        ResponseAfuResult   respAfuResult;
+
+        respAfuResult.Create();
 
         NoiseIntermResult noiseIntermResult;
 
@@ -220,7 +228,7 @@ namespace Vsar
         //  modify project status
         if (noiseIntermResult.IsResultExist())
             Project::GetStatus()->Switch(Status::ProjectStatus_ResponseNoiseSolved);
-        else if (respResult.IsResultExist())
+        else if (respResult.IsResultExist() && respAfuResult.IsResultExist())
             Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
     }
 
@@ -381,7 +389,14 @@ namespace Vsar
 
     std::vector<std::string> ComputeExcitationTask::GetOutputResults() const
     {
-        return std::vector<std::string>();
+        std::vector<std::string>  results;
+
+        results.reserve(3);
+        results.push_back(VEHICLE_OUTPUT_FILE_NAME);
+        results.push_back(WHEEL_OUTPUT_FILE_NAME);
+        results.push_back(TURN_OUTPUT_FILE_NAME);
+
+        return results;
     }
 
     ConvertExcitationTask::ConvertExcitationTask(const BaseSolveOperation *solOper) : BaseTask(solOper), m_nodeOffset(0)

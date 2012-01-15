@@ -75,13 +75,13 @@ namespace Vsar
         return success;
     }
 
-    std::string ResponseResult::GetResultPathName() const
+    std::string ResponseOp2Result::GetResultPathName() const
     {
         //  Get result path name
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
 
         return (filesystem::path(pPrjProp->GetProjectPath()) /
-            pPrjProp->GetResponseResultName()).string();
+            pPrjProp->GetResponseOp2ResultName()).string();
     }
 
     void BaseAfuResult::Create()
@@ -98,27 +98,7 @@ namespace Vsar
         Session::GetSession()->AfuManager()->CreateNewAfuFile(GetResultPathName().c_str());
     }
 
-    std::string BaseAfuResult::GetNastranResultPathName() const
-    {
-        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
-
-        std::string    strSolverResultName((boost::format(NASTRAN_PCH_RESULT_FILE_PATTERN_NAME) %
-            pPrjProp->GetProjectName() % VSDANE_SOLUTION_NAME).str());
-
-        return  ((filesystem::path(pPrjProp->GetProjectPath()) / strSolverResultName).string());
-    }
-
 #if 0
-    struct ResponseRecordItem
-    {
-        std::string         m_recordName;
-        std::string         m_srcResultFile;
-        unsigned int        m_idxColumns[2];
-        unsigned int        m_columnCnt;
-        XyFunctionUnit      m_xUnit;
-        XyFunctionUnit      m_yUnit;
-    };
-
     static ResponseRecordItem s_responseRecordItems[] =
     {
         {"Beam-time-acceleration",          "beam_out.dat",     0, 3, 4, XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
@@ -134,6 +114,89 @@ namespace Vsar
         {"Beam-time-displacement",          "beam_out.dat",     0, 1, 4, XyFunctionUnitTimeSec, XyFunctionUnitDisplacementM }
     };
 #endif
+
+    struct ResponseRecordItem
+    {
+        std::string         m_recordName;
+        std::string         m_srcResultFile;
+        unsigned int        m_idxColumns[2];
+        unsigned int        m_columnCnt;
+        XyFunctionUnit      m_xUnit;
+        XyFunctionUnit      m_yUnit;
+    };
+
+    static ResponseRecordItem s_responseRecordItems[] =
+    {
+        {"Vehicle-Time-Acceleration",       VEHICLE_OUTPUT_FILE_NAME,  0, 3, 4,   XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Wheel-1-Time-Acceleration",       WHEEL_OUTPUT_FILE_NAME,    0, 3, 13,  XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Wheel-2-Time-Acceleration",       WHEEL_OUTPUT_FILE_NAME,    0, 6, 13,  XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Wheel-3-Time-Acceleration",       WHEEL_OUTPUT_FILE_NAME,    0, 9, 13,  XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Wheel-4-Time-Acceleration",       WHEEL_OUTPUT_FILE_NAME,    0, 12, 13, XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Turn-Front-Time-Acceleration",    TURN_OUTPUT_FILE_NAME,     0, 3, 7,   XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM},
+        {"Turn-Rear-Time-Acceleration",     TURN_OUTPUT_FILE_NAME,     0, 6, 7,   XyFunctionUnitTimeSec, XyFunctionUnitAccelerationM}
+    };
+
+    std::string ResponseAfuResult::GetResultPathName() const
+    {
+        //  Get result path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        return (filesystem::path(pPrjProp->GetProjectPath()) /
+                                 pPrjProp->GetResponseAfuResultName()).string();
+    }
+
+    void ResponseAfuResult::CreateRecords()
+    {
+        std::for_each(s_responseRecordItems, s_responseRecordItems + N_ELEMENTS(s_responseRecordItems),
+            bind(&ResponseAfuResult::CreateRecord, this, _1));
+    }
+
+    void ResponseAfuResult::CreateRecord(const ResponseRecordItem &recordItem)
+    {
+        AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
+
+        boost::scoped_ptr<AfuData>      pAfuData(pAfuMgr->CreateAfuData());
+
+        pAfuData->SetFileName(GetResultPathName().c_str());
+        pAfuData->SetRecordName(recordItem.m_recordName);
+        pAfuData->SetAxisDefinition(AfuData::AbscissaTypeUneven, recordItem.m_xUnit,
+            AfuData::OrdinateTypeReal, recordItem.m_yUnit);
+        pAfuData->SetFunctionDataType(XyFunctionDataTypeTime);
+
+        //  Read xy values from dat file
+        std::vector<double>     xValues;
+        std::vector<double>     yValues;
+
+        ReadDataFromDat(recordItem, xValues, yValues);
+
+        pAfuData->SetRealData(xValues, yValues);
+
+        pAfuMgr->CreateRecord(pAfuData.get());
+    }
+
+    void ResponseAfuResult::ReadDataFromDat(const ResponseRecordItem &recordItem,
+        std::vector<double> &xValues, std::vector<double> &yValues) const
+    {
+        //  Get dat path name
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        std::string datResultPathName((filesystem::path(pPrjProp->GetProjectPath()) /
+            recordItem.m_srcResultFile).string());
+
+        if (!filesystem::exists(datResultPathName))
+            NXException::Create(MSGTXT("Result file does not exist."));
+
+        std::ifstream  ifDatResult(datResultPathName.c_str());
+        std::vector<double>    srcRecLineItem(recordItem.m_columnCnt);
+
+        while (ifDatResult.good())
+        {
+            std::for_each(srcRecLineItem.begin(), srcRecLineItem.end(), ifDatResult >> _1);
+
+            xValues.push_back(srcRecLineItem[recordItem.m_idxColumns[0]]);
+            yValues.push_back(srcRecLineItem[recordItem.m_idxColumns[1]]);
+        }
+    }
 
     class ResultBlock
     {
@@ -415,6 +478,16 @@ namespace Vsar
         return "VELOCITY";
     }
 
+    std::string NastranResult::GetNastranResultPathName() const
+    {
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        std::string    strSolverResultName((boost::format(NASTRAN_PCH_RESULT_FILE_PATTERN_NAME) %
+            pPrjProp->GetProjectName() % VSDANE_SOLUTION_NAME).str());
+
+        return  ((filesystem::path(pPrjProp->GetProjectPath()) / strSolverResultName).string());
+    }
+
     template<typename BlockType>
     StlResultBlockVector NastranResult::ReadDataBlock(std::ifstream &ifStream)
     {
@@ -541,16 +614,13 @@ namespace Vsar
 
         for (unsigned int idx = 0; idx < m_outputPoints.size(); idx++)
         {
-            std::vector<double>     xValues;
-            std::vector<double>     yValues;
+            OutputTimeRecord(idx);
 
-            OutputTimeRecord(idx, xValues, yValues);
-
-            OutputFreqRecord(idx, xValues, yValues);
+            OutputFreqRecord(idx);
         }
     }
 
-    void NoiseResult::OutputTimeRecord(int idxRecord, std::vector<double> &xValues, std::vector<double> &yValues)
+    void NoiseResult::OutputTimeRecord(int idxRecord)
     {
         //  output time-sound pressure
         Point3d   coord(m_outputPoints[idxRecord]->Coordinates());
@@ -562,6 +632,9 @@ namespace Vsar
         recordName      = (boost::format(NOISE_RESULT_TIME_RECORD_PATTERN_NAME) %
             coord.X % coord.Y % coord.Z).str();
 
+        std::vector<double>     xValues;
+        std::vector<double>     yValues;
+
         //  Read xy values from dat file
         ReadDataFromDat(noiseOutputName, xValues, yValues);
 
@@ -569,23 +642,28 @@ namespace Vsar
             XyFunctionUnitTimeSec, XyFunctionUnitUnknown, xValues, yValues);
     }
 
-    void NoiseResult::OutputFreqRecord(int idxRecord, const std::vector<double> &xValues, const std::vector<double> &yValues)
+    void NoiseResult::OutputFreqRecord(int idxRecord)
     {
         //  output frequency-sound pressure
         Point3d   coord(m_outputPoints[idxRecord]->Coordinates());
 
-        //std::string noiseOutputName;
+        std::string noiseOutputName;
         std::string recordName;
 
-        //noiseOutputName = (boost::format(NOISE_FREQ_OUTPUT_FILE_NAME) % (idxRecord+1)).str();
+        noiseOutputName = (boost::format(NOISE_FREQ_OUTPUT_FILE_NAME) % (idxRecord+1)).str();
         recordName      = (boost::format(NOISE_RESULT_FREQ_RECORD_PATTERN_NAME) %
             coord.X % coord.Y % coord.Z).str();
 
-#if 0
-        WriteRecord(noiseOutputName, recordName, XyFunctionDataTypeSpectrum,
-            XyFunctionUnitFrequencyHz, XyFunctionUnitStressPa);
-#endif
+        std::vector<double>     xValues;
+        std::vector<double>     yValues;
 
+        //  Read xy values from dat file
+        ReadDataFromDat(noiseOutputName, xValues, yValues);
+
+        WriteRecord(recordName, XyFunctionDataTypeGeneral,
+            XyFunctionUnitFrequencyHz, XyFunctionUnitUnknown, xValues, yValues);
+
+#if 0
         //  FFT Time-Sound data
         AfuManager *pAfuMgr = Session::GetSession()->AfuManager();
 
@@ -597,7 +675,92 @@ namespace Vsar
 
         WriteRecord(recordName, XyFunctionDataTypeGeneral,
             XyFunctionUnitFrequencyHz, XyFunctionUnitUnknown, freqVals, yReals, yImags);
+#endif
     }
+
+    /* even data setting */
+    typedef struct FTK_AFU_even_data_s
+    {
+        double x_min;    /* minimum value */
+        double x_incre;  /* increment value */
+        int    x_nums;   /* # of points */
+    }FTK_AFU_even_data_t, *FTK_AFU_even_data_p_t;
+
+    /* data's unit type */
+    typedef struct FTK_AFU_unit_type_s
+    {
+        int x_type;   /* see JA_xy_function_measure */
+        int x_unit;   /* see JA_xy_function_unit */
+        int y_type;   /* see JA_xy_function_measure */
+        int y_unit;   /* see JA_xy_function_unit */
+        int frf_type; /* see JA_xy_function_measure */
+        int frf_unit; /* see JA_xy_function_unit */
+    }FTK_AFU_unit_type_t, *FTK_AFU_unit_type_p_t;
+
+    /* AFU record header info - ID */
+    typedef struct FTK_AFU_record_id_s
+    {
+        char   reference[4+1];
+        int    reference_id;
+        char   response[4+1];
+        int    response_id;
+        int    load_case;
+        int    version;
+        int    coordinate;
+        char   owner[16+1];
+        char   id_line1[80+1];
+        char   id_line2[80+1];
+        char   id_line3[80+1];
+        char   id_line4[80+1];
+    }FTK_AFU_record_id_t, *FTK_AFU_record_id_p_t;
+
+    /* AFU record header info - abscissa */
+    typedef struct FTK_AFU_record_abs_s
+    {
+        int    spacing; /* 0 - Even, 1 - Uneven, 2 - Sequence */
+        char   axis_label[20+1];
+        char   unit_label[20+1];
+    }FTK_AFU_record_abs_t, *FTK_AFU_record_abs_p_t;
+
+    /* AFU record header info - ordinate */
+    typedef struct FTK_AFU_record_ord_s
+    {
+        int    data_format; /* 0 - Real, 1 - Complex(real/imaginary), 2 - Complex(magnitude/phase) */
+        double real_offset;
+        double imag_offset;
+        double real_scale;
+        double imag_scale;
+        double damping;
+        char   axis_label[20+1];
+        char   unit_label[20+1];
+    }FTK_AFU_record_ord_t, *FTK_AFU_record_ord_p_t;
+
+    /* record data points */
+    typedef struct FTK_AFU_record_data_point_s
+    {
+        int     n_vals;  /* # of points */
+        float * x_vals;  /* x values */
+        float * y_vals;  /* y values, Real values or Magnitude values for complex data */
+        float * c_vals;  /* Imaginary values or Phase values for complex data */
+    }FTK_AFU_record_data_point_t, *FTK_AFU_record_data_point_p_t;
+
+    typedef struct FTK_AFU_table_func_s
+    {
+        char afu_name[1025+1];
+        char record_name[40+1];
+        int  function_type;
+
+        FTK_AFU_even_data_t     even_data;
+        FTK_AFU_unit_type_t     unit_data;
+
+        FTK_AFU_record_id_t     id_data;
+        FTK_AFU_record_abs_t    x_data;
+        FTK_AFU_record_ord_t    y_data;
+
+        /* record numerical data */
+        FTK_AFU_record_data_point_t data_point;
+
+    }JA_AFU_DATA_t, *JA_AFU_DATA_p_t;
 
     void NoiseResult::WriteRecord(const std::string &recordName, XyFunctionDataType funcType,
                                   XyFunctionUnit xUnit, XyFunctionUnit yUnit,
@@ -613,15 +776,20 @@ namespace Vsar
                                     AfuData::OrdinateTypeReal, yUnit);
         pAfuData->SetFunctionDataType(funcType);
 
+        pAfuData->SetRealData(xValues, yValues);
+
         // The following API is not available
         // Modify Y Axis Label to "Sound Pressure"
         // Modify Y Unit Label to "decibal"
+        JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)((char*)(pAfuData.get()) + sizeof(void*));
 
-        pAfuData->SetRealData(xValues, yValues);
+        strcpy(pJaAfuData->y_data.axis_label, "Sound Pressure");
+        strcpy(pJaAfuData->y_data.unit_label, "decibal");
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }
 
+#if 0
     void NoiseResult::WriteRecord(const std::string &recordName, XyFunctionDataType funcType,
                                   XyFunctionUnit xUnit, XyFunctionUnit yUnit,
                                   const std::vector<double> &xValues,
@@ -641,6 +809,7 @@ namespace Vsar
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }
+#endif
 
     void NoiseResult::ReadDataFromDat(const std::string &noiseOutputName,
                                       std::vector<double> &xValues, std::vector<double> &yValues) const

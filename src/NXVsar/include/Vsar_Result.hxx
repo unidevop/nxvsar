@@ -38,14 +38,14 @@ namespace Vsar
         virtual std::string GetResultPathName() const = 0;
     };
 
-    class ResponseResult : public BaseResult
+    class ResponseOp2Result : public BaseResult
     {
     public:
-        ResponseResult() : BaseResult()
+        ResponseOp2Result() : BaseResult()
         {
         }
 
-        virtual ~ResponseResult()
+        virtual ~ResponseOp2Result()
         {
         }
 
@@ -65,13 +65,37 @@ namespace Vsar
 
         void Create();
 
-        std::string GetNastranResultPathName() const;
-
     protected:
 
         void CreateResultFile();
 
         virtual void CreateRecords() = 0;
+    };
+
+    struct ResponseRecordItem;
+
+    class ResponseAfuResult : public BaseAfuResult
+    {
+    public:
+        ResponseAfuResult() : BaseAfuResult()
+        {
+        }
+
+        virtual ~ResponseAfuResult()
+        {
+        }
+
+        virtual std::string GetResultPathName() const;
+
+    protected:
+        virtual void CreateRecords();
+
+        void CreateRecord(const ResponseRecordItem &recordItem);
+
+        void ReadDataFromDat(const ResponseRecordItem &recordItem,
+            std::vector<double> &xValues, std::vector<double> &yValues) const;
+
+        //virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
     };
 
     typedef std::vector<boost::shared_ptr<ResultBlock>> StlResultBlockVector;
@@ -88,6 +112,8 @@ namespace Vsar
         }
 
     protected:
+        std::string GetNastranResultPathName() const;
+
         virtual void CreateRecords();
 
         virtual StlResultBlockVector ExtractContent(std::ifstream &iResult) = 0;
@@ -157,17 +183,19 @@ namespace Vsar
                          NXOpen::CAE::XyFunctionUnit xUnit, NXOpen::CAE::XyFunctionUnit yUnit,
                          const std::vector<double> &xValues, const std::vector<double> &yValues);
 
+#if 0
         void WriteRecord(const std::string &recordName, NXOpen::CAE::XyFunctionDataType funcType,
                          NXOpen::CAE::XyFunctionUnit xUnit, NXOpen::CAE::XyFunctionUnit yUnit,
                          const std::vector<double> &xValues,
                          const std::vector<double> &yRealValues, const std::vector<double> &yImagValues);
+#endif
 
         void ReadDataFromDat(const std::string &noiseOutputName,
             std::vector<double> &xValues, std::vector<double> &yValues) const;
 
-        void OutputTimeRecord(int idxRecord, std::vector<double> &xValues, std::vector<double> &yValues);
+        void OutputTimeRecord(int idxRecord);
 
-        void OutputFreqRecord(int idxRecord, const std::vector<double> &xValues, const std::vector<double> &yValues);
+        void OutputFreqRecord(int idxRecord);
     private:
 
         boost::filesystem::path   m_srcDir;

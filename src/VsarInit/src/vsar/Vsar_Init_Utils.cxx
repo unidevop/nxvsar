@@ -42,6 +42,8 @@
 
 #include <boost/filesystem.hpp>
 
+#include <NXOpen/CAE_FTK_DataManager.hxx>
+
 
 namespace Vsar
 {
@@ -115,6 +117,22 @@ namespace Vsar
 
             bfs::copy_file(fromFilePathName, toFilePathName);
             ++iter;
+        }
+    }
+
+    void LoadResult(const std::string &resultPathName)
+    {
+        NXOpen::CAE::FTK::DataManager *pDataMgr = NXOpen::Session::GetSession()->DataManager();
+
+        if (boost::filesystem::exists(resultPathName))
+        {
+            try
+            {
+                pDataMgr->LoadFile(resultPathName.c_str());
+            }
+            catch (std::exception &)
+            {
+            }
         }
     }
 

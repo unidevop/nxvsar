@@ -58,7 +58,9 @@ namespace Vsar
     const char * const NOISE_INTERMEDIATE_RESULT_FILE_PATTERN_NAME  = "%1%_noise_intermediate.afu";
     const char * const NOISE_RESULT_FILE_PATTERN_NAME               = "%1%_noise.afu";
 
-    const char * const RESPONSE_RESULT_FILE_PATTERN_NAME            = "%1%_s-%2%.op2";
+    const char * const RESPONSE_OP2_RESULT_FILE_PATTERN_NAME        = "%1%_s-%2%.op2";
+
+    const char * const RESPONSE_AFU_RESULT_FILE_PATTERN_NAME        = "%1%_s-%2%.afu";
 
 }
 
