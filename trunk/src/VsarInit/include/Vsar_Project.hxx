@@ -143,22 +143,21 @@ namespace Vsar
 
         std::string GetProjectPath() const;
 
-#if 0
-        std::string GetResponseResultName() const
+        std::string GetResponseOp2ResultName() const
         {
-            return GetProjectName().append(RESPONSE_RESULT_FILE_SUFFIX_NAME).append(".afu");
+            return (boost::format(RESPONSE_OP2_RESULT_FILE_PATTERN_NAME) %
+                GetProjectName() % VSDANE_SOLUTION_NAME).str();
         }
-#endif
+
+        std::string GetResponseAfuResultName() const
+        {
+            return (boost::format(RESPONSE_AFU_RESULT_FILE_PATTERN_NAME) %
+                GetProjectName() % VSDANE_SOLUTION_NAME).str();
+        }
 
         std::string GetNoiseIntermediateResultName() const
         {
             return (boost::format(NOISE_INTERMEDIATE_RESULT_FILE_PATTERN_NAME) % GetProjectName()).str();
-        }
-
-        std::string GetResponseResultName() const
-        {
-            return (boost::format(RESPONSE_RESULT_FILE_PATTERN_NAME) %
-                GetProjectName() % VSDANE_SOLUTION_NAME).str();
         }
 
         std::string GetNoiseResultName() const

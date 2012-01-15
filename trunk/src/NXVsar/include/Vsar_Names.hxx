@@ -243,6 +243,13 @@ namespace Vsar
     const char * const BEAM_INPUT_FILE_NAME                     = "beam.dat";
     const char * const CALCULATION_INPUT_FILE_NAME              = "calculation.dat";
 
+    //////////////////////////////////////////////////////////////////////////
+    // Excitation output names
+    const char * const VEHICLE_OUTPUT_FILE_NAME                 = "vehicle_out.dat";
+    const char * const WHEEL_OUTPUT_FILE_NAME                   = "wheel_out.dat";
+    const char * const TURN_OUTPUT_FILE_NAME                    = "turn_out.dat";
+    
+
     //  Read_excitation input names
     const char * const CONVERT_EXCITATION_INPUT_FILE_NAME       = "excitation_nodes.dat";
 

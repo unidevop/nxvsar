@@ -468,35 +468,22 @@ namespace Vsar
             //  Load result
             BaseProjectProperty  *pPrjProp = m_prjInstance->GetProperty();
 
+            // Load response result
             filesystem::path  resultPathName(filesystem::path(pPrjProp->GetProjectPath()) /
-                                             pPrjProp->GetResponseResultName());
+                                             pPrjProp->GetResponseOp2ResultName());
 
-            FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
+            LoadResult(resultPathName.string());
 
-            if (filesystem::exists(resultPathName))
-            {
-                try
-                {
-                    pDataMgr->LoadFile(resultPathName.string().c_str());
-                }
-                catch (std::exception &)
-                {
-                }
-            }
+            resultPathName = filesystem::path(pPrjProp->GetProjectPath()) /
+                                              pPrjProp->GetResponseAfuResultName();
 
+            LoadResult(resultPathName.string());
+
+            // Load noise
             resultPathName = filesystem::path(pPrjProp->GetProjectPath()) /
                                               pPrjProp->GetNoiseResultName();
 
-            if (filesystem::exists(resultPathName))
-            {
-                try
-                {
-                    pDataMgr->LoadFile(resultPathName.string().c_str());
-                }
-                catch (std::exception &)
-                {
-                }
-            }
+            LoadResult(resultPathName.string());
         }
         catch (std::exception &)
         {

@@ -1,0 +1,8 @@
+.hpp
+.cpp
+.\AppRoot\application\SelectPoint.dlx
+.\AppRoot\bin\sample
+.\AppRoot\tml.backup
+.\AppRoot\template\modified
+.\AppRoot\template\RailSlabBase.backup
+.7z
