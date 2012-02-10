@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <boost/scope_exit.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
 #include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
@@ -39,6 +40,7 @@
 #include <NXOpen/CAE_FENodeLabelMap.hxx>
 #include <NXOpen/CAE_Mesh.hxx>
 
+#include <uf.h>
 #include <uf_sf.h>
 
 #include <Vsar_Project.hxx>
@@ -360,8 +362,8 @@ namespace Vsar
                 meshToMergeNodes.push_back(GetMeshByName(pBaseFeModel,
                     FIND_MESH_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
             }
-            else    // TODO:
-                MergeDuplicateNodes(meshToMergeNodes);
+
+            MergeDuplicateNodes(meshToMergeNodes);
         }
     }
 
@@ -575,8 +577,8 @@ namespace Vsar
             meshToMergeNodes.push_back(GetMeshByName(pBaseFeModelOcc,
                 FIND_MESH_OCC_PATTERN_NAME, SLAB_BASE_CONNECTION_MESH_NAME));
         }
-        else    // TODO:
-            MergeDuplicateNodes(meshToMergeNodes);
+
+        MergeDuplicateNodes(meshToMergeNodes);
     }
 
     void BaseComponent::OnInit()
@@ -634,8 +636,20 @@ namespace Vsar
 
         std::vector<tag_t>  tMeshesToMearge(meshToMergeNodes.size());
 
-        std::transform(meshToMergeNodes.begin(), meshToMergeNodes.end(),
-                  tMeshesToMearge.begin(), boost::bind(&Mesh::Tag, _1));
+        for (int idx = 0; idx < meshToMergeNodes.size(); idx++)
+        {
+            tag_p_t                     tMeshPtrs  = NULL;
+            int                         meshCnt;
+
+            UF_SF_locate_all_meshes(meshToMergeNodes[idx]->Tag(), &meshCnt, &tMeshPtrs);
+
+            boost::shared_array<tag_t>  tMeshPtrArray(tMeshPtrs, UF_free);
+
+            if (meshCnt > 0)
+                tMeshesToMearge[idx] = tMeshPtrs[0];
+        }
+        //std::transform(meshToMergeNodes.begin(), meshToMergeNodes.end(),
+        //               tMeshesToMearge.begin(), boost::bind(&Mesh::Tag, _1));
 
         int iErr = UF_SF_check_model_duplicate_nodes(tMeshesToMearge.size(),
             tMeshesToMearge.empty() ? NULL_TAG : &tMeshesToMearge[0],
