@@ -432,9 +432,9 @@ namespace Vsar
         std::vector<CAEFace*> caeFaces;
         int                   numFaces;
         tag_t                *tFaces   = NULL;
-        boost::shared_array<tag_t>  tFacesArray(tFaces, UF_free);
 
         UF_SF_body_ask_faces(pCaeBody->Tag(), &numFaces, &tFaces);
+        boost::shared_array<tag_t>  tFacesArray(tFaces, UF_free);
 
         for (int idx = 0; idx < numFaces; idx++)
         {
