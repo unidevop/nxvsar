@@ -118,7 +118,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;DEL /F /Q $(TargetDir)\NXOpen*.dll&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
 			<Tool
