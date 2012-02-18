@@ -781,10 +781,10 @@ namespace Vsar
         // The following API is not available
         // Modify Y Axis Label to "Sound Pressure"
         // Modify Y Unit Label to "decibal"
-        JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)((char*)(pAfuData.get()) + sizeof(void*));
+        //JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)((char*)(pAfuData.get()) + sizeof(void*));
 
-        strcpy(pJaAfuData->y_data.axis_label, "Sound Pressure");
-        strcpy(pJaAfuData->y_data.unit_label, "decibal");
+        //strcpy(pJaAfuData->y_data.axis_label, "Sound Pressure");
+        //strcpy(pJaAfuData->y_data.unit_label, "decibal");
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }

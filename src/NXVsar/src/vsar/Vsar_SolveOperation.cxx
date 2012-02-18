@@ -90,10 +90,15 @@ namespace Vsar
         //  remove work dir
         BOOST_SCOPE_EXIT((&m_workDir)(&oldWorkPath))
         {
-
 #if !defined(_DEBUG) && !defined(DEBUG)
-            if (filesystem::exists(m_workDir))
-                filesystem::remove_all(m_workDir);
+            try
+            {
+                if (filesystem::exists(m_workDir))
+                    filesystem::remove_all(m_workDir);
+            }
+            catch (std::exception &)
+            {
+            }
 #endif
             m_workDir.clear();
 
