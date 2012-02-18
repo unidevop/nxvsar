@@ -225,8 +225,8 @@ namespace Vsar
     const char * const SOLVER_NOISE_EXE_NAME                    = "noise.exe";
 
     // log file
-    const char * const SOLVE_ELASTIC_SUCCESS_LOG_NAME           = "elastic_finished.log";
-    const char * const SOLVE_ELASTIC_FAIL_LOG_NAME              = "elastic_error.log";
+    const char * const SOLVE_ELASTIC_SUCCESS_LOG_NAME           = "excitation_finished.log";
+    const char * const SOLVE_ELASTIC_FAIL_LOG_NAME              = "excitation_error.log";
 
     const char * const SOLVE_CONVERT_ELASTIC_FAIL_LOG_NAME      = "read_excitation_error.log";
 
