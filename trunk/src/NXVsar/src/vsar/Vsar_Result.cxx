@@ -844,9 +844,10 @@ namespace Vsar
         bool             respResultLoaded  = false;
         bool             noiseResultLoaded = false;
 
-        SolveResponseOperation  solveRespOper;
+        ResponseOp2Result   respResult;
+        ResponseAfuResult   respAfuResult;
 
-        solveRespOper.LoadResult();
+        respResultLoaded = respResult.Load() && respAfuResult.Load();
 
         NoiseResult noiseResult(filesystem::path(""), std::vector<Point*>());  // for result query only
 

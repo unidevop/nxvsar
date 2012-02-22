@@ -297,9 +297,17 @@ namespace Vsar
         void SetEntityGroup(const std::string &groupName,
             const std::vector<NXOpen::TaggedObject*> &outputEntities);
 
+        void SetRunJobInForeground();
+
+        void CheckNoiseDatumPoints();
+
+        void SetResponseOutput();
+
         void SetNoiseOutput();
 
         void SetTimeStep();
+
+        void OpenOutputRequest(const std::string &oObjName, const std::string &oReqName, bool bOpen);
 
     private:
         bool m_bOutputElems;

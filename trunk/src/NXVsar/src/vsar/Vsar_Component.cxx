@@ -651,7 +651,7 @@ namespace Vsar
         //std::transform(meshToMergeNodes.begin(), meshToMergeNodes.end(),
         //               tMeshesToMearge.begin(), boost::bind(&Mesh::Tag, _1));
 
-        int iErr = UF_SF_check_model_duplicate_nodes(tMeshesToMearge.size(),
+        int iErr = UF_SF_check_model_duplicate_nodes(static_cast<int>(tMeshesToMearge.size()),
             tMeshesToMearge.empty() ? NULL_TAG : &tMeshesToMearge[0],
             true, tolerance, &numDuplicates);
 
