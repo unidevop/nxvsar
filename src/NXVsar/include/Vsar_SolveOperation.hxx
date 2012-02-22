@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <boost/filesystem.hpp>
+#include <boost/tuple/tuple.hpp>
 
 namespace NXOpen
 {
@@ -279,6 +280,8 @@ namespace Vsar
         std::vector<NXOpen::TaggedObject*>  m_refNodeSeq;
     };
 
+    typedef boost::tuple<std::string, bool> OutputRequestItem;
+
     //////////////////////////////////////////////////////////////////////////
     // Solver settings
     class SolveSettings
@@ -301,13 +304,15 @@ namespace Vsar
 
         void CheckNoiseDatumPoints();
 
+        void CheckConstraints();
+
         void SetResponseOutput();
 
         void SetNoiseOutput();
 
         void SetTimeStep();
 
-        void OpenOutputRequest(const std::string &oObjName, const std::string &oReqName, bool bOpen);
+        void OpenOutputRequests(const std::string &oObjName, const std::vector<OutputRequestItem> &outputReqItems);
 
     private:
         bool m_bOutputElems;

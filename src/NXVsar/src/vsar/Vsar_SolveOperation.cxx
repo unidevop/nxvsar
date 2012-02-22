@@ -233,13 +233,26 @@ namespace Vsar
 
         respAfuResult.Create();
 
+        // may don't have noise intermediate result
         NoiseIntermResult noiseIntermResult;
 
-        noiseIntermResult.Create();
+        try
+        {
+            noiseIntermResult.Create();
+        }
+        catch (NXException &)
+        {
+            // does nothing if failed to extract noise intermediate results, the empty result has been deleted
+        }
 
         //  modify project status
         if (noiseIntermResult.IsResultExist())
+        {
+            FTK::DataManager *pDataMgr = Session::GetSession()->DataManager();
+
+            pDataMgr->UnloadFile(noiseIntermResult.GetResultPathName().c_str());
             Project::GetStatus()->Switch(Status::ProjectStatus_ResponseNoiseSolved);
+        }
         else if (respResult.IsResultExist() && respAfuResult.IsResultExist())
             Project::GetStatus()->Switch(Status::ProjectStatus_ResponseSolved);
     }
@@ -866,7 +879,7 @@ namespace Vsar
     {
         std::string afuFileName(GetIntermediateResult());
 
-        //  unload intermidate result
+        //  unload intermediate result
         BOOST_SCOPE_EXIT((&afuFileName))
         {
             try
@@ -1025,6 +1038,8 @@ namespace Vsar
     {
         SetRunJobInForeground();
 
+        CheckConstraints();
+
         SetResponseOutput();
 
         SetNoiseOutput();
@@ -1062,15 +1077,18 @@ namespace Vsar
     {
         if (m_bOutputElems)
             SetEntityGroup(ELEMENT_FOR_RESPONSE_GROUP_NAME, m_outputElems);
-        // TODO: check empty group
 
         if (m_bOutputNodes)
             SetEntityGroup(NODE_FOR_RESPONSE_GROUP_NAME, m_outputNodes);
 
-        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Acceleration - Enable", m_bOutputNodes);
-        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Displacement - Enable", m_bOutputNodes);
+        std::vector<OutputRequestItem> outputReqItems;
 
-        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Stress - Enable", m_bOutputElems);
+        outputReqItems.reserve(3);
+        outputReqItems.push_back(OutputRequestItem("Acceleration - Enable", m_bOutputNodes));
+        outputReqItems.push_back(OutputRequestItem("Displacement - Enable", m_bOutputNodes));
+        outputReqItems.push_back(OutputRequestItem("Stress - Enable", m_bOutputElems));
+
+        OpenOutputRequests(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, outputReqItems);
     }
 
     void SolveSettings::CheckNoiseDatumPoints()
@@ -1082,14 +1100,23 @@ namespace Vsar
         }
     }
 
+    void SolveSettings::CheckConstraints()
+    {
+        // TODO: check constraints
+    }
+
     void SolveSettings::SetNoiseOutput()
     {
         CheckNoiseDatumPoints();
 
-        OpenOutputRequest(NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Velocity - Enable", m_bOutputNodesForNoise);
+        std::vector<OutputRequestItem> outputReqItems;
+
+        outputReqItems.push_back(OutputRequestItem("Velocity - Enable", m_bOutputNodesForNoise));
+
+        OpenOutputRequests(NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME, outputReqItems);
     }
 
-    void SolveSettings::OpenOutputRequest(const std::string &oObjName, const std::string &oReqName, bool bOpen)
+    void SolveSettings::OpenOutputRequests(const std::string &oObjName, const std::vector<OutputRequestItem> &outputReqItems)
     {
         BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
         CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
@@ -1100,7 +1127,10 @@ namespace Vsar
 
         PropertyTable *pPropTab = pModelingObjPT->PropertyTable();
 
-        pPropTab->SetBooleanPropertyValue(oReqName.c_str(), bOpen);
+        BOOST_FOREACH(OutputRequestItem oReqItem, outputReqItems)
+        {
+            pPropTab->SetBooleanPropertyValue(oReqItem.get<0>().c_str(), oReqItem.get<1>());
+        }
     }
 
     void SolveSettings::SetTimeStep()
