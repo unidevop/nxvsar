@@ -69,7 +69,7 @@ namespace Vsar
 
     VSARINITEXPORT void CopyDirectory(const std::string &fromPath, const std::string &toPath);
 
-    VSARINITEXPORT void LoadResult(const std::string &resultPathName);
+    VSARINITEXPORT int  LoadResult(const std::string &resultPathName);
 }
 
 #endif //VSAR_INIT_UTILS_H_INCLUDED

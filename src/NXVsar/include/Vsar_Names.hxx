@@ -211,6 +211,7 @@ namespace Vsar
     const char * const NODE_FOR_RESPONSE_GROUP_NAME             = "NodeForResponse";
     const char * const NODES_FOR_NOISE_GROUP_NAME               = "NodesForNoise";
 
+    const char * const RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME   = "Response_Structural_Output";
     const char * const NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME      = "Noise_Structural_Output";
     const char * const TIME_STEP_OUTPUT_OBJECT_NAME             = "Time_Step";
 
@@ -273,6 +274,9 @@ namespace Vsar
     const char * const FIND_MESH_OCC_PATTERN_NAME               = "MeshOccurrence[%1%]";
     const char * const FIND_MESH_COL_PATTERN_NAME               = "MeshCollector[%1%]";
     const char * const FIND_MESH_COL_OCC_PATTERN_NAME           = "MeshCollectorOccurrence[%1%]";
+
+    const char * const FIND_MODELING_OBJ_PATTERN_NAME           = "SsmoPropTable[%1%]";
+    const char * const FIND_SOLUTION_PATTERN_NAME               = "Solution[%1%]";
 
 
     const double mmToMConvert = 0.001;

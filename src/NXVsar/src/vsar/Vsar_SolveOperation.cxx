@@ -114,7 +114,14 @@ namespace Vsar
         Solve();
 
         if (CanAutoLoadResult())
+        {
             LoadResult();
+
+            // save parts
+            CAE::SimPart *pSimPrt = Project::Instance()->GetProperty()->GetSimPart();
+
+            pSimPrt->Save(BasePart::SaveComponentsTrue, BasePart::CloseAfterSaveFalse);
+        }
     }
 
     void BaseSolveOperation::CleanResultFile(const std::string &resultPathName)
@@ -203,7 +210,7 @@ namespace Vsar
         SimPart             *pSimPart  = pPrjProp->GetSimPart();
 
         SimSimulation *pSim = pSimPart->Simulation();
-        std::string    strSol(std::string("Solution[").append(VSDANE_SOLUTION_NAME).append("]"));
+        std::string    strSol((boost::format(FIND_SOLUTION_PATTERN_NAME) % VSDANE_SOLUTION_NAME).str());
 
         SimSolution * pSolution(dynamic_cast<SimSolution*>(pSim->FindObject(strSol)));
 
@@ -213,7 +220,7 @@ namespace Vsar
 
     bool SolveResponseOperation::CanAutoLoadResult() const
     {
-        return false;
+        return true;
     }
 
     void SolveResponseOperation::LoadResult()
@@ -960,7 +967,7 @@ namespace Vsar
         FENodeLabelMap    *pRailSlabNodeLabelMap = pRailFEModelOcc->FenodeLabelMap();
         FENode            *pFENode               = pRailSlabNodeLabelMap->GetNode(nodeLabel);
 
-        int nodeIndex = std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode) - m_refNodeSeq.begin() + 1;
+        int nodeIndex = static_cast<int>(std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode) - m_refNodeSeq.begin() + 1);
 
         return (boost::format(NOISE_FREQUENCE_INPUT_FILE_NAME) % nodeIndex).str();
     }
@@ -1016,11 +1023,9 @@ namespace Vsar
 
     void SolveSettings::Apply()
     {
-        if (m_bOutputElems)
-            SetEntityGroup(ELEMENT_FOR_RESPONSE_GROUP_NAME, m_outputElems);
+        SetRunJobInForeground();
 
-        if (m_bOutputNodes)
-            SetEntityGroup(NODE_FOR_RESPONSE_GROUP_NAME, m_outputNodes);
+        SetResponseOutput();
 
         SetNoiseOutput();
 
@@ -1038,18 +1043,64 @@ namespace Vsar
         pGroup->SetEntities(outputEntities);
     }
 
+    void SolveSettings::SetRunJobInForeground()
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+        std::string    strSol((boost::format(FIND_SOLUTION_PATTERN_NAME) % VSDANE_SOLUTION_NAME).str());
+
+        SimSimulation *pSim = pSimPart->Simulation();
+
+        SimSolution * pSolution(dynamic_cast<SimSolution*>(pSim->FindObject(strSol)));
+
+        PropertyTable *pPropTab = pSolution->PropertyTable();
+
+        pPropTab->SetBooleanPropertyValue("Foreground", true);
+    }
+
+    void SolveSettings::SetResponseOutput()
+    {
+        if (m_bOutputElems)
+            SetEntityGroup(ELEMENT_FOR_RESPONSE_GROUP_NAME, m_outputElems);
+        // TODO: check empty group
+
+        if (m_bOutputNodes)
+            SetEntityGroup(NODE_FOR_RESPONSE_GROUP_NAME, m_outputNodes);
+
+        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Acceleration - Enable", m_bOutputNodes);
+        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Displacement - Enable", m_bOutputNodes);
+
+        OpenOutputRequest(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Stress - Enable", m_bOutputElems);
+    }
+
+    void SolveSettings::CheckNoiseDatumPoints()
+    {
+        // TODO: check 14 points
+        if (m_bOutputNodesForNoise)
+        {
+            
+        }
+    }
+
     void SolveSettings::SetNoiseOutput()
+    {
+        CheckNoiseDatumPoints();
+
+        OpenOutputRequest(NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME, "Velocity - Enable", m_bOutputNodesForNoise);
+    }
+
+    void SolveSettings::OpenOutputRequest(const std::string &oObjName, const std::string &oReqName, bool bOpen)
     {
         BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
         CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
 
-        std::string  strModelingObj(std::string("SsmoPropTable[").append(NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME).append("]"));
+        std::string strModelingObj((boost::format(FIND_MODELING_OBJ_PATTERN_NAME) % oObjName.c_str()).str());
 
         ModelingObjectPropertyTable *pModelingObjPT(pSimPart->ModelingObjectPropertyTables()->FindObject(strModelingObj));
 
         PropertyTable *pPropTab = pModelingObjPT->PropertyTable();
 
-        pPropTab->SetBooleanPropertyValue("Velocity - Enable", m_bOutputNodesForNoise);
+        pPropTab->SetBooleanPropertyValue(oReqName.c_str(), bOpen);
     }
 
     void SolveSettings::SetTimeStep()
@@ -1057,7 +1108,7 @@ namespace Vsar
         BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
         CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
 
-        std::string  strModelingObj(std::string("SsmoPropTable[").append(TIME_STEP_OUTPUT_OBJECT_NAME).append("]"));
+        std::string strModelingObj((boost::format(FIND_MODELING_OBJ_PATTERN_NAME) % TIME_STEP_OUTPUT_OBJECT_NAME).str());
 
         ModelingObjectPropertyTable *pModelingObjPT(pSimPart->ModelingObjectPropertyTables()->FindObject(strModelingObj));
 

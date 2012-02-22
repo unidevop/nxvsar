@@ -42,6 +42,7 @@
 
 #include <boost/filesystem.hpp>
 
+#include <NXOpen/NXException.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 
 
@@ -120,9 +121,10 @@ namespace Vsar
         }
     }
 
-    void LoadResult(const std::string &resultPathName)
+    int LoadResult(const std::string &resultPathName)
     {
         NXOpen::CAE::FTK::DataManager *pDataMgr = NXOpen::Session::GetSession()->DataManager();
+        int  rtc = 0;
 
         if (boost::filesystem::exists(resultPathName))
         {
@@ -130,10 +132,13 @@ namespace Vsar
             {
                 pDataMgr->LoadFile(resultPathName.c_str());
             }
-            catch (std::exception &)
+            catch (NXOpen::NXException &ex)
             {
+                rtc = ex.ErrorCode();
             }
         }
+
+        return rtc;
     }
 
 }
