@@ -636,7 +636,7 @@ namespace Vsar
 
         std::vector<tag_t>  tMeshesToMearge(meshToMergeNodes.size());
 
-        for (int idx = 0; idx < meshToMergeNodes.size(); idx++)
+        for (int idx = 0; idx < (int)(meshToMergeNodes.size()); idx++)
         {
             tag_p_t                     tMeshPtrs  = NULL;
             int                         meshCnt;

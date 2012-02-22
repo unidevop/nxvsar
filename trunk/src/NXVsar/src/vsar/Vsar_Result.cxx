@@ -541,6 +541,8 @@ namespace Vsar
                 pResultBlock->Write(resultName);
             }
         }
+        else
+            throw NXException::Create("No output result of specified type exists.");
     }
 
 #if 0
@@ -778,13 +780,18 @@ namespace Vsar
 
         pAfuData->SetRealData(xValues, yValues);
 
+        // TODO: hack adding labels
         // The following API is not available
         // Modify Y Axis Label to "Sound Pressure"
         // Modify Y Unit Label to "decibal"
+        //std::string axisLabel("Sound Pressure");
+        //std::string unitLabel("decibal");
+
         //JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)((char*)(pAfuData.get()) + sizeof(void*));
 
-        //strcpy(pJaAfuData->y_data.axis_label, "Sound Pressure");
-        //strcpy(pJaAfuData->y_data.unit_label, "decibal");
+        //strcpy(pJaAfuData->y_data.axis_label, axisLabel.c_str());
+
+        //strcpy(pJaAfuData->y_data.unit_label, unitLabel.c_str());
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }
