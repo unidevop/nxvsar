@@ -5,4 +5,6 @@
 .\AppRoot\tml.backup
 .\AppRoot\template\modified
 .\AppRoot\template\RailSlabBase.backup
+.\AppRoot\startup\x86
+.\AppRoot\startup\x64
 .7z
