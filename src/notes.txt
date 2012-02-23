@@ -1,3 +1,0 @@
-JA_AFU_DATA_CONVERTOR_get_fft_frequency_data
-
-CreateAFUData.java setTimeToFFT
