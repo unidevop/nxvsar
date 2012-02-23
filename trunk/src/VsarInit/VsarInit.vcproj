@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;xcopy /Y $(TargetDir)\x86 $(TargetDir)"
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
 			<Tool
@@ -68,7 +68,7 @@
 				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
 				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(SolutionDir)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(SolutionDir)\lib\x86&quot;"
 				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
@@ -114,7 +114,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;xcopy /Y $(TargetDir)\x64 $(TargetDir)"
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
 			<Tool
@@ -152,7 +152,7 @@
 				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
 				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(SolutionDir)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(UGII_BASE_DIR)\ugopen&quot;;&quot;$(SolutionDir)\lib\x64&quot;"
 				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
@@ -199,7 +199,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;"
+				CommandLine="$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;xcopy /Y $(TargetDir)\x86 $(TargetDir)"
 				AdditionalDependencies=""
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
@@ -236,7 +236,7 @@
 				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
 				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(UGII_BASE_DIR)\ugopen;&quot;$(SolutionDir)\lib&quot;"
+				AdditionalLibraryDirectories="$(UGII_BASE_DIR)\ugopen;&quot;$(SolutionDir)\lib\x86&quot;"
 				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
@@ -285,7 +285,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Clean and signup"
-				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;"
+				CommandLine="DEL /F /Q $(TargetDir)\*.ilk&#x0D;&#x0A;$(UGII_BASE_DIR)\ugopen\nxsign $(TargetPath)&#x0D;&#x0A;xcopy /Y $(TargetDir)\x64 $(TargetDir)"
 				AdditionalDependencies=""
 				Outputs="$(TargetDir)\$(TargetName).ilk"
 			/>
@@ -323,7 +323,7 @@
 				AdditionalDependencies="libnxopencpp.lib libnxopenuicpp.lib libboost_filesystem-vc90-mt-1_46_1.lib"
 				OutputFile="$(UGII_USER_DIR)\startup\libvsarinit.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(UGII_BASE_DIR)\ugopen;&quot;$(SolutionDir)\lib&quot;"
+				AdditionalLibraryDirectories="$(UGII_BASE_DIR)\ugopen;&quot;$(SolutionDir)\lib\x64&quot;"
 				ManifestFile=".\$(IntDir)\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(TargetName).pdb"
