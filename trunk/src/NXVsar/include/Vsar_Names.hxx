@@ -106,6 +106,7 @@ namespace Vsar
     const char * const SLAB_POISSON_RATIO_EXP_NAME              = "Slab_Poisson_Ratio";
 
     const char * const SLAB_LENGTH_EXP_NAME                     = "Slab_Length";
+    const char * const SLAB_WIDTH_EXP_NAME                      = "Slab_Width";
     const char * const SLAB_ELEMENT_SIZE_EXP_NAME               = "Slab_Element_Size";
     const char * const SLAB_COUNT_EXP_NAME                      = "Slab_Count";
     const char * const SLAB_SECTION_INERTIA_EXP_NAME            = "Slab_Section_Inertia";
