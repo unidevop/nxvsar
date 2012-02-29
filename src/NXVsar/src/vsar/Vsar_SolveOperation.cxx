@@ -1096,7 +1096,16 @@ namespace Vsar
         // TODO: check 14 points
         if (m_bOutputNodesForNoise)
         {
-            
+            BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+            CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+
+            CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
+
+            // Update noise datum points manually
+            if (pGroup->GetEntities().size() != 14)
+            {
+                
+            }
         }
     }
 
