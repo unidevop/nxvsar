@@ -607,7 +607,7 @@ namespace Vsar
 
             CAEFace *pBottomFace = vCaeFaces.empty() ? NULL : vCaeFaces[0];
 
-            std::string  curMeshName(meshName + "(" + boost::lexical_cast<std::string>(pPolygonBodies.size() - idx) + ")");
+            std::string  curMeshName(meshName + "(" + boost::lexical_cast<std::string>((int)(pPolygonBodies.size()) - idx) + ")");
 
             CreateSweptMesh(pMeshMgr, pMeshCol, curMeshName, pTopFace, pBottomFace, eleSizeExpName);
         }

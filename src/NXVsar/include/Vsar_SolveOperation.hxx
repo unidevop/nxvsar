@@ -302,8 +302,6 @@ namespace Vsar
 
         void SetRunJobInForeground();
 
-        void CheckNoiseDatumPoints();
-
         void CheckConstraints();
 
         void SetResponseOutput();

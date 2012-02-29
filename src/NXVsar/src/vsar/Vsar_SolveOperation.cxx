@@ -67,6 +67,102 @@ using namespace Vsar;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
+
+    class NoiseDatumPointsUpdater
+    {
+    public:
+        NoiseDatumPointsUpdater()
+        {
+        }
+
+        ~NoiseDatumPointsUpdater()
+        {
+        }
+
+        void Update();
+
+        Point* GetSlabCenter() const;
+
+    protected:
+        std::vector<TaggedObject*> GetDatumNodes() const;
+
+        std::vector<Point3d> GetDatumPoints() const;
+
+        Point3d GetSlabDim() const;
+    };
+
+    void NoiseDatumPointsUpdater::Update()
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+
+        CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
+
+        // Update noise datum points manually
+        if (pGroup->GetEntities().size() != 14)
+        {
+            std::vector<TaggedObject*>  datumNodes(GetDatumNodes());
+
+            if (datumNodes.size() == 14)
+                pGroup->SetEntities(datumNodes);
+            else
+                throw NXException::Create("Failed to update noise datum points.");
+        }
+    }
+
+    std::vector<TaggedObject*> NoiseDatumPointsUpdater::GetDatumNodes() const
+    {
+        std::vector<Point3d>  datumPts(GetDatumPoints());
+
+        std::vector<TaggedObject*>  datumNodes;
+
+        return datumNodes;
+    }
+
+    std::vector<Point3d> NoiseDatumPointsUpdater::GetDatumPoints() const
+    {
+        std::vector<Point3d>  datumPts;
+
+        datumPts.reserve(14);
+
+        Point3d  slabDim(GetSlabDim());
+        Point3d  slabCenter(GetSlabCenter()->Coordinates());
+
+        for (int idx = 0; idx < 7; idx++)
+        {
+            datumPts.push_back(Point3d(slabCenter.X - slabDim.X/2, slabCenter.Y, slabCenter.Z - slabDim.Z/2 + idx * slabDim.Z/6));
+            datumPts.push_back(Point3d(slabCenter.X + slabDim.X/2, slabCenter.Y, slabCenter.Z - slabDim.Z/2 + idx * slabDim.Z/6));
+        }
+
+        return datumPts;
+    }
+
+    Point* NoiseDatumPointsUpdater::GetSlabCenter() const
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
+        PointCollection     *pPoints   = pSimPart->Points();
+
+        std::string        pointName(SLAB_CENTER_POINT_NAME);
+        //  Get points
+        for (PointCollection::iterator iter = pPoints->begin(); iter != pPoints->end(); ++iter)
+        {
+            if (pointName.compare((*iter)->Name().GetText()) == 0)
+                return *iter;
+        }
+
+        return NULL;
+    }
+
+    Point3d NoiseDatumPointsUpdater::GetSlabDim() const
+    {
+        Expression *pLengthExp = BaseComponent::GetExpression(SLAB_PRT_PART_NAME, SLAB_LENGTH_EXP_NAME);
+        Expression *pWidghExp  = BaseComponent::GetExpression(SLAB_PRT_PART_NAME, SLAB_WIDTH_EXP_NAME);
+
+        return Point3d(pWidghExp->Value(), 0.0, pLengthExp->Value());
+    }
+
+
     BaseSolveOperation::BaseSolveOperation() : m_workDir(), m_solDir()
     {
         //  Get result path name
@@ -268,6 +364,10 @@ namespace Vsar
 
     void SolveNoiseOperation::PreExecute()
     {
+        NoiseDatumPointsUpdater datumPtsUpdater;
+
+        datumPtsUpdater.Update();
+
         // convert to FFT
         NoiseInput  noiseInput(m_workDir, m_outputPoints);
 
@@ -823,7 +923,7 @@ namespace Vsar
     }
 
 
-    class NodePosXZComparer : public std::binary_function<tag_t, tag_t, bool>
+    class NodePosXZComparer : public std::binary_function<TaggedObject*, TaggedObject*, bool>
     {
     public:
         NodePosXZComparer()
@@ -1012,19 +1112,9 @@ namespace Vsar
 
     Point* NoiseInput::GetSlabCenter() const
     {
-        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
-        CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
-        PointCollection     *pPoints   = pSimPart->Points();
+        NoiseDatumPointsUpdater datumPtsUpdater;
 
-        std::string        pointName(SLAB_CENTER_POINT_NAME);
-        //  Get points
-        for (PointCollection::iterator iter = pPoints->begin(); iter != pPoints->end(); ++iter)
-        {
-            if (pointName.compare((*iter)->Name().GetText()) == 0)
-                return *iter;
-        }
-
-        return NULL;
+        return datumPtsUpdater.GetSlabCenter();
     }
 
     SolveSettings::SolveSettings(bool bOutputElems, const std::vector<TaggedObject*> &outputElems,
@@ -1091,24 +1181,6 @@ namespace Vsar
         OpenOutputRequests(RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME, outputReqItems);
     }
 
-    void SolveSettings::CheckNoiseDatumPoints()
-    {
-        // TODO: check 14 points
-        if (m_bOutputNodesForNoise)
-        {
-            BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
-            CAE::SimPart        *pSimPart  = pPrjProp->GetSimPart();
-
-            CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
-
-            // Update noise datum points manually
-            if (pGroup->GetEntities().size() != 14)
-            {
-                
-            }
-        }
-    }
-
     void SolveSettings::CheckConstraints()
     {
         // TODO: check constraints
@@ -1116,7 +1188,13 @@ namespace Vsar
 
     void SolveSettings::SetNoiseOutput()
     {
-        CheckNoiseDatumPoints();
+        //  Check Noise Datum Points
+        if (m_bOutputNodesForNoise)
+        {
+            NoiseDatumPointsUpdater datumPtsUpdater;
+
+            datumPtsUpdater.Update();
+        }
 
         std::vector<OutputRequestItem> outputReqItems;
 
