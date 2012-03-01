@@ -28,8 +28,11 @@
 #include <NXOpen/Point.hxx>
 #include <NXOpen/PointCollection.hxx>
 #include <NXOpen/NXException.hxx>
+#include <NXOpen/NXObjectManager.hxx>
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 #include <NXOpen/CAE_CaeGroup.hxx>
+#include <NXOpen/CAE_CAEBody.hxx>
+//#include <NXOpen/CAE_CAEFace.hxx>
 #include <NXOpen/CAE_CaeGroupCollection.hxx>
 #include <NXOpen/CAE_FemPart.hxx>
 #include <NXOpen/CAE_SimPart.hxx>
@@ -84,7 +87,11 @@ namespace Vsar
         Point* GetSlabCenter() const;
 
     protected:
-        std::vector<TaggedObject*> GetDatumNodes() const;
+        std::vector<FENode*> GetDatumNodes() const;
+
+        std::vector<CAEFace*> GetSlabFaces() const;
+
+        std::vector<FENode*> GetCandidateNodes() const;
 
         std::vector<Point3d> GetDatumPoints() const;
 
@@ -101,20 +108,28 @@ namespace Vsar
         // Update noise datum points manually
         if (pGroup->GetEntities().size() != 14)
         {
-            std::vector<TaggedObject*>  datumNodes(GetDatumNodes());
+            std::vector<FENode*>  datumNodes(GetDatumNodes());
 
             if (datumNodes.size() == 14)
-                pGroup->SetEntities(datumNodes);
+            {
+                std::vector<TaggedObject*>  datumNodeTags;
+
+                datumNodeTags.resize(datumNodes.size());
+                std::copy(datumNodes.begin(), datumNodes.end(), datumNodeTags.begin());
+
+                pGroup->SetEntities(datumNodeTags);
+            }
             else
                 throw NXException::Create("Failed to update noise datum points.");
         }
     }
 
-    std::vector<TaggedObject*> NoiseDatumPointsUpdater::GetDatumNodes() const
+    std::vector<FENode*> NoiseDatumPointsUpdater::GetDatumNodes() const
     {
         std::vector<Point3d>  datumPts(GetDatumPoints());
 
-        std::vector<TaggedObject*>  datumNodes;
+        std::vector<FENode*>  datumNodes(GetCandidateNodes());
+
 
         return datumNodes;
     }
@@ -160,6 +175,33 @@ namespace Vsar
         Expression *pWidghExp  = BaseComponent::GetExpression(SLAB_PRT_PART_NAME, SLAB_WIDTH_EXP_NAME);
 
         return Point3d(pWidghExp->Value(), 0.0, pLengthExp->Value());
+    }
+
+    std::vector<FENode*> NoiseDatumPointsUpdater::GetCandidateNodes() const
+    {
+        std::vector<FENode*>    slabTopNodes;
+        std::vector<CAEFace*>   slabTopFaces(GetSlabFaces());
+
+        return slabTopNodes;
+    }
+
+    std::vector<CAEFace*> NoiseDatumPointsUpdater::GetSlabFaces() const
+    {
+        std::vector<CAE::CAEFace*>  slabTopFaces;
+
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        FemPart             *pSlabFem  = pPrjProp->GetRailSlabFemPart();
+
+        std::vector<CAEBody*>  slabBodies(GetCaeBodyByName(pSlabFem, SLAB_BODY_NAME));
+
+        for (int idx = 0; idx < int(slabBodies.size()); idx++)
+        {
+            std::vector<CAE::CAEFace*>  topFaces(GetCaeFaceByName(slabBodies[idx], FACE_NAME_TOP));
+
+            slabTopFaces.insert(slabTopFaces.end(), topFaces.begin(), topFaces.end());
+        }
+
+        return slabTopFaces;
     }
 
 

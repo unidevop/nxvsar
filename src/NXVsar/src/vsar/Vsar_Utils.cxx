@@ -4,6 +4,7 @@
 
 #include <uf.h>
 #include <uf_ui.h>
+#include <uf_obj.h>
 
 #if 0
 #include <uf_assem.h>
@@ -448,6 +449,29 @@ namespace Vsar
         }
 
         return caeFaces;
+    }
+
+    std::vector<CAEBody*> GetCaeBodyByName(BasePart *pPrt, const std::string &bodyName)
+    {
+        std::vector<CAEBody*>  caeBodies;
+
+        int                  rtc       = 0;
+        tag_t                tCaeBody  = NULL_TAG;
+
+        rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), bodyName.c_str(), UF_caegeom_type, true, &tCaeBody);
+        //rtc = UF_OBJ_cycle_by_name(const_cast<char*>(bodyName), &tCaeBody);
+        while (tCaeBody != NULL_TAG)
+        {
+            CAE::CAEBody *pCaeBody = dynamic_cast<CAE::CAEBody*>(NXObjectManager::Get(tCaeBody));
+
+            if (pCaeBody)
+            {
+                caeBodies.push_back(pCaeBody);
+            }
+            rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), bodyName.c_str(), UF_caegeom_type, true, &tCaeBody);
+        }
+
+        return caeBodies;
     }
 
     FEModelOccurrence* GetFEModelOccByMeshName(IHierarchicalFEModel *pHieFeModel, const std::string &meshName)

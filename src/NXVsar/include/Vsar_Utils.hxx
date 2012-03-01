@@ -63,6 +63,8 @@ namespace Vsar
 
     std::vector<NXOpen::CAE::CAEFace*> GetCaeFaceByName(const NXOpen::CAE::CAEBody *pCaeBody, const std::string &faceName);
 
+    std::vector<NXOpen::CAE::CAEBody*> GetCaeBodyByName(NXOpen::BasePart *pPrt, const std::string &bodyName);
+
     void EditSweptMeshData(NXOpen::CAE::IFEModel *pFeModel, const std::string &meshName,
                         const std::vector<NXOpen::Body*> &srcBodies);
 
