@@ -18,6 +18,7 @@
 #include <uf_unit_types.h>
 #include <uf.h>
 #include <uf_sf.h>
+#include <uf_vec.h>
 
 #include <NXOpen/Session.hxx>
 #include <NXOpen/PartCollection.hxx>
@@ -42,6 +43,8 @@
 #include <NXOpen/CAE_FEModelOccurrence.hxx>
 #include <NXOpen/CAE_Mesh.hxx>
 #include <NXOpen/CAE_IMeshManager.hxx>
+#include <NXOpen/CAE_SmartSelectionManager.hxx>
+#include <NXOpen/CAE_RelatedNodeMethod.hxx>
 #include <NXOpen/CAE_FENode.hxx>
 #include <NXOpen/CAE_FENodeLabelMap.hxx>
 #include <NXOpen/CAE_ModelingObjectPropertyTable.hxx>
@@ -127,9 +130,29 @@ namespace Vsar
     std::vector<FENode*> NoiseDatumPointsUpdater::GetDatumNodes() const
     {
         std::vector<Point3d>  datumPts(GetDatumPoints());
+        std::vector<FENode*>  candidateNodes(GetCandidateNodes());
+        std::vector<FENode*>  datumNodes;
 
-        std::vector<FENode*>  datumNodes(GetCandidateNodes());
+        datumNodes.reserve(datumPts.size());
 
+        for (int idx = 0; idx < int(candidateNodes.size()) && datumNodes.size() != datumPts.size(); idx++)
+        {
+            Point3d candidatePt(candidateNodes[idx]->Coordinates());
+
+            for (int jdx = 0; jdx < int(datumPts.size()); jdx++)
+            {
+                double distance = 0.0;
+
+                UF_VEC3_distance(reinterpret_cast<double*>(&datumPts[jdx]),
+                                 reinterpret_cast<double*>(&candidatePt), &distance);
+
+                if (distance < 0.000001)
+                {
+                    datumNodes.push_back(candidateNodes[idx]);
+                    break;
+                }
+            }
+        }
 
         return datumNodes;
     }
@@ -181,6 +204,20 @@ namespace Vsar
     {
         std::vector<FENode*>    slabTopNodes;
         std::vector<CAEFace*>   slabTopFaces(GetSlabFaces());
+
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        SimPart             *pSimPrt   = pPrjProp->GetSimPart();
+
+        SmartSelectionManager *pSelMgr = pSimPrt->SmartSelectionMgr();
+
+        for (int idx = 0; idx < int(slabTopFaces.size()); idx++)
+        {
+            RelatedNodeMethod *pRelNodeMethod = pSelMgr->CreateRelatedNodeMethod(slabTopFaces[idx]);
+
+            std::vector<FENode*>  slabNodes(pRelNodeMethod->GetNodes());
+
+            slabTopNodes.insert(slabTopNodes.end(), slabNodes.begin(), slabNodes.end());
+        }
 
         return slabTopNodes;
     }
@@ -1212,6 +1249,10 @@ namespace Vsar
 
         if (m_bOutputNodes)
             SetEntityGroup(NODE_FOR_RESPONSE_GROUP_NAME, m_outputNodes);
+
+        // TODO:
+        //JAXI_SIM_SOLUTION_get_property_table(simSolution->GetTag(), &tPropTable);
+        //JAXI_PROPERTY_TABLE_set_table_property_without_value(tPropTable, "Output Requests");
 
         std::vector<OutputRequestItem> outputReqItems;
 
