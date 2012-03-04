@@ -50,7 +50,7 @@
 
 #include <Vsar_SolveOperation.hxx>
 //#include <Vsar_Names.hxx>
-//#include <Vsar_Solution.hxx>
+#include <Vsar_Solution.hxx>
 
 using namespace NXOpen;
 using namespace NXOpen::BlockStyler;
@@ -97,7 +97,7 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
-    SolveNoise::SolveNoise() : BaseDialog("SolveNoise.dlx")
+    SolveNoise::SolveNoise() : BaseCompDialog("SolveNoise.dlx", new NoiseSolution())
     {
     }
 

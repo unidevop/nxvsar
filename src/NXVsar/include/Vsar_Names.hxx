@@ -15,6 +15,11 @@ namespace Vsar
 
     const char * const FACE_NAME_TOP                            = "TOP_FACE";
     const char * const FACE_NAME_BOTTOM                         = "BOTTOM_FACE";
+    const char * const FACE_NAME_FRONT                          = "FRONT_FACE";
+    const char * const FACE_NAME_REAR                           = "REAR_FACE";
+
+    const char * const TUNNEL_FACE_NAME_TOP                     = "TUNNEL_TOP_FACE";
+    const char * const TUNNEL_FACE_NAME_BOTTOM                  = "TUNNEL_BOTTOM_FACE";
 
     // Bridge
     const char * const BRIDGE_BEAM_PART_NAME                    = "beam.prt";
@@ -46,6 +51,7 @@ namespace Vsar
 
     // Base
     const char * const BASE_MESH_COLLECTOR_NAME                 = "Base_Mesh_Collector";
+    const char * const BASE_BODY_NAME                           = "BASE_BODY";
 
     // Tunnel
     const char * const TUNNEL_CONCRETE_MESH_NAME                = "Concrete_Tunnel_Mesh";
@@ -197,7 +203,9 @@ namespace Vsar
     const char * const TRAIN_WHEELSET_CONTACT_COEF_ELAST_ID_NAME  = "wheelSetContactCoefElast";
     const char * const TRAIN_WHEELSET_CONTACT_COEF_ELAST_EXP_NAME = "WheelSetContactCoefElast";
 
+    //////////////////////////////////////////////////////////////////////////
     //  Solution
+    //////////////////////////////////////////////////////////////////////////
 
     const char * const TRAIN_SPEED_ID_NAME                      = "trainSpeed";
     const char * const TRAIN_SPEED_EXP_NAME                     = "Train_Speed";
@@ -215,6 +223,13 @@ namespace Vsar
     const char * const RESPONSE_STRUCTURAL_OUTPUT_OBJECT_NAME   = "Response_Structural_Output";
     const char * const NOISE_STRUCTURAL_OUTPUT_OBJECT_NAME      = "Noise_Structural_Output";
     const char * const TIME_STEP_OUTPUT_OBJECT_NAME             = "Time_Step";
+
+    //  Constraint Name
+    const char * const FRONT_CONSTRAINT_NAME                    = "FrontConstraint";
+    const char * const MIDDLE_CONSTRAINT_NAME                   = "MiddleConstraint";
+    const char * const REAR_CONSTRAINT_NAME                     = "RearConstraint";
+    const char * const BOTTOM_CONSTRAINT_NAME                   = "BottomConstraint";
+    const char * const VERTICAL_CONSTRAINT_NAME                 = "VerticalConstraint";
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -278,6 +293,7 @@ namespace Vsar
 
     const char * const FIND_MODELING_OBJ_PATTERN_NAME           = "SsmoPropTable[%1%]";
     const char * const FIND_SOLUTION_PATTERN_NAME               = "Solution[%1%]";
+    const char * const FIND_CONSTRAINT_PATTERN_NAME             = "Constraint[%1%]";
 
 
     const double mmToMConvert = 0.001;
@@ -291,6 +307,8 @@ namespace Vsar
         BASE_CONNECT_TO_SLAB_LEFT_POINT_LAYER                   = 132,
         BASE_CONNECT_TO_SLAB_RIGHT_POINT_LAYER                  = 133
     };
+
+    const unsigned int NOISE_DATUM_POINT_COUNT                  = 14;
 }
 
 #endif //VSAR_NAMES_H_INCLUDED

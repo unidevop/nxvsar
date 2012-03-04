@@ -19,7 +19,7 @@
 //------------------------------------------------------------------------------
 //These includes are needed for the following template code
 //------------------------------------------------------------------------------
-#include <VsarUI_BaseDialog.hxx>
+#include <VsarUI_BaseCompDialog.hxx>
 
 namespace NXOpen
 {
@@ -35,43 +35,43 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     //Bit Option for Property: SnapPointTypesEnabled
     //------------------------------------------------------------------------------
-#define              SnapPointTypesEnabled_UserDefined (1 << 0);
-#define                 SnapPointTypesEnabled_Inferred (1 << 1);
-#define           SnapPointTypesEnabled_ScreenPosition (1 << 2);
-#define                 SnapPointTypesEnabled_EndPoint (1 << 3);
-#define                 SnapPointTypesEnabled_MidPoint (1 << 4);
-#define             SnapPointTypesEnabled_ControlPoint (1 << 5);
-#define             SnapPointTypesEnabled_Intersection (1 << 6);
-#define                SnapPointTypesEnabled_ArcCenter (1 << 7);
-#define            SnapPointTypesEnabled_QuadrantPoint (1 << 8);
-#define            SnapPointTypesEnabled_ExistingPoint (1 << 9);
-#define             SnapPointTypesEnabled_PointonCurve (1 <<10);
-#define           SnapPointTypesEnabled_PointonSurface (1 <<11);
-#define         SnapPointTypesEnabled_PointConstructor (1 <<12);
-#define     SnapPointTypesEnabled_TwocurveIntersection (1 <<13);
-#define             SnapPointTypesEnabled_TangentPoint (1 <<14);
-#define                    SnapPointTypesEnabled_Poles (1 <<15);
-#define         SnapPointTypesEnabled_BoundedGridPoint (1 <<16);
+//#define              SnapPointTypesEnabled_UserDefined (1 << 0);
+//#define                 SnapPointTypesEnabled_Inferred (1 << 1);
+//#define           SnapPointTypesEnabled_ScreenPosition (1 << 2);
+//#define                 SnapPointTypesEnabled_EndPoint (1 << 3);
+//#define                 SnapPointTypesEnabled_MidPoint (1 << 4);
+//#define             SnapPointTypesEnabled_ControlPoint (1 << 5);
+//#define             SnapPointTypesEnabled_Intersection (1 << 6);
+//#define                SnapPointTypesEnabled_ArcCenter (1 << 7);
+//#define            SnapPointTypesEnabled_QuadrantPoint (1 << 8);
+//#define            SnapPointTypesEnabled_ExistingPoint (1 << 9);
+//#define             SnapPointTypesEnabled_PointonCurve (1 <<10);
+//#define           SnapPointTypesEnabled_PointonSurface (1 <<11);
+//#define         SnapPointTypesEnabled_PointConstructor (1 <<12);
+//#define     SnapPointTypesEnabled_TwocurveIntersection (1 <<13);
+//#define             SnapPointTypesEnabled_TangentPoint (1 <<14);
+//#define                    SnapPointTypesEnabled_Poles (1 <<15);
+//#define         SnapPointTypesEnabled_BoundedGridPoint (1 <<16);
     //------------------------------------------------------------------------------
     //Bit Option for Property: SnapPointTypesOnByDefault
     //------------------------------------------------------------------------------
-#define          SnapPointTypesOnByDefault_UserDefined (1 << 0);
-#define             SnapPointTypesOnByDefault_Inferred (1 << 1);
-#define       SnapPointTypesOnByDefault_ScreenPosition (1 << 2);
-#define             SnapPointTypesOnByDefault_EndPoint (1 << 3);
-#define             SnapPointTypesOnByDefault_MidPoint (1 << 4);
-#define         SnapPointTypesOnByDefault_ControlPoint (1 << 5);
-#define         SnapPointTypesOnByDefault_Intersection (1 << 6);
-#define            SnapPointTypesOnByDefault_ArcCenter (1 << 7);
-#define        SnapPointTypesOnByDefault_QuadrantPoint (1 << 8);
-#define        SnapPointTypesOnByDefault_ExistingPoint (1 << 9);
-#define         SnapPointTypesOnByDefault_PointonCurve (1 <<10);
-#define       SnapPointTypesOnByDefault_PointonSurface (1 <<11);
-#define     SnapPointTypesOnByDefault_PointConstructor (1 <<12);
-#define SnapPointTypesOnByDefault_TwocurveIntersection (1 <<13);
-#define         SnapPointTypesOnByDefault_TangentPoint (1 <<14);
-#define                SnapPointTypesOnByDefault_Poles (1 <<15);
-#define     SnapPointTypesOnByDefault_BoundedGridPoint (1 <<16);
+//#define          SnapPointTypesOnByDefault_UserDefined (1 << 0);
+//#define             SnapPointTypesOnByDefault_Inferred (1 << 1);
+//#define       SnapPointTypesOnByDefault_ScreenPosition (1 << 2);
+//#define             SnapPointTypesOnByDefault_EndPoint (1 << 3);
+//#define             SnapPointTypesOnByDefault_MidPoint (1 << 4);
+//#define         SnapPointTypesOnByDefault_ControlPoint (1 << 5);
+//#define         SnapPointTypesOnByDefault_Intersection (1 << 6);
+//#define            SnapPointTypesOnByDefault_ArcCenter (1 << 7);
+//#define        SnapPointTypesOnByDefault_QuadrantPoint (1 << 8);
+//#define        SnapPointTypesOnByDefault_ExistingPoint (1 << 9);
+//#define         SnapPointTypesOnByDefault_PointonCurve (1 <<10);
+//#define       SnapPointTypesOnByDefault_PointonSurface (1 <<11);
+//#define     SnapPointTypesOnByDefault_PointConstructor (1 <<12);
+//#define SnapPointTypesOnByDefault_TwocurveIntersection (1 <<13);
+//#define         SnapPointTypesOnByDefault_TangentPoint (1 <<14);
+//#define                SnapPointTypesOnByDefault_Poles (1 <<15);
+//#define     SnapPointTypesOnByDefault_BoundedGridPoint (1 <<16);
 
     //class SelectPoint : public BaseDialog
     //{
@@ -87,7 +87,7 @@ namespace VsarUI
     //    NXOpen::BlockStyler::UIBlock* m_selectPoint;// Block type: Specify Point
     //};
 
-    class SolveNoise : public BaseDialog
+    class SolveNoise : public BaseCompDialog
     {
     public:
 

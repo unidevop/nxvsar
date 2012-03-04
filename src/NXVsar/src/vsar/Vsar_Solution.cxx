@@ -19,13 +19,48 @@ using namespace boost;
 //------------------------------------------------------------------------------
 namespace Vsar
 {
+
+    BaseSolution::~BaseSolution()
+    {
+    }
+
+    void BaseSolution::OnInit()
+    {
+    }
+
+    bool BaseSolution::HasGeometryDependency() const
+    {
+        return true;
+    }
+
+    bool BaseSolution::CanUpdateRailSlabFEModel() const
+    {
+        return false;
+    }
+
+    bool BaseSolution::CanUpdateBraseFEModel() const
+    {
+        return false;
+    }
+
+    bool BaseSolution::CanUpdateRailSlabConnection() const
+    {
+        return false;
+    }
+
+    bool BaseSolution::CanUpdateBraseConnection() const
+    {
+        return false;
+    }
+
+
     static CompAttrInfo attrExpInfo[] =
     {
         {TRAIN_SPEED_ID_NAME,       "", TRAIN_SPEED_EXP_NAME},
         {COMPUTE_TIME_STEP_ID_NAME, "", COMPUTE_TIME_STEP_EXP_NAME}
     };
 
-    Solution::Solution() : BaseComponent(attrExpInfo, N_ELEMENTS(attrExpInfo))
+    ResponseSolution::ResponseSolution() : BaseSolution(attrExpInfo, N_ELEMENTS(attrExpInfo))
     {
         //  Get result path name
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
@@ -38,37 +73,16 @@ namespace Vsar
         }
     }
 
-    Solution::~Solution()
-    {
-
-    }
-
-    void Solution::OnInit()
+    ResponseSolution::~ResponseSolution()
     {
     }
 
-    bool Solution::HasGeometryDependency() const
+
+    NoiseSolution::NoiseSolution() : BaseSolution(NULL, 0)
     {
-        return true;
     }
 
-    bool Solution::CanUpdateRailSlabFEModel() const
+    NoiseSolution::~NoiseSolution()
     {
-        return false;
-    }
-
-    bool Solution::CanUpdateBraseFEModel() const
-    {
-        return false;
-    }
-
-    bool Solution::CanUpdateRailSlabConnection() const
-    {
-        return false;
-    }
-
-    bool Solution::CanUpdateBraseConnection() const
-    {
-        return false;
     }
 }
