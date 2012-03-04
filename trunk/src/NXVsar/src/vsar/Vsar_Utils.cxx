@@ -51,6 +51,7 @@
 #include <NXOpen/CAE_SweptMesh.hxx>
 #include <NXOpen/CAE_Mesh3dHexBuilder.hxx>
 #include <NXOpen/CAE_MeshCollector.hxx>
+#include <NXOpen/CAE_FENode.hxx>
 #include <NXOpen/CAE_ElementTypeBuilder.hxx>
 #include <NXOpen/CAE_DestinationCollectorBuilder.hxx>
 #include <NXOpen/CAE_PropertyTable.hxx>
@@ -62,6 +63,8 @@
 #include <NXOpen/CAE_IMeshManager.hxx>
 #include <NXOpen/CAE_SimPart.hxx>
 #include <NXOpen/CAE_SimSimulation.hxx>
+#include <NXOpen/CAE_SmartSelectionManager.hxx>
+#include <NXOpen/CAE_RelatedNodeMethod.hxx>
 #include <NXOpen/SelectTaggedObjectList.hxx>
 
 
@@ -428,7 +431,7 @@ namespace Vsar
         return caeBodies;
     }
 
-    std::vector<CAEFace*> GetCaeFaceByName(const CAEBody *pCaeBody, const std::string &faceName)
+    std::vector<CAEFace*> GetCaeFaceByName(CAEBody *pCaeBody, const std::string &faceName)
     {
         std::vector<CAEFace*> caeFaces;
         int                   numFaces;
@@ -451,27 +454,54 @@ namespace Vsar
         return caeFaces;
     }
 
-    std::vector<CAEBody*> GetCaeBodyByName(BasePart *pPrt, const std::string &bodyName)
+    template<class GeomClass>
+    static std::vector<GeomClass*> GetCaeGeomByName(CaePart *pPrt, const std::string &geomName, int geomType)
     {
-        std::vector<CAEBody*>  caeBodies;
+        std::vector<GeomClass*>  caeGeoms;
 
         int                  rtc       = 0;
-        tag_t                tCaeBody  = NULL_TAG;
+        tag_t                tCaeGeom  = NULL_TAG;
 
-        rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), bodyName.c_str(), UF_caegeom_type, true, &tCaeBody);
+        rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), geomName.c_str(), geomType, true, &tCaeGeom);
         //rtc = UF_OBJ_cycle_by_name(const_cast<char*>(bodyName), &tCaeBody);
-        while (tCaeBody != NULL_TAG)
+        while (tCaeGeom != NULL_TAG)
         {
-            CAE::CAEBody *pCaeBody = dynamic_cast<CAE::CAEBody*>(NXObjectManager::Get(tCaeBody));
+            GeomClass *pCaeBody = dynamic_cast<GeomClass*>(NXObjectManager::Get(tCaeGeom));
 
             if (pCaeBody)
             {
-                caeBodies.push_back(pCaeBody);
+                caeGeoms.push_back(pCaeBody);
             }
-            rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), bodyName.c_str(), UF_caegeom_type, true, &tCaeBody);
+            rtc = UF_OBJ_cycle_by_name_and_type(pPrt->Tag(), geomName.c_str(), geomType, true, &tCaeGeom);
         }
 
-        return caeBodies;
+        return caeGeoms;
+    }
+
+    std::vector<CAEBody*> GetCaeBodyByName(CaePart *pPrt, const std::string &bodyName)
+    {
+        return GetCaeGeomByName<CAEBody>(pPrt, bodyName, UF_caegeom_type);
+    }
+
+    std::vector<CAEFace*> GetCaeFaceByName(CaePart *pPrt, const std::string &faceName)
+    {
+        return GetCaeGeomByName<CAEFace>(pPrt, faceName, UF_caegeom_type);
+    }
+
+    std::vector<CAEFace*> GetCaeFacesOfBodyByName(CaePart *pPrt, const std::string &bodyName, const std::string &faceName)
+    {
+        std::vector<CAEFace*>  pAllFaces;
+
+        std::vector<CAEBody*>  pBodies(GetCaeBodyByName(pPrt, bodyName));
+
+        for (int idx = 0; idx < int(pBodies.size()); idx++)
+        {
+            std::vector<CAEFace*>  pFaces(GetCaeFaceByName(pBodies[idx], faceName));
+
+            pAllFaces.insert(pAllFaces.end(), pFaces.begin(), pFaces.end());
+        }
+
+        return pAllFaces;
     }
 
     FEModelOccurrence* GetFEModelOccByMeshName(IHierarchicalFEModel *pHieFeModel, const std::string &meshName)
@@ -553,6 +583,90 @@ namespace Vsar
         }
 
         return existingMeshes;
+    }
+
+    std::vector<FENode*> GetNodesOnFace(CaePart *pCaePrt, const std::vector<CAEFace*> &pFaces)
+    {
+        std::vector<FENode*>    pAllNodes;
+
+        SmartSelectionManager *pSelMgr = pCaePrt->SmartSelectionMgr();
+
+        for (int idx = 0; idx < int(pFaces.size()); idx++)
+        {
+            boost::scoped_ptr<RelatedNodeMethod> pRelNodeMethod(pSelMgr->CreateRelatedNodeMethod(pFaces[idx]));
+
+            std::vector<FENode*>  slabNodes(pRelNodeMethod->GetNodes());
+
+            pAllNodes.insert(pAllNodes.end(), slabNodes.begin(), slabNodes.end());
+        }
+
+        return pAllNodes;
+    }
+
+    std::vector<FENode*> GetNodeOcc(FEModelOccurrence *pFeModelOcc, int nodeOffset, const std::vector<FENode*> &nodeProtos)
+    {
+        std::vector<FENode*> nodeOccs;
+
+        boost::scoped_ptr<FENodeLabelMap> pNodeLabelMap(pFeModelOcc->FenodeLabelMap());
+
+        nodeOccs.reserve(nodeProtos.size());
+        BOOST_FOREACH(FENode* pNodeProto, nodeProtos)
+        {
+            FENode *pNodeOcc = pNodeLabelMap->GetNode(nodeOffset + pNodeProto->Label());
+
+            if (pNodeOcc)
+                nodeOccs.push_back(pNodeOcc);
+        }
+
+        return nodeOccs;
+    }
+
+    int GetNodeOffset(FEModelOccurrence *pFeModelOcc)
+    {
+        int nodeOffset;
+        int elemOffset;
+        int csysOffset;
+
+        pFeModelOcc->GetLabelOffsets(&nodeOffset, &elemOffset, &csysOffset);
+
+        return nodeOffset;
+    }
+
+    Mesh* GetMesh(FENode *pNode)
+    {
+        Mesh *pMesh = NULL;
+
+        if (pNode)
+        {
+            tag_p_t                     tMeshes  = NULL;
+            int                         meshCnt;
+
+            UF_SF_find_mesh(pNode->Tag(), UF_SF_DIMENSION_ANY, &meshCnt, &tMeshes);
+
+            boost::shared_array<tag_t>  tMeshArray(tMeshes, UF_free);
+
+            if (meshCnt > 0)
+            {
+                pMesh = dynamic_cast<Mesh*>(NXObjectManager::Get(tMeshes[0]));
+            }
+        }
+
+        return pMesh;
+    }
+
+    FEModelOccurrence* GetFEModelOccOfNode(FEModelOccurrence *pParentFEModel, FENode *pNodeProto)
+    {
+        if (!pNodeProto)
+            return NULL;
+
+        // Get mesh name
+        Mesh *pMesh = GetMesh(pNodeProto);
+        if (!pMesh)
+            return NULL;
+
+        std::string meshName(pMesh->Name().GetUTF8Text());
+
+        return GetFEModelOccByMeshName(pParentFEModel, meshName);
     }
 
 #if 0

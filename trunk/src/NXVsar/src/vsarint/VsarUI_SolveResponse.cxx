@@ -55,7 +55,7 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
     //------------------------------------------------------------------------------
-    SolveResponse::SolveResponse() : BaseCompDialog("SolveResponse.dlx", new Solution())
+    SolveResponse::SolveResponse() : BaseCompDialog("SolveResponse.dlx", new ResponseSolution())
     {
     }
 

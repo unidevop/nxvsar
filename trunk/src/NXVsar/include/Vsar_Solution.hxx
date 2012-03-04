@@ -6,15 +6,22 @@
 
 namespace Vsar
 {
-    class Solution : public BaseComponent
+    class BaseSolution : public BaseComponent
     {
     public:
-        Solution();
-        ~Solution();
+        virtual ~BaseSolution() = 0;
 
         virtual void OnInit();
 
     protected:
+        inline BaseSolution() : BaseComponent(NULL, 0)
+        {
+        }
+
+        inline BaseSolution(const CompAttrInfo *pCompAttrs, int compAttrCnt) : BaseComponent(pCompAttrs, compAttrCnt)
+        {
+        }
+
         virtual bool HasGeometryDependency() const;
 
         virtual bool CanUpdateRailSlabFEModel() const;
@@ -26,6 +33,20 @@ namespace Vsar
         virtual bool CanUpdateBraseConnection() const;
 
     private:
+    };
+
+    class ResponseSolution : public BaseSolution
+    {
+    public:
+        ResponseSolution();
+        virtual ~ResponseSolution();
+    };
+
+    class NoiseSolution : public BaseSolution
+    {
+    public:
+        NoiseSolution();
+        virtual ~NoiseSolution();
     };
 }
 

@@ -11,6 +11,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_array.hpp>
 #include <boost/cast.hpp>
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
@@ -39,12 +40,13 @@
 #include <NXOpen/CAE_SimPart.hxx>
 #include <NXOpen/CAE_SimSimulation.hxx>
 #include <NXOpen/CAE_SimSolution.hxx>
+#include <NXOpen/CAE_SimConstraint.hxx>
+#include <NXOpen/CAE_SimConstraintCollection.hxx>
+#include <NXOpen/CAE_SetManager.hxx>
 #include <NXOpen/CAE_FEModel.hxx>
 #include <NXOpen/CAE_FEModelOccurrence.hxx>
 #include <NXOpen/CAE_Mesh.hxx>
 #include <NXOpen/CAE_IMeshManager.hxx>
-#include <NXOpen/CAE_SmartSelectionManager.hxx>
-#include <NXOpen/CAE_RelatedNodeMethod.hxx>
 #include <NXOpen/CAE_FENode.hxx>
 #include <NXOpen/CAE_FENodeLabelMap.hxx>
 #include <NXOpen/CAE_ModelingObjectPropertyTable.hxx>
@@ -108,12 +110,14 @@ namespace Vsar
 
         CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
 
+        int       numGroupMember = pGroup->GetEntities().size();
+
         // Update noise datum points manually
-        if (pGroup->GetEntities().size() != 14)
+        if (numGroupMember != NOISE_DATUM_POINT_COUNT)
         {
             std::vector<FENode*>  datumNodes(GetDatumNodes());
 
-            if (datumNodes.size() == 14)
+            if (datumNodes.size() == NOISE_DATUM_POINT_COUNT)
             {
                 std::vector<TaggedObject*>  datumNodeTags;
 
@@ -146,7 +150,7 @@ namespace Vsar
                 UF_VEC3_distance(reinterpret_cast<double*>(&datumPts[jdx]),
                                  reinterpret_cast<double*>(&candidatePt), &distance);
 
-                if (distance < 0.000001)
+                if (distance < 0.0000001)
                 {
                     datumNodes.push_back(candidateNodes[idx]);
                     break;
@@ -154,19 +158,28 @@ namespace Vsar
             }
         }
 
-        return datumNodes;
+        if (datumNodes.size() != NOISE_DATUM_POINT_COUNT)
+            return std::vector<FENode*>();
+
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        SimPart             *pSimPrt   = pPrjProp->GetSimPart();
+
+        FEModelOccurrence   *pSimFEModel     = pSimPrt->Simulation()->Femodel();
+        FEModelOccurrence   *pRailFEModelOcc = GetFEModelOccOfNode(pSimFEModel, datumNodes.front());
+
+        return GetNodeOcc(pSimFEModel, GetNodeOffset(pRailFEModelOcc), datumNodes);
     }
 
     std::vector<Point3d> NoiseDatumPointsUpdater::GetDatumPoints() const
     {
         std::vector<Point3d>  datumPts;
 
-        datumPts.reserve(14);
+        datumPts.reserve(NOISE_DATUM_POINT_COUNT);
 
         Point3d  slabDim(GetSlabDim());
         Point3d  slabCenter(GetSlabCenter()->Coordinates());
 
-        for (int idx = 0; idx < 7; idx++)
+        for (int idx = 0; idx < NOISE_DATUM_POINT_COUNT/2; idx++)
         {
             datumPts.push_back(Point3d(slabCenter.X - slabDim.X/2, slabCenter.Y, slabCenter.Z - slabDim.Z/2 + idx * slabDim.Z/6));
             datumPts.push_back(Point3d(slabCenter.X + slabDim.X/2, slabCenter.Y, slabCenter.Z - slabDim.Z/2 + idx * slabDim.Z/6));
@@ -202,43 +215,201 @@ namespace Vsar
 
     std::vector<FENode*> NoiseDatumPointsUpdater::GetCandidateNodes() const
     {
-        std::vector<FENode*>    slabTopNodes;
         std::vector<CAEFace*>   slabTopFaces(GetSlabFaces());
 
         BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
         SimPart             *pSimPrt   = pPrjProp->GetSimPart();
 
-        SmartSelectionManager *pSelMgr = pSimPrt->SmartSelectionMgr();
-
-        for (int idx = 0; idx < int(slabTopFaces.size()); idx++)
-        {
-            RelatedNodeMethod *pRelNodeMethod = pSelMgr->CreateRelatedNodeMethod(slabTopFaces[idx]);
-
-            std::vector<FENode*>  slabNodes(pRelNodeMethod->GetNodes());
-
-            slabTopNodes.insert(slabTopNodes.end(), slabNodes.begin(), slabNodes.end());
-        }
-
-        return slabTopNodes;
+        return GetNodesOnFace(pSimPrt, slabTopFaces);
     }
 
     std::vector<CAEFace*> NoiseDatumPointsUpdater::GetSlabFaces() const
     {
-        std::vector<CAE::CAEFace*>  slabTopFaces;
-
         BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
         FemPart             *pSlabFem  = pPrjProp->GetRailSlabFemPart();
 
-        std::vector<CAEBody*>  slabBodies(GetCaeBodyByName(pSlabFem, SLAB_BODY_NAME));
+        return GetCaeFacesOfBodyByName(pSlabFem, SLAB_BODY_NAME, FACE_NAME_TOP);
+    }
 
-        for (int idx = 0; idx < int(slabBodies.size()); idx++)
+
+    class ConstraintUpdater
+    {
+    public:
+        ConstraintUpdater()
         {
-            std::vector<CAE::CAEFace*>  topFaces(GetCaeFaceByName(slabBodies[idx], FACE_NAME_TOP));
-
-            slabTopFaces.insert(slabTopFaces.end(), topFaces.begin(), topFaces.end());
         }
 
-        return slabTopFaces;
+        ~ConstraintUpdater()
+        {
+        }
+
+        void Update();
+
+    protected:
+        void SetConstraint(SimSimulation *pSim, const std::string &constraintName, const std::vector<FENode*> &pNodes);
+        void ResolveConflicts(SimSimulation *pSim);
+
+        std::vector<FENode*> GetNodeOccsOnFace(const std::vector<CAEFace*> &pFaceProtos) const;
+
+        std::vector<FENode*> GetAllNodes(IFEModel *pFEModel) const;
+
+        CAEFace* GetBridgeFrontFace(FemPart *pPrt);
+        std::vector<CAEFace*> GetBridgeMiddleFaces(FemPart *pPrt, CAEFace *pFrontFace, CAEFace *pRearFace);
+        CAEFace* GetBridgeRearFace(FemPart *pPrt);
+    };
+
+    void ConstraintUpdater::Update()
+    {
+        // check constraints
+        BaseProjectProperty *pPrjProp    = Project::Instance()->GetProperty();
+        FemPart             *pBracePart  = pPrjProp->GetBraceFemPart();
+        SimPart             *pSimPart  = pPrjProp->GetSimPart();
+        SimSimulation       *pSim      = pSimPart->Simulation();
+
+        std::vector<CAEFace*>  pFaceProtos;
+        std::vector<FENode*>   pNodes;
+
+        switch (pPrjProp->GetProjectType())
+        {
+        case Project::ProjectType_Bridge:
+            break;
+        case Project::ProjectType_Selmi_Infinite:
+            pFaceProtos = GetCaeFacesOfBodyByName(pBracePart, BASE_BODY_NAME, FACE_NAME_BOTTOM);
+            pNodes = GetNodeOccsOnFace(pFaceProtos);
+            SetConstraint(pSim, BOTTOM_CONSTRAINT_NAME, pNodes);
+            break;
+        case Project::ProjectType_Tunnel:
+            pFaceProtos = GetCaeFaceByName(pBracePart, TUNNEL_FACE_NAME_BOTTOM);
+            pNodes = GetNodeOccsOnFace(pFaceProtos);
+            SetConstraint(pSim, BOTTOM_CONSTRAINT_NAME, pNodes);
+            break;
+        default:
+            break;
+        }
+
+        // Set Vertical Constraint
+        pNodes = GetAllNodes(pSim->Femodel());
+        SetConstraint(pSim, VERTICAL_CONSTRAINT_NAME, pNodes);
+
+        ResolveConflicts(pSim);
+    }
+
+    CAEFace* ConstraintUpdater::GetBridgeFrontFace(FemPart *pPrt)
+    {
+        std::vector<CAEFace*>  pFaceProtos;
+
+        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_FRONT);
+
+        // TODO: do filtering
+
+        return NULL;
+    }
+
+    std::vector<CAEFace*> ConstraintUpdater::GetBridgeMiddleFaces(FemPart *pPrt, CAEFace *pFrontFace, CAEFace *pRearFace)
+    {
+        std::vector<CAEFace*>  pFaceProtos;
+
+        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_REAR);
+
+        // removes front and rear faces
+        pFaceProtos.erase(std::remove(pFaceProtos.begin(), pFaceProtos.end(), pFrontFace), pFaceProtos.end());
+        pFaceProtos.erase(std::remove(pFaceProtos.begin(), pFaceProtos.end(), pRearFace), pFaceProtos.end());
+
+        return pFaceProtos;
+    }
+
+    CAEFace* ConstraintUpdater::GetBridgeRearFace(FemPart *pPrt)
+    {
+        std::vector<CAEFace*>  pFaceProtos;
+
+        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_REAR);
+
+        // TODO: do filtering
+
+        return NULL;
+    }
+
+    std::vector<FENode*> ConstraintUpdater::GetNodeOccsOnFace(const std::vector<CAEFace*> &pFaceProtos) const
+    {
+        BaseProjectProperty *pPrjProp  = Project::Instance()->GetProperty();
+        SimPart             *pSimPrt   = pPrjProp->GetSimPart();
+
+        std::vector<FENode*> nodeProtos(GetNodesOnFace(pSimPrt, pFaceProtos));
+
+        if (nodeProtos.empty())
+            return std::vector<FENode*>();
+
+        FEModelOccurrence   *pSimFEModel = pSimPrt->Simulation()->Femodel();
+        FEModelOccurrence   *pNodeFEModelOcc = GetFEModelOccOfNode(pSimFEModel, nodeProtos.front());
+
+        return GetNodeOcc(pSimFEModel, GetNodeOffset(pNodeFEModelOcc), nodeProtos);
+    }
+
+    std::vector<FENode*> ConstraintUpdater::GetAllNodes(IFEModel *pFEModel) const
+    {
+        std::vector<FENode*> pNodes;
+
+        boost::scoped_ptr<FENodeLabelMap> pNodeLabelMap(pFEModel->FenodeLabelMap());
+
+        pNodes.reserve(pNodeLabelMap->NumNodes());
+
+        int     nodeLabel = 0;
+        FENode *pCurNode = NULL;
+
+        while (1)
+        {
+            nodeLabel = pNodeLabelMap->AskNextNodeLabel(nodeLabel);
+            pCurNode  = pNodeLabelMap->GetNode(nodeLabel);
+            if (pCurNode)
+                pNodes.push_back(pCurNode);
+            else
+                break;
+        }
+
+        return pNodes;
+    }
+
+    void ConstraintUpdater::SetConstraint(SimSimulation *pSim, const std::string &constraintName,
+                                          const std::vector<FENode*> &pNodes)
+    {
+        std::string    strConstraint((boost::format(FIND_CONSTRAINT_PATTERN_NAME) % constraintName.c_str()).str());
+        SimConstraint *pConstraint(dynamic_cast<SimConstraint *>(pSim->Constraints()->FindObject(strConstraint)));
+
+        SetManager *pSetMgr = pConstraint->TargetSetManager();
+
+        std::vector<SetObject> pSetObjs;
+
+        pSetObjs.reserve(pNodes.size());
+        BOOST_FOREACH(FENode *pNode, pNodes)
+        {
+            pSetObjs.push_back(SetObject(pNode, CaeSetObjectSubTypeNone, 0));
+        }
+
+        pSetMgr->SetTargetSetMembers(0, pSetObjs);
+    }
+
+    void ConstraintUpdater::ResolveConflicts(SimSimulation *pSim)
+    {
+        std::string    strSol((boost::format(FIND_SOLUTION_PATTERN_NAME) % VSDANE_SOLUTION_NAME).str());
+
+        SimSolution * pSolution(dynamic_cast<SimSolution*>(pSim->FindObject(strSol)));
+
+        try
+        {
+            pSim->SetActiveSolution(pSolution);
+
+            Session *pSession   = Session::GetSession();
+
+            Session::UndoMarkId undoMark = pSession->SetUndoMark(Session::MarkVisibilityInvisible, "Resolve Constraint Conflicts");
+
+            int nErrs = pSession->UpdateManager()->DoUpdate(undoMark);
+
+            pSolution->ResolveConstraintConflicts();
+        }
+        catch (NXException& ex)
+        {
+            ex.Message();
+        }
     }
 
 
@@ -1156,7 +1327,7 @@ namespace Vsar
         FEModelOccurrence   *pSimFEModel = pSimPart->Simulation()->Femodel();
 
         FEModelOccurrence *pRailFEModelOcc       = GetFEModelOccByMeshName(pSimFEModel, RAIL_MESH_NAME);
-        FENodeLabelMap    *pRailSlabNodeLabelMap = pRailFEModelOcc->FenodeLabelMap();
+        boost::scoped_ptr<FENodeLabelMap> pRailSlabNodeLabelMap(pRailFEModelOcc->FenodeLabelMap());
         FENode            *pFENode               = pRailSlabNodeLabelMap->GetNode(nodeLabel);
 
         int nodeIndex = static_cast<int>(std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode) - m_refNodeSeq.begin() + 1);
@@ -1250,10 +1421,6 @@ namespace Vsar
         if (m_bOutputNodes)
             SetEntityGroup(NODE_FOR_RESPONSE_GROUP_NAME, m_outputNodes);
 
-        // TODO:
-        //JAXI_SIM_SOLUTION_get_property_table(simSolution->GetTag(), &tPropTable);
-        //JAXI_PROPERTY_TABLE_set_table_property_without_value(tPropTable, "Output Requests");
-
         std::vector<OutputRequestItem> outputReqItems;
 
         outputReqItems.reserve(3);
@@ -1266,7 +1433,9 @@ namespace Vsar
 
     void SolveSettings::CheckConstraints()
     {
-        // TODO: check constraints
+        ConstraintUpdater constraintUpdater;
+
+        constraintUpdater.Update();
     }
 
     void SolveSettings::SetNoiseOutput()

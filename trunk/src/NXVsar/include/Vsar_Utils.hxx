@@ -34,6 +34,8 @@ namespace NXOpen
         class FEModelOccurrence;
         class IHierarchicalFEModel;
         class Mesh;
+        class FENode;
+        class CaePart;
     }
 }
 
@@ -61,9 +63,13 @@ namespace Vsar
 
     std::vector<NXOpen::CAE::CAEBody*> GetCaeBodies(const std::vector<NXOpen::Body*> &bodies);
 
-    std::vector<NXOpen::CAE::CAEFace*> GetCaeFaceByName(const NXOpen::CAE::CAEBody *pCaeBody, const std::string &faceName);
+    std::vector<NXOpen::CAE::CAEFace*> GetCaeFaceByName(NXOpen::CAE::CAEBody *pCaeBody, const std::string &faceName);
 
-    std::vector<NXOpen::CAE::CAEBody*> GetCaeBodyByName(NXOpen::BasePart *pPrt, const std::string &bodyName);
+    std::vector<NXOpen::CAE::CAEFace*> GetCaeFaceByName(NXOpen::CAE::CaePart *pPrt, const std::string &faceName);
+
+    std::vector<NXOpen::CAE::CAEBody*> GetCaeBodyByName(NXOpen::CAE::CaePart *pPrt, const std::string &bodyName);
+
+    std::vector<NXOpen::CAE::CAEFace*> GetCaeFacesOfBodyByName(NXOpen::CAE::CaePart *pPrt, const std::string &bodyName, const std::string &faceName);
 
     void EditSweptMeshData(NXOpen::CAE::IFEModel *pFeModel, const std::string &meshName,
                         const std::vector<NXOpen::Body*> &srcBodies);
@@ -92,6 +98,18 @@ namespace Vsar
 
     std::vector<NXOpen::CAE::Mesh*> GetMeshesInCollector(NXOpen::CAE::IFEModel *pFeModel,
         const std::string &meshNamePattern, const std::string &meshColName);
+
+    std::vector<NXOpen::CAE::FENode*> GetNodesOnFace(NXOpen::CAE::CaePart *pCaePrt, const std::vector<NXOpen::CAE::CAEFace*> &pFaces);
+
+    int GetNodeOffset(NXOpen::CAE::FEModelOccurrence *pFeModelOcc);
+
+    std::vector<NXOpen::CAE::FENode*> GetNodeOcc(NXOpen::CAE::FEModelOccurrence *pFeModelOcc,
+                                                 int nodeOffset,
+                                                 const std::vector<NXOpen::CAE::FENode*> &nodeProtos);
+
+    NXOpen::CAE::Mesh* GetMesh(NXOpen::CAE::FENode *pNode);
+
+    NXOpen::CAE::FEModelOccurrence* GetFEModelOccOfNode(NXOpen::CAE::FEModelOccurrence *pParentFEModel, NXOpen::CAE::FENode *pNodeProto);
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)
