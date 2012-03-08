@@ -110,7 +110,7 @@ namespace Vsar
 
         CaeGroup *pGroup = pSimPart->CaeGroups()->FindObject(NODES_FOR_NOISE_GROUP_NAME);
 
-        int       numGroupMember = pGroup->GetEntities().size();
+        size_t numGroupMember = pGroup->GetEntities().size();
 
         // Update noise datum points manually
         if (numGroupMember != NOISE_DATUM_POINT_COUNT)
@@ -253,9 +253,13 @@ namespace Vsar
 
         std::vector<FENode*> GetAllNodes(IFEModel *pFEModel) const;
 
-        CAEFace* GetBridgeFrontFace(FemPart *pPrt);
-        std::vector<CAEFace*> GetBridgeMiddleFaces(FemPart *pPrt, CAEFace *pFrontFace, CAEFace *pRearFace);
-        CAEFace* GetBridgeRearFace(FemPart *pPrt);
+        void GetBridgeFaces(FemPart *pPrt, CAEFace **ppFrontFace,
+                            std::vector<CAEFace*> &middleFaces, CAEFace **ppRearFace);
+
+        CAEFace* GetBridgeFrontFace(const std::vector<CAEBody*> &pBodies);
+        std::vector<CAEFace*> GetBridgeMiddleFaces(const std::vector<CAEBody*> &pBodies,
+                                                   CAEFace *pFrontFace, CAEFace *pRearFace);
+        CAEFace* GetBridgeRearFace(const std::vector<CAEBody*> &pBodies);
     };
 
     void ConstraintUpdater::Update()
@@ -272,6 +276,31 @@ namespace Vsar
         switch (pPrjProp->GetProjectType())
         {
         case Project::ProjectType_Bridge:
+            {
+                CAEFace *pFrontFace = NULL;
+                CAEFace *pRearFace  = NULL;
+                std::vector<CAEFace*>  pMiddleFaces;
+
+                GetBridgeFaces(pBracePart, &pFrontFace, pMiddleFaces, &pRearFace);
+
+                // Set Front face Constraint
+                pFaceProtos.clear();
+                pFaceProtos.push_back(pFrontFace);
+                pNodes = GetNodeOccsOnFace(pFaceProtos);
+                SetConstraint(pSim, FRONT_CONSTRAINT_NAME, pNodes);
+
+                // Set Middle faces Constraint
+                pFaceProtos.clear();
+                pFaceProtos = pMiddleFaces;
+                pNodes = GetNodeOccsOnFace(pFaceProtos);
+                SetConstraint(pSim, MIDDLE_CONSTRAINT_NAME, pNodes);
+
+                // Set Rear face Constraint
+                pFaceProtos.clear();
+                pFaceProtos.push_back(pRearFace);
+                pNodes = GetNodeOccsOnFace(pFaceProtos);
+                SetConstraint(pSim, REAR_CONSTRAINT_NAME, pNodes);
+            }
             break;
         case Project::ProjectType_Selmi_Infinite:
             pFaceProtos = GetCaeFacesOfBodyByName(pBracePart, BASE_BODY_NAME, FACE_NAME_BOTTOM);
@@ -294,22 +323,88 @@ namespace Vsar
         ResolveConflicts(pSim);
     }
 
-    CAEFace* ConstraintUpdater::GetBridgeFrontFace(FemPart *pPrt)
+    class CaeBodyPosZComparer : public std::binary_function<CAEBody*, CAEBody*, bool>
     {
-        std::vector<CAEFace*>  pFaceProtos;
+    public:
+        CaeBodyPosZComparer()
+        {
+        }
 
-        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_FRONT);
+        ~CaeBodyPosZComparer()
+        {
+        }
 
-        // TODO: do filtering
+        bool operator () (CAEBody *pBody1, CAEBody *pBody2) const
+        {
+            Point3d centroid1(GetCentroidOfBody(pBody1));
+            Point3d centroid2(GetCentroidOfBody(pBody2));
 
-        return NULL;
+            return centroid1.Z < centroid2.Z;
+        }
+
+    private:
+
+        Point3d GetCentroidOfBody(CAEBody *pBody) const
+        {
+            double   pdVolume;
+            Point3d  centroid;
+
+            int rtc = UF_SF_body_ask_volume_and_centroid(pBody->Tag(), &pdVolume, (double*)(&centroid));
+
+            if (rtc != 0)
+                throw NXException::Create(rtc);
+
+            return centroid;
+        }
+    };
+
+    void ConstraintUpdater::GetBridgeFaces(FemPart *pPrt, CAEFace **ppFrontFace,
+                                           std::vector<CAEFace*> &middleFaces, CAEFace **ppRearFace)
+    {
+        std::vector<CAEBody*>  pBodies(GetCaeBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME));
+
+        *ppFrontFace = GetBridgeFrontFace(pBodies);
+        *ppRearFace  = GetBridgeRearFace(pBodies);
+        middleFaces  = GetBridgeMiddleFaces(pBodies, *ppFrontFace, *ppRearFace);
     }
 
-    std::vector<CAEFace*> ConstraintUpdater::GetBridgeMiddleFaces(FemPart *pPrt, CAEFace *pFrontFace, CAEFace *pRearFace)
+    CAEFace* ConstraintUpdater::GetBridgeFrontFace(const std::vector<CAEBody*> &pBodies)
+    {
+        if (pBodies.empty())
+            throw NXException::Create("No bridge geometry exists. The model may be broken.");
+
+        CAEBody *pFrontBody = NULL;
+
+        if (pBodies.size() > 1)
+        {
+            // do filtering
+            pFrontBody = *(std::min_element(pBodies.begin(), pBodies.end(), CaeBodyPosZComparer()));
+        }
+        else
+            pFrontBody = pBodies.back();
+
+        std::vector<CAEFace*>  pFaceProtos;
+
+        pFaceProtos = GetCaeFaceByName(pFrontBody, FACE_NAME_FRONT);
+
+        if (pFaceProtos.size() != 1)
+            throw NXException::Create("Wrong bridge geometry face information. The model may be broken.");
+
+        return pFaceProtos.back();
+    }
+
+    std::vector<CAEFace*> ConstraintUpdater::GetBridgeMiddleFaces(const std::vector<CAEBody*> &pBodies,
+                                                                  CAEFace *pFrontFace, CAEFace *pRearFace)
     {
         std::vector<CAEFace*>  pFaceProtos;
 
-        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_REAR);
+        // Get all faces
+        for (int idx = 0; idx < int(pBodies.size()); idx++)
+        {
+            std::vector<CAEFace*>  pFaces(GetCaeFaceByName(pBodies[idx], FACE_NAME_REAR));
+
+            pFaceProtos.insert(pFaceProtos.end(), pFaces.begin(), pFaces.end());
+        }
 
         // removes front and rear faces
         pFaceProtos.erase(std::remove(pFaceProtos.begin(), pFaceProtos.end(), pFrontFace), pFaceProtos.end());
@@ -318,15 +413,29 @@ namespace Vsar
         return pFaceProtos;
     }
 
-    CAEFace* ConstraintUpdater::GetBridgeRearFace(FemPart *pPrt)
+    CAEFace* ConstraintUpdater::GetBridgeRearFace(const std::vector<CAEBody*> &pBodies)
     {
+        if (pBodies.empty())
+            throw NXException::Create("No bridge geometry exists. The model may be broken.");
+
+        CAEBody *pRearBody = NULL;
+
+        if (pBodies.size() > 1)
+        {
+            // do filtering
+            pRearBody = *(std::max_element(pBodies.begin(), pBodies.end(), CaeBodyPosZComparer()));
+        }
+        else
+            pRearBody = pBodies.back();
+
         std::vector<CAEFace*>  pFaceProtos;
 
-        pFaceProtos = GetCaeFacesOfBodyByName(pPrt, BRIDGE_BEAM_BODY_NAME, FACE_NAME_REAR);
+        pFaceProtos = GetCaeFaceByName(pRearBody, FACE_NAME_REAR);
 
-        // TODO: do filtering
+        if (pFaceProtos.size() != 1)
+            throw NXException::Create("Wrong bridge geometry face information. The model may be broken.");
 
-        return NULL;
+        return pFaceProtos.back();
     }
 
     std::vector<FENode*> ConstraintUpdater::GetNodeOccsOnFace(const std::vector<CAEFace*> &pFaceProtos) const
@@ -1378,13 +1487,13 @@ namespace Vsar
     {
         SetRunJobInForeground();
 
-        CheckConstraints();
-
         SetResponseOutput();
 
         SetNoiseOutput();
 
         SetTimeStep();
+
+        CheckConstraints();
     }
 
     void SolveSettings::SetEntityGroup(const std::string &groupName,
