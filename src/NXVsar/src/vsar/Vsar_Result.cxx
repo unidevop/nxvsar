@@ -780,18 +780,18 @@ namespace Vsar
 
         pAfuData->SetRealData(xValues, yValues);
 
-        // TODO: hack adding labels
+        // Hack adding labels
         // The following API is not available
         // Modify Y Axis Label to "Sound Pressure"
         // Modify Y Unit Label to "decibal"
-        //std::string axisLabel("Sound Pressure");
-        //std::string unitLabel("decibal");
+        std::string axisLabel("Sound Pressure");
+        std::string unitLabel("decibal");
 
-        //JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)((char*)(pAfuData.get()) + sizeof(void*));
+        JA_AFU_DATA_p_t pJaAfuData = (JA_AFU_DATA_p_t)(pAfuData->GetHandle());
 
-        //strcpy(pJaAfuData->y_data.axis_label, axisLabel.c_str());
+        strcpy(pJaAfuData->y_data.axis_label, axisLabel.c_str());
 
-        //strcpy(pJaAfuData->y_data.unit_label, unitLabel.c_str());
+        strcpy(pJaAfuData->y_data.unit_label, unitLabel.c_str());
 
         pAfuMgr->CreateRecord(pAfuData.get());
     }
