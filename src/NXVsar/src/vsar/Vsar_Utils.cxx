@@ -371,11 +371,12 @@ namespace Vsar
                             const std::vector<TaggedObject*> &railConnectPts,
                             const std::vector<TaggedObject*> &slabConnectPts,
                             const std::string &connName,
-                            const std::string &connColName)
+                            const std::string &connColName,
+                            const std::string &meshName)
     {
         CAEConnectionCollection  *pCaeConnCol     = pFeModel->CaeConnections();
         CAEConnection            *pCaeConn        = NULL;
-        bool                      createMode      = false;
+        //bool                      createMode      = false;
 
         try
         {
@@ -384,7 +385,7 @@ namespace Vsar
         catch (NXException&)
         {
             pCaeConn    = NULL;
-            createMode  = true;
+            //createMode  = true;
         }
 
         boost::shared_ptr<CAEConnectionBuilder> pCaeConnBuilder(pCaeConnCol->CreateConnectionBuilder(pCaeConn), boost::bind(&Builder::Destroy, _1));
@@ -408,9 +409,13 @@ namespace Vsar
 
         pCaeConn = dynamic_cast<CAEConnection*>(pCaeConnBuilder->Commit());
 
-        if (createMode)
+        pCaeConn->SetName(connName);
+
+        std::vector<Mesh*> pMeshes(pMeshCol->GetMeshes());
+
+        if (pMeshes.size() == 1)
         {
-            pCaeConn->SetName(connName);
+            pMeshes.back()->SetName(meshName);
         }
     }
 
@@ -632,16 +637,16 @@ namespace Vsar
         return nodeOffset;
     }
 
-    Mesh* GetMesh(FENode *pNode)
+    Mesh* GetMesh(TaggedObject *pObj)
     {
         Mesh *pMesh = NULL;
 
-        if (pNode)
+        if (pObj)
         {
             tag_p_t                     tMeshes  = NULL;
             int                         meshCnt;
 
-            UF_SF_find_mesh(pNode->Tag(), UF_SF_DIMENSION_ANY, &meshCnt, &tMeshes);
+            UF_SF_find_mesh(pObj->Tag(), UF_SF_DIMENSION_ANY, &meshCnt, &tMeshes);
 
             boost::shared_array<tag_t>  tMeshArray(tMeshes, UF_free);
 
