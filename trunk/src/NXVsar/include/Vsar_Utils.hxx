@@ -86,7 +86,8 @@ namespace Vsar
                             const std::vector<NXOpen::TaggedObject*> &railConnectPts,
                             const std::vector<NXOpen::TaggedObject*> &slabConnectPts,
                             const std::string &connName,
-                            const std::string &connColName);
+                            const std::string &connColName,
+                            const std::string &meshName);
 
     NXOpen::CAE::FEModelOccurrence* GetFEModelOccByMeshName(NXOpen::CAE::IHierarchicalFEModel *pHieFeModel,
         const std::string &meshName);
@@ -107,7 +108,7 @@ namespace Vsar
                                                  int nodeOffset,
                                                  const std::vector<NXOpen::CAE::FENode*> &nodeProtos);
 
-    NXOpen::CAE::Mesh* GetMesh(NXOpen::CAE::FENode *pNode);
+    NXOpen::CAE::Mesh* GetMesh(NXOpen::TaggedObject *pNode);
 
     NXOpen::CAE::FEModelOccurrence* GetFEModelOccOfNode(NXOpen::CAE::FEModelOccurrence *pParentFEModel, NXOpen::CAE::FENode *pNodeProto);
 }

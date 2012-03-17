@@ -270,6 +270,8 @@ namespace Vsar
         {
             undoMark = pSession->SetUndoMark(Session::MarkVisibilityVisible, "Setting Vsar Component");
 
+            pFem->BaseFEModel()->UpdateFemodel();
+
             updateCb();
 
             pFem->BaseFEModel()->UpdateFemodel();
@@ -416,7 +418,7 @@ namespace Vsar
         slabConnectPts = GetPointByLayer(pFemPart, SLAB_CONNECT_TO_RAIL_POINT_LAYER);
 
         Update1DConnection(pFemPart->BaseFEModel(), railConnectPts, slabConnectPts,
-            RAIL_SLAB_CONNECTION_NAME, RAIL_SLAB_CONNECTION_COLLECTOR_NAME);
+            RAIL_SLAB_CONNECTION_NAME, RAIL_SLAB_CONNECTION_COLLECTOR_NAME, RAIL_SLAB_CONNECTION_MESH_NAME);
     }
 
     void BaseComponent::UpdateBaseSlabConnection()
@@ -445,7 +447,7 @@ namespace Vsar
         baseConnectPts.insert(baseConnectPts.end(), basePartConnectPts.begin(), basePartConnectPts.end());
 
         Update1DConnection(pFemPart->BaseFEModel(), slabConnectPts, baseConnectPts,
-            SLAB_BASE_CONNECTION_NAME, SLAB_BASE_CONNECTION_COLLECTOR_NAME);
+            SLAB_BASE_CONNECTION_NAME, SLAB_BASE_CONNECTION_COLLECTOR_NAME, SLAB_BASE_CONNECTION_MESH_NAME);
     }
 
     void BaseComponent::SetFeGeometryData( FemPart * pFemPart, const std::vector<Body*> &bodyOccs, bool syncLines )
