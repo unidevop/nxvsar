@@ -232,7 +232,7 @@ struct MenuItemCallbackInfo
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            NewProject::theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            NewProject::s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 //#endif//USER_EXIT

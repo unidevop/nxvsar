@@ -94,7 +94,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 
@@ -134,7 +134,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 
@@ -152,7 +152,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 
@@ -246,7 +246,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return 0;
     }

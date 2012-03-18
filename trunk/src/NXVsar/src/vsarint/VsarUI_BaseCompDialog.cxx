@@ -63,7 +63,7 @@ namespace VsarUI
         catch(NXException&)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Initilize", NXMessageBox::DialogTypeError,
+            s_theUI->NXMessageBox()->Show("Initilize", NXMessageBox::DialogTypeError,
                 "The model is corrupted. Maybe the part has been modified by hand. \n"
                 "Please recreate a new project to continue.");
             throw;
@@ -101,7 +101,7 @@ namespace VsarUI
         {
             if (m_pComp)
             {
-                undoMark = theSession->SetUndoMark(Session::MarkVisibilityVisible, "Setting Vsar Component");
+                undoMark = s_theSession->SetUndoMark(Session::MarkVisibilityVisible, "Setting Vsar Component");
 
                 HandleExpressions(boost::bind(&BaseCompDialog::WriteExpression, this, _1, _2));
 
@@ -112,11 +112,11 @@ namespace VsarUI
         {
             //---- Enter your exception handling code here -----
             errorCode = 1;
-            theUI->NXMessageBox()->Show("Update Model", NXMessageBox::DialogTypeError,
+            s_theUI->NXMessageBox()->Show("Update Model", NXMessageBox::DialogTypeError,
                 "Failed to update model. The input parameter is incorrect or the model is corrupted.\n"
                 " Maybe the part has been modified by hand. \n");
 
-            theSession->UndoToLastVisibleMark();
+            s_theSession->UndoToLastVisibleMark();
         }
         return errorCode;
     }

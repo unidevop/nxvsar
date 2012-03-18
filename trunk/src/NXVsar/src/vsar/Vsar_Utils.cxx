@@ -674,6 +674,26 @@ namespace Vsar
         return GetFEModelOccByMeshName(pParentFEModel, meshName);
     }
 
+    std::string GetNXVersion()
+    {
+        Session *pSession = Session::GetSession();
+
+        std::string strVer(pSession->GetEnvironmentVariableValue("UGII_FULL_VERSION").GetText());
+        //    UGII_PRODUCT_NAME                NX
+        //    UGII_VERSION                     v7.5
+        //    UGII_FULL_VERSION                v7.5.2.5
+        //    UGII_MAJOR_VERSION               7
+        //    UGII_MINOR_VERSION               5
+        //    UGII_SUBMINOR_VERSION            2
+
+        UF_system_info_t pInfo;
+
+        UF_ask_system_info(&pInfo);
+        UF_free_system_info(&pInfo);
+
+        return strVer;
+    }
+
 #if 0
     std::vector<Assemblies::Component*> GetOccInCompTree(Assemblies::Component *pAssemTree, Part *pPrt)
     {

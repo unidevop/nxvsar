@@ -111,6 +111,8 @@ namespace Vsar
     NXOpen::CAE::Mesh* GetMesh(NXOpen::TaggedObject *pNode);
 
     NXOpen::CAE::FEModelOccurrence* GetFEModelOccOfNode(NXOpen::CAE::FEModelOccurrence *pParentFEModel, NXOpen::CAE::FENode *pNodeProto);
+
+    std::string GetNXVersion();
 }
 
 //#if defined(__MSVC_RUNTIME_CHECKS)

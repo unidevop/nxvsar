@@ -545,6 +545,8 @@ namespace Vsar
         //  remove work dir
         BOOST_SCOPE_EXIT((&m_workDir)(&oldWorkPath))
         {
+            filesystem::current_path(oldWorkPath);
+
 #if !defined(_DEBUG) && !defined(DEBUG)
             try
             {
@@ -556,8 +558,6 @@ namespace Vsar
             }
 #endif
             m_workDir.clear();
-
-            filesystem::current_path(oldWorkPath);
         }
         BOOST_SCOPE_EXIT_END
 
@@ -1439,7 +1439,12 @@ namespace Vsar
         boost::scoped_ptr<FENodeLabelMap> pRailSlabNodeLabelMap(pRailFEModelOcc->FenodeLabelMap());
         FENode            *pFENode               = pRailSlabNodeLabelMap->GetNode(nodeLabel);
 
-        int nodeIndex = static_cast<int>(std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode) - m_refNodeSeq.begin() + 1);
+        std::vector<TaggedObject*>::const_iterator iter = std::find(m_refNodeSeq.begin(), m_refNodeSeq.end(), pFENode);
+
+        if (iter == m_refNodeSeq.end())
+            throw NXException::Create("The response result is out of date. Please solve response first.");
+
+        int nodeIndex = static_cast<int>(iter - m_refNodeSeq.begin() + 1);
 
         return (boost::format(NOISE_FREQUENCE_INPUT_FILE_NAME) % nodeIndex).str();
     }
@@ -1520,6 +1525,11 @@ namespace Vsar
         PropertyTable *pPropTab = pSolution->PropertyTable();
 
         pPropTab->SetBooleanPropertyValue("Foreground", true);
+
+        // set scratch dir
+        pPropTab = pSolution->SolverOptionsPropertyTable();
+
+        pPropTab->SetStringPropertyValue("sdirectory", pPrjProp->GetProjectPath());
     }
 
     void SolveSettings::SetResponseOutput()
