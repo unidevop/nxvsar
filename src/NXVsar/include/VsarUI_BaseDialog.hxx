@@ -51,8 +51,8 @@ namespace VsarUI
     {
         // class members
     public:
-        static NXOpen::Session *theSession;
-        static NXOpen::UI      *theUI;
+        static NXOpen::Session *s_theSession;
+        static NXOpen::UI      *s_theUI;
 
         int Show(NXOpen::BlockStyler::BlockDialog::DialogMode dialogMode = NXOpen::BlockStyler::BlockDialog::DialogModeCreate);
 

@@ -58,8 +58,8 @@ namespace VsarUI
     //------------------------------------------------------------------------------
     // Initialize static variables
     //------------------------------------------------------------------------------
-    Session* BaseDialog::theSession = NULL;
-    UI*      BaseDialog::theUI      = NULL;
+    Session* BaseDialog::s_theSession = NULL;
+    UI*      BaseDialog::s_theUI      = NULL;
 
     //------------------------------------------------------------------------------
     // Constructor for NX Styler class
@@ -69,10 +69,10 @@ namespace VsarUI
         try
         {
             // Initialize the NX Open C++ API environment
-            theSession = Session::GetSession();
-            theUI      = UI::GetUI();
+            s_theSession = Session::GetSession();
+            s_theUI      = UI::GetUI();
 
-            m_theDialog.reset(theUI->CreateDialog(dialogName.c_str()));
+            m_theDialog.reset(s_theUI->CreateDialog(dialogName.c_str()));
 
             // Registration of callback functions
             m_theDialog->AddApplyHandler(make_callback(this, &BaseDialog::ApplyCb));
@@ -108,7 +108,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return 0;
     }
@@ -131,7 +131,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 
@@ -148,7 +148,7 @@ namespace VsarUI
         {
             //---- Enter your exception handling code here -----
             errorCode = 1;
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return errorCode;
     }
@@ -163,7 +163,7 @@ namespace VsarUI
         {
             //---- Enter your exception handling code here -----
             errorCode = 1;
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return errorCode;
     }
@@ -180,7 +180,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return 0;
     }
@@ -199,7 +199,7 @@ namespace VsarUI
         {
             //---- Enter your exception handling code here -----
             errorCode = 1;
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return errorCode;
     }
@@ -221,7 +221,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 
@@ -238,7 +238,7 @@ namespace VsarUI
         catch(std::exception& ex)
         {
             //---- Enter your exception handling code here -----
-            theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
+            s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
     }
 

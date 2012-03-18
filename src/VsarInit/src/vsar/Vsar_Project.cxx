@@ -23,6 +23,7 @@
 #include <NXOpen/CAE_FTK_DataManager.hxx>
 #include <NXOpen/ListingWindow.hxx>
 #include <NXOpen/UI.hxx>
+#include <NXOpen/NXMessageBox.hxx>
 #include <NXOpen/MenuBar_MenuBarManager.hxx>
 #include <NXOpen/MenuBar_MenuButton.hxx>
 
@@ -371,6 +372,11 @@ namespace Vsar
 
     void Project::New(const std::string &prjName, const std::string &prjPath, ProjectType prjType)
     {
+        if (m_prjInstance.get())
+        {
+            throw NXException::Create(MSGTXT("Failed to create a new vsdane project. Only one project could exist in the session."));
+        }
+
         m_prjInstance.reset(new Project(prjName, prjPath, prjType));
 
         m_prjStatus.Switch(Status::ProjectStatus_Defined);
@@ -461,6 +467,15 @@ namespace Vsar
         {
             ProjectType   prjType(GetProjectTypeOfPart(pOpenedPrt));
 
+            if (m_prjInstance.get())
+            {
+                UI::GetUI()->NXMessageBox()->Show("Open Project", NXMessageBox::DialogTypeError,
+                    MSGTXT("Failed to open vsdane project. Only one project could exist in the session."));
+                // TODO: Close the part
+                //pOpenedPrt->Close(BasePart::CloseWholeTreeTrue, BasePart::CloseModifiedCloseModified, NULL);
+                throw NXException::Create(MSGTXT("Failed to open vsdane project. Only one project could exist in the session."));
+            }
+
             m_prjInstance.reset(new Project(dynamic_cast<CAE::SimPart*>(pOpenedPrt), prjType));
 
             m_prjStatus.Switch(GetProjectStatusOfPart(pOpenedPrt));
@@ -496,9 +511,13 @@ namespace Vsar
         {
             ProjectType   prjType(GetProjectTypeOfPart(pOpenedPrt));
 
-            m_prjInstance.reset();
+            if (m_prjInstance.get() &&
+                m_prjInstance->GetProperty()->GetSimPart() == pOpenedPrt)
+            {
+                m_prjInstance.reset();
 
-            m_prjStatus.Switch(Status::ProjectStatus_None);
+                m_prjStatus.Switch(Status::ProjectStatus_None);
+            }
         }
         catch (std::exception &)
         {
