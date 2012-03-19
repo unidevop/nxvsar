@@ -180,7 +180,7 @@ namespace Vsar
         //  Get dat path name
         BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
 
-        std::string datResultPathName((filesystem::path(pPrjProp->GetProjectPath()) /
+        std::string datResultPathName((filesystem::path(m_inputPath) /
             recordItem.m_srcResultFile).string());
 
         if (!filesystem::exists(datResultPathName))
@@ -852,7 +852,10 @@ namespace Vsar
         bool             noiseResultLoaded = false;
 
         ResponseOp2Result   respResult;
-        ResponseAfuResult   respAfuResult;
+
+        BaseProjectProperty *pPrjProp = Project::Instance()->GetProperty();
+
+        ResponseAfuResult   respAfuResult(pPrjProp->GetProjectPath());
 
         respResultLoaded = respResult.Load() && respAfuResult.Load();
 

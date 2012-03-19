@@ -57,15 +57,20 @@ namespace VsarUI
         virtual void DialogShownCb();
         virtual int ApplyCb();
         virtual int UpdateCb(NXOpen::BlockStyler::UIBlock* block);
+        virtual bool Okay();
 
     protected:
         bool CanOutputElements() const;
 
         std::vector<NXOpen::TaggedObject*> GetOutputElements() const;
 
+        void SetOutputElements(const std::vector<NXOpen::TaggedObject*> &);
+
         bool CanOutputNodes() const;
 
         std::vector<NXOpen::TaggedObject*> GetOutputNodes() const;
+
+        void SetOutputNodes(const std::vector<NXOpen::TaggedObject*> &);
 
         bool CanOutputNodesForNoise() const;
 

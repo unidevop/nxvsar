@@ -226,4 +226,12 @@ namespace VsarUI
         }
         return 0;
     }
+
+    bool NewProject::Okay()
+    {
+        std::string  prjName = m_prjName->GetProperties()->GetString("Value").GetUTF8Text();
+        std::string  prjPath = m_prjPath->GetProperties()->GetString("Path").GetUTF8Text();
+
+        return !prjName.empty() && !prjPath.empty();
+    }
 }

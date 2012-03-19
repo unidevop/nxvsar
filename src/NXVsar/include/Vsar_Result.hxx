@@ -77,7 +77,7 @@ namespace Vsar
     class ResponseAfuResult : public BaseAfuResult
     {
     public:
-        ResponseAfuResult() : BaseAfuResult()
+        ResponseAfuResult(const std::string &inputPath) : BaseAfuResult(), m_inputPath(inputPath)
         {
         }
 
@@ -96,6 +96,9 @@ namespace Vsar
             std::vector<double> &xValues, std::vector<double> &yValues) const;
 
         //virtual StlResultBlockVector ExtractContent(std::ifstream &iResult);
+
+    private:
+        std::string   m_inputPath;
     };
 
     typedef std::vector<boost::shared_ptr<ResultBlock>> StlResultBlockVector;

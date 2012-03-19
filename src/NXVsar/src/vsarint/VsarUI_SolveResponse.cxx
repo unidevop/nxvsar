@@ -156,10 +156,16 @@ namespace VsarUI
     int SolveResponse::ApplyCb()
     {
         int errorCode = 0;
+
         try
         {
-            SolveSettings solveSettings(CanOutputElements(), GetOutputElements(),
-                CanOutputNodes(), GetOutputNodes(), CanOutputNodesForNoise());
+            bool                        canOutputElems(CanOutputElements());
+            std::vector<TaggedObject*>  outputElems(GetOutputElements());
+            bool                        canOutputNodes(CanOutputNodes());
+            std::vector<TaggedObject*>  outputNodes(GetOutputNodes());
+
+            SolveSettings solveSettings(canOutputElems, outputElems,
+                canOutputNodes, outputNodes, CanOutputNodesForNoise());
 
             solveSettings.Apply();
 
@@ -226,6 +232,11 @@ namespace VsarUI
         return 0;
     }
 
+    bool SolveResponse::Okay()
+    {
+        return CanOutputNodesForNoise();
+    }
+
     bool SolveResponse::CanOutputElements() const
     {
         boost::scoped_ptr<PropertyList> pHasElemsPropList(m_hasElemsOutput->GetProperties());
@@ -240,6 +251,13 @@ namespace VsarUI
         return pOutputElemsPropList->GetTaggedObjectVector("SelectedObjects");
     }
 
+    void SolveResponse::SetOutputElements(const std::vector<TaggedObject*> &outputElems)
+    {
+        boost::scoped_ptr<PropertyList> pOutputElemsPropList(m_outputElements->GetProperties());
+
+        pOutputElemsPropList->SetTaggedObjectVector("SelectedObjects", outputElems);
+    }
+
     bool SolveResponse::CanOutputNodes() const
     {
         boost::scoped_ptr<PropertyList> pHasNodesPropList(m_hasNodesOutput->GetProperties());
@@ -252,6 +270,13 @@ namespace VsarUI
         boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
 
         return pOutputNodesPropList->GetTaggedObjectVector("SelectedObjects");
+    }
+
+    void SolveResponse::SetOutputNodes(const std::vector<TaggedObject*> &outputNodes)
+    {
+        boost::scoped_ptr<PropertyList> pOutputNodesPropList(m_outputNodes->GetProperties());
+
+        pOutputNodesPropList->SetTaggedObjectVector("SelectedObjects", outputNodes);
     }
 
     bool SolveResponse::CanOutputNodesForNoise() const
