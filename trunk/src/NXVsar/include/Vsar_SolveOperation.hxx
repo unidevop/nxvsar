@@ -123,8 +123,6 @@ namespace Vsar
 
         virtual void CallExecutable() const;
 
-        virtual void PostSolveCheck() const;
-
         virtual void MoveOutputs() const;
 
         virtual std::string GetExecutableName() const = 0;

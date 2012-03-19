@@ -650,7 +650,7 @@ namespace Vsar
 
         CleanResultFile(respResult.GetResultPathName());
 
-        ResponseAfuResult   respAfuResult;
+        ResponseAfuResult   respAfuResult(m_workDir.string());
 
         CleanResultFile(respAfuResult.GetResultPathName());
 
@@ -684,7 +684,8 @@ namespace Vsar
 
         respResult.Load();
 
-        ResponseAfuResult   respAfuResult;
+        //  Get dat path name
+        ResponseAfuResult   respAfuResult(m_workDir.string());
 
         respAfuResult.Create();
 
@@ -748,11 +749,11 @@ namespace Vsar
         //  set work dir
         filesystem::current_path(GetWorkDir());
 
-        std::system(exePathName.string().c_str());
+        int rtc = std::system(exePathName.string().c_str());
 
         filesystem::path failLogPath = GetWorkDir() / SOLVE_NOISE_FAIL_LOG_NAME;
 
-        if (filesystem::exists(failLogPath))
+        if (rtc != 0 || filesystem::exists(failLogPath))
             throw NXException::Create("Failed to solve noise.");
     }
 
@@ -788,8 +789,6 @@ namespace Vsar
 
         CallExecutable();
 
-        PostSolveCheck();
-
         MoveOutputs();
     }
 
@@ -814,14 +813,12 @@ namespace Vsar
         //  set work dir
         filesystem::current_path(m_solOper->GetWorkDir());
 
-        std::system(exePathName.string().c_str());
-    }
+        int rtc = std::system(exePathName.string().c_str());
 
-    void BaseTask::PostSolveCheck() const
-    {
+        //  post solve check
         filesystem::path failLogPath = m_solOper->GetWorkDir() / GetFailLog();
 
-        if (filesystem::exists(failLogPath))
+        if (rtc != 0 || filesystem::exists(failLogPath))
             throw NXException::Create("Failed to solve excitation.");
     }
 
@@ -875,10 +872,10 @@ namespace Vsar
     {
         std::vector<std::string>  results;
 
-        results.reserve(3);
-        results.push_back(VEHICLE_OUTPUT_FILE_NAME);
-        results.push_back(WHEEL_OUTPUT_FILE_NAME);
-        results.push_back(TURN_OUTPUT_FILE_NAME);
+        //results.reserve(3);
+        //results.push_back(VEHICLE_OUTPUT_FILE_NAME);
+        //results.push_back(WHEEL_OUTPUT_FILE_NAME);
+        //results.push_back(TURN_OUTPUT_FILE_NAME);
 
         return results;
     }
@@ -998,22 +995,17 @@ namespace Vsar
 
         bool operator () (tag_t tNode1, tag_t tNode2) const
         {
-            int errCode = 0;
-            int label   = 0;
-            UF_SF_node_btype_t    bType;
-            UF_SF_mid_node_type_t eType;
-            double  absPos1[3];
-            double  absPos2[3];
+            FENode  *pNode = NULL;
 
-            errCode = UF_SF_ask_node(tNode1, &label, &bType, &eType, absPos1);
-            if (errCode != 0)
-                throw NXException::Create(errCode);
+            pNode = dynamic_cast<FENode*>(NXObjectManager::Get(tNode1));
 
-            errCode = UF_SF_ask_node(tNode2, &label, &bType, &eType, absPos2);
-            if (errCode != 0)
-                throw NXException::Create(errCode);
+            Point3d  absPos1(pNode->Coordinates());
 
-            return absPos1[2] < absPos2[2];
+            pNode = dynamic_cast<FENode*>(NXObjectManager::Get(tNode2));
+
+            Point3d  absPos2(pNode->Coordinates());
+
+            return absPos1.Z < absPos2.Z;
         }
     };
 
@@ -1022,19 +1014,14 @@ namespace Vsar
         std::ofstream  inputFile(filesystem::path(m_solOper->GetWorkDir() /
             CONVERT_EXCITATION_INPUT_FILE_NAME).string().c_str());
 
-        int errCode = 0;
-        int label   = 0;
-        UF_SF_node_btype_t    bType;
-        UF_SF_mid_node_type_t eType;
-        double  absPos[3];
-
         for (std::vector<tag_t>::iterator iter = railNodes.begin(); iter != railNodes.end(); ++iter)
         {
-            errCode = UF_SF_ask_node(*iter, &label, &bType, &eType, absPos);
-            if (errCode != 0)
-                throw NXException::Create(errCode);
+            FENode *pNode = dynamic_cast<FENode*>(NXObjectManager::Get(*iter));
 
-            inputFile << (label + m_nodeOffset) << std::endl;
+            // has no need to add offset if input rail node is occurrence
+            int label = pNode->Label()/* + m_nodeOffset*/;
+
+            inputFile << label << std::endl;
         }
     }
 
@@ -1295,22 +1282,17 @@ namespace Vsar
 
         bool operator () (TaggedObject *pNode1, TaggedObject *pNode2) const
         {
-            int errCode = 0;
-            int label   = 0;
-            UF_SF_node_btype_t    bType;
-            UF_SF_mid_node_type_t eType;
-            double  absPos1[3];
-            double  absPos2[3];
+            FENode  *pNode = NULL;
 
-            errCode = UF_SF_ask_node(pNode1->Tag(), &label, &bType, &eType, absPos1);
-            if (errCode != 0)
-                throw NXException::Create(errCode);
+            pNode = dynamic_cast<FENode*>(pNode1);
 
-            errCode = UF_SF_ask_node(pNode2->Tag(), &label, &bType, &eType, absPos2);
-            if (errCode != 0)
-                throw NXException::Create(errCode);
+            Point3d  absPos1(pNode->Coordinates());
 
-            return (absPos1[0] > absPos2[0]) || (absPos1[2] < absPos2[2]);
+            pNode = dynamic_cast<FENode*>(pNode2);
+
+            Point3d  absPos2(pNode->Coordinates());
+
+            return (absPos1.X > absPos2.X) || (absPos1.Z < absPos2.Z);
         }
     };
 

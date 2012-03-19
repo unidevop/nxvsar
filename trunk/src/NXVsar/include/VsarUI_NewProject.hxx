@@ -45,6 +45,7 @@ namespace VsarUI
         virtual void DialogShownCb();
         virtual int ApplyCb();
         virtual int UpdateCb(NXOpen::BlockStyler::UIBlock* block);
+        virtual bool Okay();
 
     private:
 

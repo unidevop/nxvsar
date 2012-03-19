@@ -52,6 +52,7 @@
 #include <NXOpen/CAE_Mesh3dHexBuilder.hxx>
 #include <NXOpen/CAE_MeshCollector.hxx>
 #include <NXOpen/CAE_FENode.hxx>
+#include <NXOpen/CAE_FEElement.hxx>
 #include <NXOpen/CAE_ElementTypeBuilder.hxx>
 #include <NXOpen/CAE_DestinationCollectorBuilder.hxx>
 #include <NXOpen/CAE_PropertyTable.hxx>
@@ -646,6 +647,7 @@ namespace Vsar
             tag_p_t                     tMeshes  = NULL;
             int                         meshCnt;
 
+            // NOTE: this method will switch display part, cause updating problem.
             UF_SF_find_mesh(pObj->Tag(), UF_SF_DIMENSION_ANY, &meshCnt, &tMeshes);
 
             boost::shared_array<tag_t>  tMeshArray(tMeshes, UF_free);
@@ -665,11 +667,21 @@ namespace Vsar
             return NULL;
 
         // Get mesh name
-        Mesh *pMesh = GetMesh(pNodeProto);
+
+        // find node of mesh
+        std::vector<FEElement*> elemsOfNode(pNodeProto->GetElements());
+
+        Mesh *pMesh = NULL;
+
+        if (!elemsOfNode.empty())
+        {
+            pMesh = elemsOfNode.back()->Mesh();
+        }
+
         if (!pMesh)
             return NULL;
 
-        std::string meshName(pMesh->Name().GetUTF8Text());
+        std::string meshName(pMesh->Name().GetText());
 
         return GetFEModelOccByMeshName(pParentFEModel, meshName);
     }

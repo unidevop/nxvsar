@@ -77,6 +77,7 @@ namespace VsarUI
             // Registration of callback functions
             m_theDialog->AddApplyHandler(make_callback(this, &BaseDialog::ApplyCb));
             m_theDialog->AddOkHandler(make_callback(this, &BaseDialog::OkCb));
+            m_theDialog->AddEnableOKButtonHandler(make_callback(this, &BaseDialog::Okay));
             m_theDialog->AddCancelHandler(make_callback(this, &BaseDialog::CancelCb));
             m_theDialog->AddUpdateHandler(make_callback(this, &BaseDialog::UpdateCb));
             m_theDialog->AddFilterHandler(make_callback(this, &BaseDialog::FilterCb));
@@ -202,6 +203,11 @@ namespace VsarUI
             s_theUI->NXMessageBox()->Show("Block Styler", NXMessageBox::DialogTypeError, ex.what());
         }
         return errorCode;
+    }
+
+    bool BaseDialog::Okay()
+    {
+        return true;
     }
 
     int BaseDialog::FilterCb(NXOpen::BlockStyler::UIBlock *pBlock, NXOpen::TaggedObject *pSel)
