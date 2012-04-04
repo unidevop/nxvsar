@@ -1,0 +1,75 @@
+prototype StringTrim(BYREF STRING);
+prototype BOOL IsTheSamePath(STRING, STRING);
+
+function StringTrim(sVivisect)
+	// Definition in Header: 
+	// prototype stdmiscStringTrim(BYREF STRING);
+	// Whitespaces (blanks and tabs) will be eliminated
+	// in the beginning and end from the given string
+	// Written by horshack@lisa.franken.de for everyones use
+
+	STRING sWork;
+	NUMBER nLengthString;
+	NUMBER nWhitespaceBeginning, nWhitespaceEnd;
+	NUMBER i;
+	STRING sSubstring;
+	BOOL bEndAnalyze;
+begin
+	nWhitespaceBeginning=0;
+	nWhitespaceEnd=0;
+
+	// analysiere the beginning of string
+	bEndAnalyze=FALSE;
+	nLengthString = StrLength(sVivisect);
+	i=0;
+	repeat
+		StrSub (sSubstring, sVivisect, i, 1);
+		if ((StrCompare (sSubstring, " ") == 0) ||
+			  (StrCompare (sSubstring, "\t") == 0))  then
+			  nWhitespaceBeginning=nWhitespaceBeginning+1;
+		else
+			  bEndAnalyze=TRUE;
+		endif;
+		i=i+1;
+	until ((i == nLengthString) || (bEndAnalyze == TRUE));
+	  
+	// analyze beginning
+	bEndAnalyze=FALSE;
+	nLengthString = StrLength(sVivisect);
+	i=nLengthString-1;
+
+    repeat
+    	StrSub (sSubstring, sVivisect, i, 1);
+    	if ((StrCompare (sSubstring, " ") == 0) ||
+    		  (StrCompare (sSubstring, "\t") == 0))  then
+    		  nWhitespaceEnd = nWhitespaceEnd + 1;
+    	else
+    		  bEndAnalyze=TRUE;
+    	endif;
+    	i=i-1;
+	until ((i < 0) || (bEndAnalyze == TRUE));
+	// now I know how many whitespaces are at the beginning and
+	// at the end of the string     
+	StrSub (sWork, sVivisect, 
+		  nWhitespaceBeginning,
+		  StrLength(sVivisect) - nWhitespaceBeginning 
+				  - nWhitespaceEnd);
+	sVivisect = sWork;
+end;
+
+function BOOL IsTheSamePath(szPath1, szPath2)
+begin
+    // trim the leading and tailing spaces
+    StringTrim(szPath1);
+    StringTrim(szPath2);
+                      
+    // Remove quotation marks 
+    LongPathToQuote(szPath1, FALSE);
+    LongPathToQuote(szPath2, FALSE);
+    
+    // Remove last slash
+    StrRemoveLastSlash(szPath1);
+    StrRemoveLastSlash(szPath2);
+    
+    return (StrCompare(szPath1, szPath2) == 0);
+end;
