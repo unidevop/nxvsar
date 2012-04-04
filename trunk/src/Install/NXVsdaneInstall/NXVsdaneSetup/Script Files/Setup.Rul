@@ -1,0 +1,512 @@
+//===========================================================================
+//
+//  File Name:    Setup.rul
+//
+//  Description:  Blank setup main script file
+//
+//  Comments:     Blank setup is an empty setup project. If you want to
+//				  create a new project via. step-by step instructions use the
+//				  Project Assistant.
+//
+//===========================================================================
+
+// Included header files ----------------------------------------------------
+#include "ifx.h"
+#include "Utils.rul"
+
+// Note: In order to have your InstallScript function executed as a custom
+// action by the Windows Installer, it must be prototyped as an 
+// entry-point function.
+
+// The keyword export identifies MyFunction() as an entry-point function.
+// The argument it accepts must be a handle to the Installer database.
+    
+/* export prototype MyFunction(HWND); */   
+
+prototype NUMBER AskNXPathAndType(BYREF string, BYREF string);   
+  
+prototype string GetInitialNXPath();   
+prototype string GetInitialNXType(string);  
+
+prototype BOOL QueryAppRegisteredInNX(STRING, BYREF NUMBER);
+prototype RegisterApp(STRING);
+prototype UnRegisterApp();
+     
+// control identifiers 
+//#define BUTTON_NEXT    1 
+//#define BUTTON_BACK   12 
+//#define BUTTON_CANCEL  9
+//#define HWND_BROADCAST  0xFFFF     
+#define WM_WININICHANGE 0x001A 
+ 
+#define NX_PROP_DIALOG_ID       12656     
+#define SELECT_NX_PATH_CTRL_ID  1304    
+#define NX_PATH_CTRL_ID         1308     
+#define NX_TYPE_X86_CTRL_ID     501     
+#define NX_TYPE_X64_CTRL_ID     502    
+
+#define UGS_NX_REGESTRY_PATH_KEY  "SOFTWARE\\Unigraphics Solutions\\NX\\7.5"
+#define UGS_NX_REGESTRY_PATH_NAME "INSTALLDIR"  
+
+#define NXVSDANE_REGESTRY_PATH_KEY  "SOFTWARE\\NXVsdane"
+#define NXVSDANE_REGESTRY_NX_NAME   "NXPath"        
+
+#define UGS_NX_CUSTOM_DIR_REL_PATH  "ugii\\menus"
+#define UGS_NX_CUSTOM_DIR_FILE_NAME "custom_dirs.dat"
+
+
+#define UGS_NX_BASE_DIR             "UGII_BASE_DIR"
+#define UGS_NX_USER_DIR             "UGII_USER_DIR"
+
+#define SETUP_TYPE_X86          "x86"
+#define SETUP_TYPE_X64          "x64"	
+
+// Global Variables
+string UGII_BASE_DIR;
+
+// Init NX install path and NX type
+function string GetInitialNXPath()
+    NUMBER  nResult, nType, nSize;
+    string  szNXBaseDir; 
+begin 
+    // Read UGII_BASE_DIR from registry if exist
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+        
+    nResult = RegDBGetKeyValueEx(UGS_NX_REGESTRY_PATH_KEY, UGS_NX_REGESTRY_PATH_NAME, nType, szNXBaseDir, nSize);
+    if (nResult < 0) then
+    // Get path from environment variable
+       GetEnvVar(UGS_NX_BASE_DIR, szNXBaseDir);    
+    endif;
+
+    return szNXBaseDir;     
+end;
+  
+
+// Init NX install path and NX type
+function string GetInitialNXType(szNXBaseDir)
+    string  szNXType; 
+begin    
+    // Set NX Type
+    if (SYSINFO.bIsWow64) then
+        szNXType = SETUP_TYPE_X64;     
+    else
+        szNXType = SETUP_TYPE_X86;
+    endif;
+
+    return szNXType;    
+end;
+
+
+function NUMBER AskNXPathAndType(svNXBaseDir, svNXType)
+    string  szDialogName, szTitle, szMsg; 
+    NUMBER  nDialog, nResult, nCmdValue, nType, nSize; 
+    BOOL    bDone;
+    HWND    hwndDlg, hwndCtrl;
+begin 
+       // Specify a name to identify the custom dialog in this installation. 
+    szDialogName = "NXPathAndType"; 
+
+    // Define the dialog.  Pass a null string in the second parameter 
+    // to get the dialog from _isuser.dll or _isres.dll.  Pass a null 
+    // string in the third parameter because the dialog is identified 
+    // by its ID in the fourth parameter. 
+    nResult = EzDefineDialog (szDialogName, "", "", NX_PROP_DIALOG_ID); 
+
+    if (nResult < 0) then 
+        // Report an error; then terminate. 
+        MessageBox ("Error in defining dialog", SEVERE); 
+        abort; 
+    endif; 
+
+    // Initialize the indicator used to control the while loop. 
+    bDone = FALSE; 
+
+    // Loop until done. 
+    repeat 
+        // Display the dialog and return the next dialog event. 
+        nCmdValue = WaitOnDialog(szDialogName); 
+
+        // Respond to the event. 
+        switch (nCmdValue) 
+            case DLG_CLOSE: 
+                // The user clicked the window's Close button. 
+                Do (EXIT); 
+            case DLG_ERR: 
+                MessageBox ("Unable to display dialog. Setup canceled.", SEVERE); 
+                abort; 
+            case DLG_INIT:           
+                // Set nx path string
+                CtrlSetText(szDialogName, NX_PATH_CTRL_ID, svNXBaseDir);
+                
+                // Set NX Type
+                if (StrCompare(svNXType, SETUP_TYPE_X64) == 0) then    
+                    CtrlSetState(szDialogName, NX_TYPE_X64_CTRL_ID, BUTTON_CHECKED);
+                else
+                    CtrlSetState(szDialogName, NX_TYPE_X86_CTRL_ID, BUTTON_CHECKED);  
+                endif;
+                
+                // Set Sensibility of Next button
+                hwndDlg = CmdGetHwndDlg( szDialogName );
+                hwndCtrl = GetDlgItem(hwndDlg, NEXT);
+                EnableWindow(hwndCtrl, ExistsDir(svNXBaseDir) == EXISTS);
+            case SELECT_NX_PATH_CTRL_ID:      
+                szTitle = "Select NX Install Path";
+                if (SelectDirEx(szTitle, "", "", "", BIF_RETURNONLYFSDIRS | BIF_EDITBOX, svNXBaseDir) == IDOK &&
+                    ExistsDir(svNXBaseDir) == EXISTS) then
+                    CtrlSetText(szDialogName, NX_PATH_CTRL_ID, svNXBaseDir);
+                endif;
+                
+                // Set Sensibility of Next button
+                hwndDlg = CmdGetHwndDlg( szDialogName );
+                hwndCtrl = GetDlgItem(hwndDlg, NEXT);
+                EnableWindow(hwndCtrl, ExistsDir(svNXBaseDir) == EXISTS);
+            case CANCEL: 
+                // The user clicked the Cancel button. 
+                Do (EXIT); 
+            case NEXT: 
+                bDone = TRUE;  
+                nResult = NEXT; 
+            case BACK: 
+                bDone = TRUE; 
+                nResult = BACK; 
+        endswitch; 
+    until bDone; 
+
+    if (CtrlGetState(szDialogName, NX_TYPE_X86_CTRL_ID) == BUTTON_CHECKED) then
+        svNXType = SETUP_TYPE_X86;
+    else
+        svNXType = SETUP_TYPE_X64;
+    endif;
+    
+    // Close the dialog. 
+    EndDialog (szDialogName); 
+
+    // Free the dialog from memory. 
+    ReleaseDialog (szDialogName);   
+    
+    return nResult;
+
+end;
+
+//---------------------------------------------------------------------------
+// OnFirstUIBefore
+//
+// The OnFirstUIBefore event is called by the framework when the setup is
+// running in first install mode. By default this event displays UI allowing
+// the end user to specify installation parameters.
+//---------------------------------------------------------------------------
+function OnFirstUIBefore()
+    NUMBER nResult, nvSize;
+    string szTitle, szMsg, szFile;
+    string szLicenseFile;
+    string szNXType;
+begin	
+    // TO DO: if you want to enable background, window title, and caption bar title                                                                   
+    // SetTitle( @PRODUCT_NAME, 24, WHITE );                                        
+    // SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION ); 	                  
+    // Enable( FULLWINDOWMODE );						   
+    // Enable( BACKGROUND );							  
+    // SetColor(BACKGROUND,RGB (0, 128, 128));					   
+
+	SHELL_OBJECT_FOLDER = @PRODUCT_NAME;	   
+                      
+    UGII_BASE_DIR = GetInitialNXPath();
+    szNXType    = GetInitialNXType(UGII_BASE_DIR);                      
+
+Dlg_SdWelcome:
+    szTitle = "";
+    szMsg   = "";
+    nResult = SdWelcome(szTitle, szMsg);
+    if (nResult = BACK) goto Dlg_SdWelcome;
+    
+Dlg_SdLicense:
+    szTitle = "";
+    szMsg = "";
+    szLicenseFile = SUPPORTDIR ^ "License.txt";
+    
+    nResult = SdLicense(szTitle, szMsg, "", szLicenseFile);
+    
+    if (nResult = BACK) goto Dlg_SdWelcome;
+
+Dlg_NXPathAndType:
+    nResult = AskNXPathAndType(UGII_BASE_DIR, szNXType);
+    if (nResult = BACK) goto Dlg_SdLicense;
+    
+    nResult = FeatureSetupTypeSet(MEDIA, szNXType);
+Dlg_SdAskDestPath:  
+    szTitle = "";
+    szMsg   = "";  	
+    nResult = SdAskDestPath(szTitle, szMsg, INSTALLDIR, 0); 
+    //nResult = AskPath(szMsg, INSTALLDIR, INSTALLDIR);
+    if (nResult = BACK) then
+        goto Dlg_NXPathAndType;
+    else    // Next
+        nvSize = 0;
+        FeatureCompareSizeRequired(MEDIA, INSTALLDIR, nvSize);
+        if (nvSize != 0) then      
+        	MessageBox(szSdStr_NotEnoughSpace, WARNING);
+            goto Dlg_SdAskDestPath;
+        endif;
+    	goto Dlg_SdStartCopy;
+	endif;
+Dlg_SdStartCopy:
+    szTitle = "";
+    szMsg   = "";
+    nResult = SdStartCopy2( szTitle, szMsg );			
+	
+	if (nResult = BACK) then
+    	goto Dlg_SdAskDestPath;
+    endif;
+
+    // setup default status
+    Enable(STATUSEX);
+ 
+    return 0;
+end;   
+
+// Query App Register status
+function BOOL QueryAppRegisteredInNX(szCustomDirPathName, nLineNumber)
+    string szResult;
+    NUMBER nResult;
+    BOOL   bRegistered;
+begin
+    // Find the complete registry item
+    bRegistered = FALSE;
+    
+    repeat
+        nResult = FileGrep(szCustomDirPathName, INSTALLDIR, szResult, nLineNumber, CONTINUE);
+        if (nResult == 0 && IsTheSamePath(INSTALLDIR, szResult)) then
+            bRegistered = TRUE; // already registered
+        endif;
+    until (bRegistered || nResult < 0);
+
+    return bRegistered;         
+end;
+
+// Register App
+function RegisterApp(szNXBaseDir)
+    string szCustomDirPath, szCustomDirPathName, szResult;
+    NUMBER nResult, nFileHandle, nLineNumber;
+    string szKey, szEnv;
+    pointer pEnv;
+begin
+    // Register App to Registry
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
+    nResult = RegDBSetKeyValueEx(NXVSDANE_REGESTRY_PATH_KEY, NXVSDANE_REGESTRY_NX_NAME, REGDB_STRING, szNXBaseDir, -1); 
+    
+    // Register NXOpen app to NX
+    szCustomDirPath = szNXBaseDir ^ UGS_NX_CUSTOM_DIR_REL_PATH;
+    
+    // Find custom_dir.dat
+    if (FindFile(szCustomDirPath, UGS_NX_CUSTOM_DIR_FILE_NAME, szResult) == 0) then
+        szCustomDirPathName = szCustomDirPath ^ UGS_NX_CUSTOM_DIR_FILE_NAME;
+        // Find the complete registry item
+
+        if (!QueryAppRegisteredInNX(szCustomDirPathName, nLineNumber)) then   // not registered
+            OpenFileMode( FILE_MODE_APPEND );
+            OpenFile(nFileHandle, szCustomDirPath, UGS_NX_CUSTOM_DIR_FILE_NAME);
+            WriteLine(nFileHandle, INSTALLDIR);
+            CloseFile(nFileHandle);           
+            
+            // Or get the line number first
+            //listMyFile = ListCreate ( STRINGLIST );
+            //ListReadFromFile ( listMyFile, "myfile.txt" );
+            //nvLines = ListCount ( listMyFile ) - 1;
+            //ListDestroy ( listMyFile );
+            //FileInsertLine(szCustomDirPathName, INSTALLDIR, );
+        endif;
+    else   // Set Environment Variable
+        szKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+        
+        //szKey="Environment";
+        //RegDBSetDefaultRoot(HKEY_CURRENT_USER); 
+          
+        nResult = RegDBSetKeyValueEx(szKey, UGS_NX_USER_DIR, REGDB_STRING, INSTALLDIR, -1); 
+        //if (nResult < 0) then 
+        //    MessageBox("Failed to Set Environment Variable", WARNING); 
+        //else 
+        //    MessageBox("Successfully Set Environment Variable", INFORMATION); 
+            // Flush the NT registry to all applications. 
+            szEnv = "Environment"; 
+            pEnv = &szEnv; 
+            //SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+        //endif; 
+    endif;
+end;
+
+// Register App
+function UnRegisterApp()
+    string szNXBaseDir, szCustomDirPath, szCustomDirPathName, szResult;
+    NUMBER nResult, nLineNumber, nType, nSize;
+    string szKey, szEnv;
+    pointer pEnv;
+    BOOL    bUnset;
+begin
+    // Get associated UGII_BASE_DIR from Registry
+    RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+    nResult = RegDBGetKeyValueEx(NXVSDANE_REGESTRY_PATH_KEY, NXVSDANE_REGESTRY_NX_NAME, nType, szNXBaseDir, nSize);
+    
+    if (nResult == 0) then
+        // UnRegister NXOpen app to NX
+        szCustomDirPath = szNXBaseDir ^ UGS_NX_CUSTOM_DIR_REL_PATH;
+
+        //SprintfBox(INFORMATION, "", "custom_dir.dat path: %s", szCustomDirPath);        
+        // Find custom_dir.dat
+        if (FindFile(szCustomDirPath, UGS_NX_CUSTOM_DIR_FILE_NAME, szResult) == 0) then
+            szCustomDirPathName = szCustomDirPath ^ UGS_NX_CUSTOM_DIR_FILE_NAME;
+            
+            // Find the complete registry item
+            if (QueryAppRegisteredInNX(szCustomDirPathName, nLineNumber)) then   // registered
+                nResult = FileDeleteLine(szCustomDirPathName, nLineNumber, nLineNumber);
+                //SprintfBox(INFORMATION, "", "custom_dir.dat deleted: %d", nResult == 0);
+            endif;
+        endif;       
+    endif; 
+    
+    // Remove Environment Variable UGII_USER_DIR anyway
+    //if (nResult < 0) then  
+    // Get path from environment variable
+    GetEnvVar(UGS_NX_USER_DIR, szResult);
+    if (IsTheSamePath(INSTALLDIR, szResult)) then     // has the same value
+        bUnset = FALSE;
+        // Remove UGII_USER_DIR
+        szKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";  
+            
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+        nResult = RegDBDeleteValue(szKey, UGS_NX_USER_DIR);
+        bUnset  = (nResult == 0);
+        
+        szKey="Environment";
+        RegDBSetDefaultRoot(HKEY_CURRENT_USER);
+        nResult = RegDBDeleteValue(szKey, UGS_NX_USER_DIR); 
+        bUnset  = bUnset || (nResult == 0);
+
+        szEnv = "Environment"; 
+        pEnv = &szEnv; 
+        //SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+    endif;
+    //endif;
+
+end;
+
+//---------------------------------------------------------------------------
+// OnUninstall
+//
+// The OnUninstall event is called when the setup is run with the -uninst
+// switch, in this case this is the only event that will be called.
+//---------------------------------------------------------------------------
+function OnUninstall()
+	BOOL   bvOpt1, bvOpt2;
+	string szTitle, szMsg1, szMsg2, szOpt1, szOpt2, svResult, szCaption;
+begin
+	svResult = SdLoadString(ISWI_IS5_UNINST_MSG);
+	szCaption = SdLoadString(IFX_ONMAINTUI_CAPTION);
+	Sprintf (svResult, svResult, @PRODUCT_NAME);
+	if (IDCANCEL = SprintfBox(MB_OKCANCEL, szCaption, svResult)) then
+		abort; 
+	endif;
+	         
+    //MessageBox("OnUninstall", WARNING); 
+    UnRegisterApp();  
+    
+	Enable(STATUSEX);
+
+	//////////////////////////////////////
+	//DO NOT DELETE.  The below code will
+	//initiate the uninstallation process.
+	ComponentRemoveAll();
+	ComponentTransferData(MEDIA);
+	//////////////////////////////////////
+	
+	Disable(STATUSEX);
+
+	bvOpt1 = FALSE;
+	bvOpt2 = FALSE;
+	szMsg1 = SdLoadString(IFX_SDFINISH_MAINT_MSG1);
+	szTitle = SdLoadString(IFX_SDFINISH_MAINT_TITLE);
+	SdFinishEx(szTitle, szMsg1, szMsg2, szOpt1, szOpt2, bvOpt1, bvOpt2);
+end;    
+
+//---------------------------------------------------------------------------
+// OnMoved
+//
+// The OnMoved event is called just before the InstallShield action 
+// 'GeneratedMSIScript' is executed.
+//---------------------------------------------------------------------------
+function OnMoved()
+begin
+    if (!MAINTENANCE) then 
+        // code to run for first-time installation    
+        RegisterApp(UGII_BASE_DIR);
+    endif; 
+end;
+
+//---------------------------------------------------------------------------
+// OnMaintUIBefore
+//
+// The OnMaintUIBefore event is called by the framework when the setup is
+// running in maintenance mode. By default this event displays UI that
+// allows the end user to add or remove features, repair currently
+// installed features or uninstall the application.
+//---------------------------------------------------------------------------
+function OnMaintUIBefore()
+	NUMBER nResult, nType;
+	STRING szTitle, szMsg, svDir, svResult, szCaption;
+begin
+	// TO DO: if you want to enable background, window title, and caption bar title   								
+	// SetTitle( @PRODUCT_NAME, 24, WHITE );					
+	// SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION );  			
+	// SetColor(BACKGROUND,RGB (0, 128, 128));					
+	// Enable( FULLWINDOWMODE );						
+	// Enable( BACKGROUND );							
+
+    svResult = SdLoadString(ISWI_IS5_UNINST_MSG);
+	szCaption = SdLoadString(IFX_ONMAINTUI_CAPTION);
+	Sprintf (svResult, svResult, @PRODUCT_NAME);
+	if (IDCANCEL = SprintfBox(MB_OKCANCEL, szCaption, svResult)) then
+		abort; 
+	endif;	
+end;
+
+
+//---------------------------------------------------------------------------
+// OnMaintUIAfter
+//
+// The OnMaintUIAfter event called by the framework after the file transfer
+// of the setup when the setup is running in maintenance mode. By default
+// this event displays UI that informs the end user that the maintenance setup
+// has been completed successfully.
+//---------------------------------------------------------------------------
+function OnMaintUIAfter()
+	STRING szTitle, szMsg1, szMsg2, szOption1, szOption2;
+	NUMBER bOpt1, bOpt2;
+begin
+
+	Disable(STATUSEX);
+    
+    //MessageBox("OnMaintUIAfter", INFORMATION);
+    
+    UnRegisterApp();  
+
+	//////////////////////////////////////
+	//DO NOT DELETE.  The below code will
+	//initiate the uninstallation process.
+	ComponentRemoveAll();
+	ComponentTransferData(MEDIA);
+    
+	bOpt1   = FALSE;
+	bOpt2   = FALSE;
+    
+	// Added - Version 9.5 - Use appropriate strings for complete
+    // uninstall.
+    if( REMOVEALLMODE ) then
+        szTitle = SdLoadString(IFX_SDFINISH_REMOVE_TITLE);
+        szMsg1 = SdLoadString(IFX_SDFINISH_REMOVE_MSG1);
+    else
+        szTitle = SdLoadString(IFX_SDFINISH_MAINT_TITLE);    
+        szMsg1  = SdLoadString(IFX_SDFINISH_MAINT_MSG1);
+    endif;
+
+	SdFinishEx(szTitle, szMsg1, szMsg2, szOption1, szOption2, bOpt1, bOpt2);
+end;
