@@ -23,6 +23,8 @@
     
 /* export prototype MyFunction(HWND); */   
 
+prototype BOOL USER32.SendMessageTimeout(HWND, SHORT, SHORT, POINTER, SHORT, SHORT, POINTER);
+
 prototype NUMBER AskNXPathAndType(BYREF string, BYREF string);   
   
 prototype string GetInitialNXPath();   
@@ -31,13 +33,16 @@ prototype string GetInitialNXType(string);
 prototype BOOL QueryAppRegisteredInNX(STRING, BYREF NUMBER);
 prototype RegisterApp(STRING);
 prototype UnRegisterApp();
+prototype STRING GetInstallDir();
      
 // control identifiers 
 //#define BUTTON_NEXT    1 
 //#define BUTTON_BACK   12 
 //#define BUTTON_CANCEL  9
 //#define HWND_BROADCAST  0xFFFF     
-#define WM_WININICHANGE 0x001A 
+#define WM_WININICHANGE         0x001A
+#define SMTO_ABORTIFHUNG		0x0002
+#define SMTO_TIMEOUT			50
  
 #define NX_PROP_DIALOG_ID       12656     
 #define SELECT_NX_PATH_CTRL_ID  1304    
@@ -174,8 +179,10 @@ begin
 
     if (CtrlGetState(szDialogName, NX_TYPE_X86_CTRL_ID) == BUTTON_CHECKED) then
         svNXType = SETUP_TYPE_X86;
+        INSTALLDIR = PROGRAMFILES ^ IFX_PRODUCT_NAME;
     else
         svNXType = SETUP_TYPE_X64;
+        INSTALLDIR = PROGRAMFILES64 ^ IFX_PRODUCT_NAME;
     endif;
     
     // Close the dialog. 
@@ -266,16 +273,18 @@ end;
 
 // Query App Register status
 function BOOL QueryAppRegisteredInNX(szCustomDirPathName, nLineNumber)
-    string szResult;
+    STRING szResult, svInstallDir;
     NUMBER nResult;
     BOOL   bRegistered;
 begin
     // Find the complete registry item
     bRegistered = FALSE;
-    
+
+    svInstallDir = GetInstallDir();
+        
     repeat
-        nResult = FileGrep(szCustomDirPathName, INSTALLDIR, szResult, nLineNumber, CONTINUE);
-        if (nResult == 0 && IsTheSamePath(INSTALLDIR, szResult)) then
+        nResult = FileGrep(szCustomDirPathName, svInstallDir, szResult, nLineNumber, CONTINUE);
+        if (nResult == 0 && IsTheSamePath(svInstallDir, szResult)) then
             bRegistered = TRUE; // already registered
         endif;
     until (bRegistered || nResult < 0);
@@ -288,7 +297,7 @@ function RegisterApp(szNXBaseDir)
     string szCustomDirPath, szCustomDirPathName, szResult;
     NUMBER nResult, nFileHandle, nLineNumber;
     string szKey, szEnv;
-    pointer pEnv;
+    pointer pEnv, pResult;
 begin
     // Register App to Registry
     RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE); 
@@ -323,24 +332,23 @@ begin
         //RegDBSetDefaultRoot(HKEY_CURRENT_USER); 
           
         nResult = RegDBSetKeyValueEx(szKey, UGS_NX_USER_DIR, REGDB_STRING, INSTALLDIR, -1); 
-        //if (nResult < 0) then 
-        //    MessageBox("Failed to Set Environment Variable", WARNING); 
-        //else 
-        //    MessageBox("Successfully Set Environment Variable", INFORMATION); 
+        
+        if (nResult == 0) then
             // Flush the NT registry to all applications. 
             szEnv = "Environment"; 
             pEnv = &szEnv; 
             //SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
-        //endif; 
+            SendMessageTimeout(HWND_BROADCAST, WM_WININICHANGE, 0, pEnv, SMTO_ABORTIFHUNG, SMTO_TIMEOUT, pResult);
+        endif; 
     endif;
 end;
 
 // Register App
 function UnRegisterApp()
-    string szNXBaseDir, szCustomDirPath, szCustomDirPathName, szResult;
+    STRING szNXBaseDir, szCustomDirPath, szCustomDirPathName, szResult, svInstallDir;
     NUMBER nResult, nLineNumber, nType, nSize;
     string szKey, szEnv;
-    pointer pEnv;
+    pointer pEnv, pResult;
     BOOL    bUnset;
 begin
     // Get associated UGII_BASE_DIR from Registry
@@ -364,11 +372,16 @@ begin
         endif;       
     endif; 
     
+    MessageBox("UnRegisterApp", INFORMATION); 
+    
+    svInstallDir = GetInstallDir();
+    
     // Remove Environment Variable UGII_USER_DIR anyway
-    //if (nResult < 0) then  
     // Get path from environment variable
     GetEnvVar(UGS_NX_USER_DIR, szResult);
-    if (IsTheSamePath(INSTALLDIR, szResult)) then     // has the same value
+        //SprintfBox(INFORMATION, "", "UGII_USER_DIR=%s", szResult);
+        //SprintfBox(INFORMATION, "", "install dir: %s", svInstallDir);
+    if (IsTheSamePath(svInstallDir, szResult)) then     // has the same value
         bUnset = FALSE;
         // Remove UGII_USER_DIR
         szKey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";  
@@ -376,18 +389,23 @@ begin
         RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
         nResult = RegDBDeleteValue(szKey, UGS_NX_USER_DIR);
         bUnset  = (nResult == 0);
-        
+
+        //SprintfBox(INFORMATION, "", "System UGII_USER_DIR unset: %d", nResult == 0);
+                        
         szKey="Environment";
         RegDBSetDefaultRoot(HKEY_CURRENT_USER);
         nResult = RegDBDeleteValue(szKey, UGS_NX_USER_DIR); 
         bUnset  = bUnset || (nResult == 0);
-
-        szEnv = "Environment"; 
-        pEnv = &szEnv; 
-        //SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+                                           
+        //SprintfBox(INFORMATION, "", "User UGII_USER_DIR unset: %d", nResult == 0);
+        
+        if (bUnset) then
+            szEnv = "Environment"; 
+            pEnv = &szEnv; 
+            //SendMessage (HWND_BROADCAST, WM_WININICHANGE, 0, pEnv ); 
+            SendMessageTimeout(HWND_BROADCAST, WM_WININICHANGE, 0, pEnv, SMTO_ABORTIFHUNG, SMTO_TIMEOUT, pResult);
+        endif;
     endif;
-    //endif;
-
 end;
 
 //---------------------------------------------------------------------------
@@ -509,4 +527,27 @@ begin
     endif;
 
 	SdFinishEx(szTitle, szMsg1, szMsg2, szOption1, szOption2, bOpt1, bOpt2);
+end; 
+
+//---------------------------------------------------------------------------
+// OnBegin
+//
+// The OnBegin event is called directly by the framework after the setup
+// initializes.
+//---------------------------------------------------------------------------
+function STRING GetInstallDir()
+    STRING svInstallDir;
+    NUMBER nBuffer;
+begin
+	if (MAINTENANCE) then
+//	    MessageBox("OnBegin", INFORMATION);
+	    nBuffer = MAX_PATH + 1;
+	    MsiGetProductInfo(PRODUCT_GUID, INSTALLPROPERTY_INSTALLLOCATION, svInstallDir, nBuffer);
+
+        //SprintfBox(INFORMATION, "", "Product Guid: %s Install dir: %s", PRODUCT_GUID, svInstallDir);
+	else
+	    svInstallDir = INSTALLDIR;
+	endif;
+
+    return svInstallDir;
 end;
