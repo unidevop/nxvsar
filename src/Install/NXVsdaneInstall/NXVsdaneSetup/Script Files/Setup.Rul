@@ -372,7 +372,7 @@ begin
         endif;       
     endif; 
     
-    MessageBox("UnRegisterApp", INFORMATION); 
+    //MessageBox("UnRegisterApp", INFORMATION); 
     
     svInstallDir = GetInstallDir();
     
