@@ -150,8 +150,13 @@ begin
                     CtrlSetState(szDialogName, NX_TYPE_X86_CTRL_ID, BUTTON_CHECKED);  
                 endif;
                 
-                // Set Sensibility of Next button
                 hwndDlg = CmdGetHwndDlg( szDialogName );
+                
+                // Set the sensibility of x64 radio option  
+                hwndCtrl = GetDlgItem(hwndDlg, NX_TYPE_X64_CTRL_ID);
+                EnableWindow(hwndCtrl, SYSINFO.bIsWow64);
+
+                // Set Sensibility of Next button
                 hwndCtrl = GetDlgItem(hwndDlg, NEXT);
                 EnableWindow(hwndCtrl, ExistsDir(svNXBaseDir) == EXISTS);
             case SELECT_NX_PATH_CTRL_ID:      
