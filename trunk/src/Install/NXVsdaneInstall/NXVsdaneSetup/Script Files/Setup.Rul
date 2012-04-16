@@ -184,10 +184,10 @@ begin
 
     if (CtrlGetState(szDialogName, NX_TYPE_X86_CTRL_ID) == BUTTON_CHECKED) then
         svNXType = SETUP_TYPE_X86;
-        INSTALLDIR = PROGRAMFILES ^ IFX_PRODUCT_NAME;
+        //INSTALLDIR = PROGRAMFILES ^ IFX_PRODUCT_NAME;
     else
         svNXType = SETUP_TYPE_X64;
-        INSTALLDIR = PROGRAMFILES64 ^ IFX_PRODUCT_NAME;
+        //INSTALLDIR = PROGRAMFILES64 ^ IFX_PRODUCT_NAME;
     endif;
     
     // Close the dialog. 
@@ -336,7 +336,7 @@ begin
         //szKey="Environment";
         //RegDBSetDefaultRoot(HKEY_CURRENT_USER); 
           
-        nResult = RegDBSetKeyValueEx(szKey, UGS_NX_USER_DIR, REGDB_STRING, INSTALLDIR, -1); 
+        nResult = RegDBSetKeyValueEx(szKey, UGS_NX_USER_DIR, REGDB_STRING, INSTALLDIR, -1);
         
         if (nResult == 0) then
             // Flush the NT registry to all applications. 
@@ -374,7 +374,7 @@ begin
                 nResult = FileDeleteLine(szCustomDirPathName, nLineNumber, nLineNumber);
                 //SprintfBox(INFORMATION, "", "custom_dir.dat deleted: %d", nResult == 0);
             endif;
-        endif;       
+        endif;
     endif; 
     
     //MessageBox("UnRegisterApp", INFORMATION); 
